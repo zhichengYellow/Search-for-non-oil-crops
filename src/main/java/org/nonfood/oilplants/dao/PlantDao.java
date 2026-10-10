@@ -23,17 +23,28 @@ public class PlantDao {
         }
         return new Page<>(items,page,size,total);
     }
+    public List<PlantSuggestion> suggestions(String query,int requestedLimit)throws SQLException {
+        String value=query==null?"":query.trim();if(value.isEmpty()||value.length()>100)return List.of();String prefix=value+"%";
+        String sql="SELECT p.id,p.name_zh,p.scientific_name FROM plants p WHERE p.is_public=1 AND (p.name_zh LIKE ? OR p.scientific_name LIKE ? OR EXISTS(SELECT 1 FROM plant_aliases a WHERE a.plant_id=p.id AND a.alias LIKE ?)) ORDER BY CASE WHEN p.name_zh LIKE ? THEN 0 WHEN p.scientific_name LIKE ? THEN 1 ELSE 2 END,p.name_zh,p.id LIMIT ?";
+        List<PlantSuggestion> out=new ArrayList<>();try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){ps.setString(1,prefix);ps.setString(2,prefix);ps.setString(3,prefix);ps.setString(4,prefix);ps.setString(5,prefix);ps.setInt(6,Math.max(1,Math.min(12,requestedLimit)));try(ResultSet rs=ps.executeQuery()){while(rs.next())out.add(new PlantSuggestion(rs.getLong("id"),rs.getString("name_zh"),rs.getString("scientific_name")));}}return out;
+    }
+    public List<Plant> publicPlantOptions()throws SQLException {
+        List<Plant> out=new ArrayList<>();String sql="SELECT id,name_zh,scientific_name FROM plants WHERE is_public=1 ORDER BY name_zh,id LIMIT 1000";
+        try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql);ResultSet rs=ps.executeQuery()){while(rs.next()){Plant p=new Plant();p.setId(rs.getLong("id"));p.setNameZh(rs.getString("name_zh"));p.setScientificName(rs.getString("scientific_name"));out.add(p);}}return out;
+    }
     public Optional<Plant> findById(long id, boolean admin) throws SQLException {
         String sql=SELECT+" FROM plants p LEFT JOIN plant_genera g ON g.id=p.genus_id LEFT JOIN plant_families f ON f.id=g.family_id LEFT JOIN plant_images im ON im.id=(SELECT ii.id FROM plant_images ii WHERE ii.plant_id=p.id AND ii.is_primary=1 ORDER BY ii.id DESC LIMIT 1) WHERE p.id=?"+(admin?"":" AND p.is_public=1");
         try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){ps.setLong(1,id);try(ResultSet rs=ps.executeQuery()){if(!rs.next())return Optional.empty();Plant p=map(rs);p.setSamples(findSamples(id,c));p.setAliases(findAliases(id,c));return Optional.of(p);}}
     }
     private List<OilSample> findSamples(long plantId,Connection c)throws SQLException{
-        List<OilSample> samples=new ArrayList<>();
-        try(PreparedStatement ps=c.prepareStatement("SELECT id,sample_label,oil_content_pct,oil_content_status,source_note,source_pages,verification_status FROM plant_oil_samples WHERE plant_id=? ORDER BY id")){ps.setLong(1,plantId);try(ResultSet rs=ps.executeQuery()){while(rs.next()){OilSample s=new OilSample();s.setId(rs.getLong("id"));s.setLabel(rs.getString("sample_label"));s.setOilContentPct(rs.getBigDecimal("oil_content_pct"));s.setOilContentStatus(rs.getString("oil_content_status"));s.setSourceNote(rs.getString("source_note"));s.setSourcePages(rs.getString("source_pages"));s.setVerificationStatus(rs.getString("verification_status"));s.setComponents(findComponents(s.getId(),c));samples.add(s);}}}
+        List<OilSample> samples=new ArrayList<>();Map<Long,OilSample> byId=new LinkedHashMap<>();
+        try(PreparedStatement ps=c.prepareStatement("SELECT id,sample_label,oil_content_pct,oil_content_status,source_note,source_pages,verification_status FROM plant_oil_samples WHERE plant_id=? ORDER BY id")){
+            ps.setLong(1,plantId);try(ResultSet rs=ps.executeQuery()){while(rs.next()){OilSample sample=new OilSample();sample.setId(rs.getLong("id"));sample.setLabel(rs.getString("sample_label"));sample.setOilContentPct(rs.getBigDecimal("oil_content_pct"));sample.setOilContentStatus(rs.getString("oil_content_status"));sample.setSourceNote(rs.getString("source_note"));sample.setSourcePages(rs.getString("source_pages"));sample.setVerificationStatus(rs.getString("verification_status"));sample.setComponents(new ArrayList<>());samples.add(sample);byId.put(sample.getId(),sample);}}
+        }
+        if(samples.isEmpty())return samples;
+        String marks=String.join(",",Collections.nCopies(samples.size(),"?"));String sql="SELECT sample_id,component_name,percentage,verification_status FROM fatty_acid_components WHERE sample_id IN ("+marks+") ORDER BY sample_id,component_name";
+        try(PreparedStatement ps=c.prepareStatement(sql)){int i=1;for(OilSample sample:samples)ps.setLong(i++,sample.getId());try(ResultSet rs=ps.executeQuery()){while(rs.next()){OilSample sample=byId.get(rs.getLong("sample_id"));FattyAcid acid=new FattyAcid();acid.setName(rs.getString("component_name"));acid.setPercentage(rs.getBigDecimal("percentage"));acid.setVerificationStatus(rs.getString("verification_status"));sample.getComponents().add(acid);}}}
         return samples;
-    }
-    private List<FattyAcid> findComponents(long sampleId,Connection c)throws SQLException{
-        List<FattyAcid> out=new ArrayList<>();try(PreparedStatement ps=c.prepareStatement("SELECT component_name,percentage,verification_status FROM fatty_acid_components WHERE sample_id=? ORDER BY component_name")){ps.setLong(1,sampleId);try(ResultSet rs=ps.executeQuery()){while(rs.next()){FattyAcid a=new FattyAcid();a.setName(rs.getString(1));a.setPercentage(rs.getBigDecimal(2));a.setVerificationStatus(rs.getString(3));out.add(a);}}}return out;
     }
     public long create(Plant p, OilSample sample, List<FattyAcid> acids) throws SQLException {
         String sql="INSERT INTO plants(genus_id,name_zh,scientific_name,name_en,morphology,distribution,cultivation,uses,source_pages,verification_status) VALUES(?,?,?,?,?,?,?,?,?,?)";

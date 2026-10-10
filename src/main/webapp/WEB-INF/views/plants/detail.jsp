@@ -21,6 +21,7 @@
     </dl>
     <c:if test="${not empty plant.aliases}"><p class="alias-line"><span>别名</span><c:forEach items="${plant.aliases}" var="alias" varStatus="st"><c:if test="${st.index gt 0}">、</c:if><c:out value="${alias}"/></c:forEach></p></c:if>
     <div class="detail-actions">
+      <a class="button secondary" href="${pageContext.request.contextPath}/compare?id=${plant.id}">＋ 加入植物对比</a>
       <c:choose><c:when test="${not empty sessionScope.currentUser}"><form method="post" action="${pageContext.request.contextPath}/favorites/toggle"><input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}"><input type="hidden" name="plantId" value="${plant.id}"><button class="button secondary" type="submit" aria-pressed="${isFavorite}" data-loading-text="更新收藏…"><c:choose><c:when test="${isFavorite}">★ 已收藏</c:when><c:otherwise>☆ 收藏植物</c:otherwise></c:choose></button></form></c:when><c:otherwise><c:url var="loginForFavorite" value="/login"><c:param name="next" value="/plant?id=${plant.id}"/></c:url><a class="button secondary" href="${loginForFavorite}">☆ 登录后收藏</a></c:otherwise></c:choose>
       <div class="external-links" aria-label="外部植物学知识链接"><span>外部知识库</span><c:if test="${not empty powoUrl}"><a target="_blank" rel="noopener noreferrer" href="<c:out value='${powoUrl}'/>" class="text-link">Kew · POWO ↗</a><a target="_blank" rel="noopener noreferrer" href="<c:out value='${gbifUrl}'/>" class="text-link">GBIF ↗</a></c:if></div>
     </div>

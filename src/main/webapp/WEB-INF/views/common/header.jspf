@@ -6,8 +6,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173d32">
-  <title><c:out value="${pageTitle}" default="非粮油料植物知识库"/> · 植物知识库</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/site.css?v=botanical-4">
+  <title><c:out value="${pageTitle}" default="PlantScope · 植知"/> · PlantScope</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/site.css?v=botanical-5">
   <script>window.APP_CONTEXT = '<c:out value="${pageContext.request.contextPath}"/>';</script>
   <script src="${pageContext.request.contextPath}/assets/js/jquery-3.7.1.min.js?v=botanical-4" defer></script>
   <script src="${pageContext.request.contextPath}/assets/js/app.js?v=botanical-4" defer></script>
@@ -15,17 +15,21 @@
 <body>
 <a class="skip-link" href="#main-content">跳至主要内容</a>
 <header class="site-header">
-  <a class="brand" href="${pageContext.request.contextPath}/" aria-label="植物知识库首页">
+  <a class="brand" href="${pageContext.request.contextPath}/" aria-label="PlantScope 植知首页">
     <span class="brand-mark" aria-hidden="true">叶</span>
-    <span><b>植物知识库</b><small>NON-FOOD OIL PLANTS</small></span>
+    <span><b>PlantScope · 植知</b><small>BOTANICAL KNOWLEDGE EXPLORER</small></span>
   </a>
   <button class="nav-toggle" type="button" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span aria-hidden="true">☰</span></button>
   <nav class="main-nav" id="main-nav" aria-label="主导航">
-    <a href="${pageContext.request.contextPath}/plants">植物检索</a>
+    <a href="${pageContext.request.contextPath}/discover">描述找植物</a>
+    <a href="${pageContext.request.contextPath}/find-by-traits">外观特征</a>
+    <a href="${pageContext.request.contextPath}/plants">植物名录</a>
+    <a href="${pageContext.request.contextPath}/compare">植物对比</a>
     <a href="${pageContext.request.contextPath}/search/advanced">高级查询<c:if test="${empty sessionScope.currentUser}"><span class="nav-lock">登录后</span></c:if></a>
     <c:choose>
       <c:when test="${not empty sessionScope.currentUser}">
         <a href="${pageContext.request.contextPath}/favorites">我的收藏</a>
+        <a href="${pageContext.request.contextPath}/history">检索历史</a>
         <a href="${pageContext.request.contextPath}/profile">个人中心</a>
         <c:if test="${sessionScope.currentUser.admin}"><a href="${pageContext.request.contextPath}/admin">管理</a></c:if>
         <form class="nav-logout" method="post" action="${pageContext.request.contextPath}/logout">

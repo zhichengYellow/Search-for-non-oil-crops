@@ -16,7 +16,8 @@
         <div class="filter-group">
           <p class="filter-label">关键词</p>
           <label for="search-query">名称或描述</label>
-          <input id="search-query" name="q" maxlength="160" value="<c:out value='${param.q}'/>" placeholder="中文名、拉丁名、别名">
+          <input id="search-query" name="q" maxlength="160" value="<c:out value='${param.q}'/>" list="plant-search-suggestions" data-plant-suggest placeholder="中文名、拉丁名、别名">
+          <datalist id="plant-search-suggestions"></datalist>
           <label for="match-mode">匹配方式</label>
           <select id="match-mode" name="matchMode"><option value="fuzzy">模糊匹配</option><option value="exact" <c:if test="${param.matchMode eq 'exact'}">selected</c:if>>精确匹配</option></select>
         </div>
@@ -46,6 +47,7 @@
         </div>
         <p class="field-hint" data-range-message role="status" aria-live="polite"></p>
         <p class="filter-change-status" data-filter-status role="status" aria-live="polite"></p>
+        <c:if test="${not empty sessionScope.currentUser}"><label class="history-opt-in"><input type="checkbox" name="saveSearch" value="1" <c:if test="${param.saveSearch eq '1'}">checked</c:if>> 保存此次检索到我的历史</label></c:if>
         <div class="filter-actions"><button class="button primary" type="submit" data-loading-text="检索中…">运行检索 <span aria-hidden="true">↗</span></button><a class="button secondary" href="${pageContext.request.contextPath}/plants">重置条件</a></div>
       </form>
     </details>

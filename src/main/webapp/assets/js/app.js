@@ -104,6 +104,8 @@
       } else if (!f.password.value) {
         setFieldError(f.password, '请输入密码。');
         fail('请填写密码。');
+      } else if (!/^[23456789A-HJ-KM-NP-Z]{6}$/i.test(f.captchaCode.value.trim())) {
+        fail('请输入图片中的 6 位验证码。');
       }
     }
 
@@ -113,7 +115,37 @@
       if (f.password.value.length < 10 || f.password.value.length > 72 || !/[A-Za-z]/.test(f.password.value) || !/[0-9]/.test(f.password.value)) return fail('密码需为 10–72 位，并同时包含字母和数字。');
       if (f.password.value !== f.confirmPassword.value) return fail('两次输入的密码不一致。');
       if (!f.displayName.value.trim()) return fail('请填写显示名称。');
-      if (f.email.value && !f.email.checkValidity()) return fail('邮箱格式不正确。');
+      if (!f.email.value || !f.email.checkValidity()) return fail('请填写有效邮箱地址。');
+      if (!/^[0-9]{6}$/.test(f.emailCode.value.trim())) return fail('请输入 6 位邮箱验证码。');
+      if (!/^[23456789A-HJ-KM-NP-Z]{6}$/i.test(f.captchaCode.value.trim())) return fail('请输入图片中的 6 位验证码。');
+    }
+
+    if (type === 'reset-password') {
+      if (!f.email.checkValidity()) return fail('请输入有效邮箱地址。');
+      if (!/^[0-9]{6}$/.test(f.emailCode.value.trim())) return fail('请输入 6 位邮箱验证码。');
+      if (f.password.value.length < 10 || f.password.value.length > 72 || !/[A-Za-z]/.test(f.password.value) || !/[0-9]/.test(f.password.value)) return fail('新密码需为 10–72 位，并同时包含字母和数字。');
+      if (f.password.value !== f.confirmPassword.value) return fail('两次输入的新密码不一致。');
+    }
+
+    if (type === 'description') {
+      if (!f.q.value.trim()) return fail('请填写植物名称或外观描述。');
+      if (f.q.value.length > 500) return fail('描述最多 500 个字符。');
+    }
+
+    if (type === 'compare') {
+      const selected = form.querySelectorAll('input[name="id"]:checked');
+      if (selected.length < 2 || selected.length > 3) return fail('请选择 2–3 种植物进行对比。');
+    }
+
+    if (type === 'trait-record') {
+      if (!f.plantId.value) return fail('请选择要记录特征的植物。');
+      if (!f.traitCode.value || !f.optionCode.value) return fail('请选择特征和对应的特征值。');
+      if (!f.sourceId.value) return fail('请为该特征选择来源。');
+    }
+
+    if (type === 'trait-source') {
+      if (!f.sourceName.value.trim()) return fail('请填写来源名称。');
+      if (f.sourceUrl.value && !f.sourceUrl.checkValidity()) return fail('来源链接格式无效。');
     }
 
     if (type === 'password') {
@@ -201,6 +233,38 @@
     });
   }
 
+  function initPlantSuggestions() {
+    document.querySelectorAll('[data-plant-suggest]').forEach(input => {
+      const list = input.list;
+      if (!list) return;
+      let timer = 0;
+      let controller = null;
+      input.addEventListener('input', () => {
+        window.clearTimeout(timer);
+        if (controller) controller.abort();
+        const query = input.value.trim();
+        if (!query || query.length > 100) { list.replaceChildren(); return; }
+        timer = window.setTimeout(async () => {
+          controller = new AbortController();
+          try {
+            const response = await fetch(`${window.APP_CONTEXT || ''}/suggest?q=${encodeURIComponent(query)}`, { signal: controller.signal, headers: { Accept: 'application/json' } });
+            if (!response.ok) return;
+            const items = await response.json();
+            if (input.value.trim() !== query || !Array.isArray(items)) return;
+            list.replaceChildren(...items.map(item => {
+              const option = document.createElement('option');
+              option.value = item.nameZh || '';
+              option.label = item.scientificName || '学名待核验';
+              return option;
+            }));
+          } catch (error) {
+            if (error.name !== 'AbortError') list.replaceChildren();
+          }
+        }, 180);
+      });
+    });
+  }
+
   function init() {
     const navToggle = document.querySelector('.nav-toggle');
     const nav = document.getElementById('main-nav');
@@ -265,6 +329,79 @@
       });
     });
 
+    document.querySelectorAll('[data-captcha-refresh]').forEach(button => {
+      button.addEventListener('click', () => {
+        const row = button.closest('.captcha-row');
+        const image = row && row.querySelector('.captcha-image');
+        const hint = row && row.querySelector('.field-hint');
+        if (!image) return;
+        const purpose = new URL(image.src, window.location.href).searchParams.get('purpose');
+        const url = `${window.APP_CONTEXT || ''}/captcha?purpose=${encodeURIComponent(purpose || 'login')}&refresh=1&_=${Date.now()}`;
+        if (hint) hint.textContent = '验证码刷新请求已发送；若图片没有变化，请稍后再试。';
+        image.onerror = () => { if (hint) hint.textContent = '刷新过于频繁，请稍等片刻后重试。'; };
+        image.onload = () => { if (hint) hint.textContent = '请输入图片中的 6 个字符。'; };
+        image.src = url;
+      });
+    });
+
+    document.querySelectorAll('[data-email-code]').forEach(button => {
+      button.addEventListener('click', async () => {
+        const form = button.closest('form');
+        const emailInput = document.getElementById(button.dataset.emailInput || '');
+        const status = form && form.querySelector('[data-email-message]');
+        if (!form || !emailInput || !status) return;
+        if (button.dataset.emailPurpose !== 'verify' && !emailInput.checkValidity()) {
+          emailInput.reportValidity();
+          return;
+        }
+        const csrf = form.elements.csrfToken && form.elements.csrfToken.value;
+        button.disabled = true;
+        status.textContent = '正在提交验证码请求…';
+        try {
+          const response = await fetch(`${window.APP_CONTEXT || ''}/email-code`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 'X-CSRF-Token': csrf || '' },
+            body: new URLSearchParams({ purpose: button.dataset.emailPurpose || '', email: emailInput.value })
+          });
+          const result = await response.json();
+          status.textContent = result.message || (response.ok ? '若邮箱可用，验证码已发送。' : '请求失败，请稍后重试。');
+          status.classList.toggle('invalid', !response.ok);
+          if (response.status === 202) {
+            let seconds = 60;
+            button.textContent = `请稍候 ${seconds} 秒`;
+            const timer = window.setInterval(() => {
+              seconds -= 1;
+              if (seconds <= 0) { window.clearInterval(timer); button.disabled = false; button.textContent = '重新发送验证码'; }
+              else button.textContent = `请稍候 ${seconds} 秒`;
+            }, 1000);
+          } else button.disabled = false;
+        } catch (_) {
+          status.textContent = '邮件服务暂时不可用，请稍后重试。';
+          status.classList.add('invalid');
+          button.disabled = false;
+        }
+      });
+    });
+
+    const traitSelect = document.querySelector('[data-trait-option-filter]');
+    const traitOptionSelect = document.getElementById('trait-option');
+    if (traitSelect && traitOptionSelect) {
+      const filterTraitOptions = () => {
+        const traitCode = traitSelect.value;
+        let selectedStillVisible = false;
+        [...traitOptionSelect.options].forEach(option => {
+          if (!option.dataset.traitCode) return;
+          const visible = !traitCode || option.dataset.traitCode === traitCode;
+          option.hidden = !visible;
+          if (!visible && option.selected) option.selected = false;
+          if (visible && option.selected) selectedStillVisible = true;
+        });
+        if (!selectedStillVisible) traitOptionSelect.value = '';
+      };
+      traitSelect.addEventListener('change', filterTraitOptions);
+      filterTraitOptions();
+    }
+
     document.querySelectorAll('form[data-validate]').forEach(form => {
       form.addEventListener('submit', event => validateForm(form, event));
       form.querySelectorAll('input,select,textarea').forEach(input => input.addEventListener('input', () => clearFieldError(input)));
@@ -299,6 +436,7 @@
     if (password) password.addEventListener('input', updatePasswordHint);
     if (confirmPassword) confirmPassword.addEventListener('input', updatePasswordHint);
     initUsernameCheck();
+    initPlantSuggestions();
 
     document.querySelectorAll('[data-search-form] input, [data-search-form] select').forEach(input => {
       input.addEventListener('input', () => {

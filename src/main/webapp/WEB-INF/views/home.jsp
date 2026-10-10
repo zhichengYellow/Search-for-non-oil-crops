@@ -3,17 +3,18 @@
 
 <section class="hero">
   <div class="hero-copy">
-    <p class="eyebrow">BOTANICAL RESEARCH / KNOWLEDGE INDEX</p>
-    <h1>非粮油料植物<br><em>科学知识检索平台</em></h1>
-    <p class="hero-intro">连接植物分类、形态特征、分布用途与采样数据。每条资料保留来源与核验状态，便于研究和复查。</p>
-    <form class="hero-search" action="${pageContext.request.contextPath}/plants" method="get" data-search-form>
-      <label class="sr-only" for="home-query">植物中文名、拉丁学名或别名</label>
+    <p class="eyebrow">BOTANICAL RESEARCH / KNOWLEDGE EXPLORER</p>
+    <h1>认识你遇见的植物，<br><em>从描述所见开始。</em></h1>
+    <p class="hero-intro">按名称搜索，或描述叶片、颜色、形状与生长环境。每个候选都展示数据依据与未知信息。</p>
+    <form class="hero-search" action="${pageContext.request.contextPath}/discover" method="get" data-search-form>
+      <label class="sr-only" for="home-query">输入植物名称，或描述所见的叶片、颜色和形状</label>
       <span class="search-mark" aria-hidden="true">⌕</span>
-      <input id="home-query" name="q" maxlength="160" placeholder="搜索中文名、拉丁学名或别名">
-      <button type="submit" class="button primary" data-loading-text="检索中…">开始检索 <span aria-hidden="true">↗</span></button>
+      <input id="home-query" name="q" maxlength="500" list="plant-name-suggestions" data-plant-suggest placeholder="输入植物名称，或描述你看到的叶片、颜色和形状……">
+      <datalist id="plant-name-suggestions"></datalist>
+      <button type="submit" class="button primary" data-loading-text="检索中…">开始探索 <span aria-hidden="true">↗</span></button>
     </form>
     <div class="hero-meta"><span><i aria-hidden="true"></i>来源页码可追溯</span><span>样本记录独立关联</span></div>
-    <a class="hero-advanced-link" href="${pageContext.request.contextPath}/search/advanced">打开高级检索 <span aria-hidden="true">→</span></a>
+    <div class="home-search-modes" aria-label="更多植物检索方式"><a href="${pageContext.request.contextPath}/discover">描述找植物</a><a href="${pageContext.request.contextPath}/find-by-traits">外观特征筛选</a><a href="${pageContext.request.contextPath}/search/advanced">专业数据检索</a></div>
   </div>
   <div class="hero-art" aria-hidden="true">
     <div class="art-orbit art-orbit-one"></div><div class="art-orbit art-orbit-two"></div>
@@ -57,6 +58,7 @@
   </c:choose>
 </section>
 
+<c:if test="${not empty popularPlants}"><section class="section-block popular-section"><div class="section-heading"><div><p class="eyebrow">POPULAR / LAST 30 DAYS</p><h2>近期热门植物</h2><p>按最近 30 日的详情页访问量汇总</p></div><a class="text-link" href="${pageContext.request.contextPath}/plants">浏览全部植物 →</a></div><div class="plant-grid"><c:forEach items="${popularPlants}" var="p"><a class="plant-card" href="${pageContext.request.contextPath}/plant?id=${p.id}"><div class="plant-card-image"><c:choose><c:when test="${not empty p.imageStoredName}"><img src="${pageContext.request.contextPath}/image/${p.imageStoredName}" alt="" loading="lazy"></c:when><c:otherwise><div class="image-placeholder" aria-hidden="true">✳</div></c:otherwise></c:choose></div><div class="plant-card-body"><span class="taxonomy"><c:out value="${p.familyZh}" default="科名待补"/> · <c:out value="${p.genusZh}" default="属名待补"/></span><h3><c:out value="${p.nameZh}"/></h3><i><c:out value="${p.scientificName}" default="学名待核验"/></i></div></a></c:forEach></div></section></c:if>
 <section class="section-block featured-section">
   <div class="section-heading">
     <div><p class="eyebrow">PLANT INDEX</p><h2>植物名录</h2><p>精选条目来自实际检索结果</p></div>

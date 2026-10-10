@@ -9,6 +9,7 @@ uploads/*
 .env
 .env.*
 !.env.example
+/.local-mailbox/
 tmp/
 __pycache__/
 *.py[cod]

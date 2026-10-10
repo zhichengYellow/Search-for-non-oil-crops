@@ -1,0 +1,19 @@
+<form action="${pageContext.request.contextPath}/find-by-traits" method="get" class="trait-filter-form">
+  <div class="trait-select-grid">
+    <c:forEach items="${traits}" var="trait">
+      <fieldset class="trait-choice">
+        <legend><c:out value="${trait.label}"/></legend>
+        <label class="sr-only" for="trait-${trait.code}"><c:out value="${trait.label}"/></label>
+        <select id="trait-${trait.code}" name="${trait.code}">
+          <option value="">不确定，跳过</option>
+          <c:forEach items="${trait.options}" var="option">
+            <option value="${option.code}" <c:if test="${selectedOptions[trait.code] eq option.code}">selected</c:if>><c:out value="${option.label}"/></option>
+          </c:forEach>
+        </select>
+        <label class="trait-negation"><input type="checkbox" name="not_${trait.code}" value="true" <c:if test="${negativeTraits.contains(trait.code)}">checked</c:if>> 我确定不是这个特征</label>
+      </fieldset>
+    </c:forEach>
+  </div>
+  <c:if test="${not empty sessionScope.currentUser}"><label class="history-opt-in"><input type="checkbox" name="saveSearch" value="1" <c:if test="${param.saveSearch eq '1'}">checked</c:if>> 保存此次检索到我的历史</label></c:if>
+  <div class="trait-form-actions"><button class="button primary" type="submit">查找候选植物</button><a class="button secondary" href="${pageContext.request.contextPath}/find-by-traits">重置特征</a></div>
+</form>

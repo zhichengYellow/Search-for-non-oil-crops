@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 public final class BusinessFlowE2E {
     private static final String CONTEXT = "/e2e";
     private static final String PASSWORD = "E2eAccount123";
+    private static final String RESET_PASSWORD = "E2eResetPassword456";
     private BusinessFlowE2E() { }
 
     public static void main(String[] args) throws Exception {
@@ -43,7 +44,7 @@ public final class BusinessFlowE2E {
         String suffix = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
         String username = "e2e" + suffix;
         String plantName = "验收植物" + suffix;
-        long userId = 0, plantId = 0;
+        long userId = 0, plantId = 0;String email=null;
 
         Path base = Path.of("target", "tomcat-e2e-" + suffix).toAbsolutePath();
         Files.createDirectories(base.resolve("webapps"));
@@ -63,19 +64,35 @@ public final class BusinessFlowE2E {
             expect(home, 200, "guest home");
             expect(get(client, port, "/admin"), 302, "guest admin redirect");
             expect(get(client, port, "/favorites"), 302, "guest favorites redirect");
+            expect(get(client, port, "/history"), 302, "guest history redirect");
+            expect(get(client,port,"/compare"),200,"public plant comparison picker");
 
             HttpResponse<String> registration = get(client, port, "/register");
             expect(registration, 200, "registration form");
             String csrf = csrf(registration.body());
-            HttpResponse<String> registered = post(client, port, "/register", fields(
+            email=username+"@example.test";
+            HttpResponse<String> emailRequested=post(client,port,"/email-code",fields("csrfToken",csrf,"purpose","register","email",email));
+            expect(emailRequested,202,"registration email challenge request");
+            require(!emailRequested.body().matches("(?s).*\\b[0-9]{6}\\b.*"),"email code leaked in HTTP response");
+            String emailCode=latestEmailCode("注册验证码");
+            HttpResponse<String> registered = postWithCaptcha(client, port, "/register", "register", fields(
                     "csrfToken", csrf, "username", username, "password", PASSWORD, "confirmPassword", PASSWORD,
-                    "displayName", "验收临时账户"));
+                    "displayName", "验收临时账户","email",email,"emailCode",emailCode));
             expect(registered, 302, "registration submit");
+            require(emailIsVerified(username),"registered email was not marked verified");
+
+            HttpResponse<String> forgot=get(client,port,"/forgot-password");expect(forgot,200,"forgot password form");
+            HttpResponse<String> resetRequested=post(client,port,"/email-code",fields("csrfToken",csrf(forgot.body()),"purpose","reset","email",email));
+            expect(resetRequested,202,"password reset email challenge request");
+            String resetCode=latestEmailCode("密码重置验证码");
+            HttpResponse<String> reset=post(client,port,"/forgot-password",fields("csrfToken",csrf(forgot.body()),"email",email,
+                    "emailCode",resetCode,"password",RESET_PASSWORD,"confirmPassword",RESET_PASSWORD));
+            expect(reset,302,"password reset submit");
 
             HttpResponse<String> loginPage = get(client, port, "/login");
             expect(loginPage, 200, "login form");
-            HttpResponse<String> login = post(client, port, "/login", fields(
-                    "csrfToken", csrf(loginPage.body()), "username", username, "password", PASSWORD));
+            HttpResponse<String> login = postWithCaptcha(client, port, "/login", "login", fields(
+                    "csrfToken", csrf(loginPage.body()), "username", username, "password", RESET_PASSWORD));
             expect(login, 302, "login submit");
             HttpResponse<String> profile = get(client, port, "/profile");
             expect(profile, 200, "authenticated profile/session");
@@ -106,9 +123,45 @@ public final class BusinessFlowE2E {
             expect(created, 302, "admin plant create");
             plantId = plantId(plantName);
 
+            expect(get(client,port,"/plant?id="+plantId),200,"detail visit recorded for recent and popular views");
+            expect(get(client,port,"/plants?q="+enc(plantName)+"&saveSearch=1"),200,"opt-in saved search");
+            HttpResponse<String> historyBeforeClear=get(client,port,"/history");expect(historyBeforeClear,200,"owner-scoped search and recent history");
+            contains(historyBeforeClear.body(),plantName,"saved search and recent plant");contains(historyBeforeClear.body(),"BASIC","search mode saved");
+            contains(get(client,port,"/").body(),"近期热门植物","database-backed popular plants after detail visit");
+            expect(post(client,port,"/history",fields("csrfToken",csrf(historyBeforeClear.body()),"action","clearSearches")),302,"clear own search history");
+            require(new org.nonfood.oilplants.dao.UserDiscoveryDao().searchHistory(userId).isEmpty(),"cleared search history remains");
+            HttpResponse<String> historyAfterSearchClear=get(client,port,"/history");contains(historyAfterSearchClear.body(),plantName,"recent history remains separate from cleared searches");
+            expect(post(client,port,"/history",fields("csrfToken",csrf(historyAfterSearchClear.body()),"action","clearRecent")),302,"clear own recent history");
+            require(new org.nonfood.oilplants.dao.UserDiscoveryDao().recentPlants(userId,12).isEmpty(),"cleared recent history remains");
+
             HttpResponse<String> publicSearch = get(client, port, "/plants?q=" + enc(plantName) + "&oilMin=40&oilMax=50&component=oleic&componentMin=20");
             expect(publicSearch, 200, "public multi-condition search");
             contains(publicSearch.body(), plantName, "verified sample result");
+            HttpResponse<String> suggestions=get(client,port,"/suggest?q="+enc(plantName.substring(0,4)));expect(suggestions,200,"database-backed name suggestions");contains(suggestions.body(),plantName,"plant suggestion");
+            long otherPlantId=otherPublicPlantId(plantId);String otherPlantName=publicPlantName(otherPlantId);
+            HttpResponse<String> comparison=get(client,port,"/compare?id="+plantId+"&id="+otherPlantId);expect(comparison,200,"public plant comparison data");contains(comparison.body(),plantName,"comparison selected plant");contains(comparison.body(),otherPlantName,"comparison second plant");contains(comparison.body(),"first sample","sample-preserving comparison");
+
+            HttpResponse<String> traitsPage=get(client,port,"/admin/traits");expect(traitsPage,200,"admin trait evidence page");
+            String courseSourceId=knowledgeSourceId();
+            Map<String,String> trait=fields("csrfToken",csrf(traitsPage.body()),"action","save","plantId",Long.toString(plantId),
+                    "traitCode","leaf_shape","optionCode","needle","sourceId",courseSourceId,"sourcePage","E2E fixture",
+                    "sourceExcerpt","Temporary synthetic test fixture only","status","CONFIRMED");
+            expect(post(client,port,"/admin/traits",trait),302,"admin trait evidence create");
+            HttpResponse<String> appearance=get(client,port,"/find-by-traits?leaf_shape=needle");expect(appearance,200,"database-backed appearance search");
+            contains(appearance.body(),plantName,"confirmed trait candidate");contains(appearance.body(),"针形","trait explanation");
+            HttpResponse<String> described=get(client,port,"/discover?q="+enc("叶子像针"));expect(described,200,"database-backed description search");
+            contains(described.body(),plantName,"rule-parsed description candidate");
+
+            String traitId=match(get(client,port,"/admin/traits").body(),"name=\"id\" value=\"([0-9]+)\"","trait value id");
+            Map<String,String> pendingTrait=fields("csrfToken",csrf(get(client,port,"/admin/traits?edit="+traitId).body()),"action","save","id",traitId,
+                    "plantId",Long.toString(plantId),"traitCode","leaf_shape","optionCode","needle","sourceId",courseSourceId,
+                    "sourcePage","E2E fixture","sourceExcerpt","Temporary synthetic test fixture only","status","NEEDS_REVIEW");
+            expect(post(client,port,"/admin/traits",pendingTrait),302,"admin trait review-state update");
+            require(!get(client,port,"/find-by-traits?leaf_shape=needle").body().contains(plantName),"pending trait incorrectly entered public matching");
+            HttpResponse<String> traitDeletePage=get(client,port,"/admin/traits");
+            Map<String,String> deleteTrait=fields("csrfToken",csrf(traitDeletePage.body()),"action","delete","id",traitId);
+            expect(post(client,port,"/admin/traits",deleteTrait),302,"admin trait evidence delete");
+
             HttpResponse<String> detail = get(client, port, "/plant?id=" + plantId);
             expect(detail, 200, "plant detail");
             contains(detail.body(), "42.125%", "verified oil content display");
@@ -156,10 +209,10 @@ public final class BusinessFlowE2E {
             expect(logoutPage, 200, "session before logout");
             expect(post(client, port, "/logout", fields("csrfToken", csrf(logoutPage.body()))), 302, "logout");
             expect(get(client, port, "/favorites"), 302, "session invalidated on logout");
-            System.out.println("Business flow E2E passed: guest routes, register/login/session, user/admin authorization, CSRF forms, invalid input, DB-backed search, favorites, admin create/update/delete, image upload/serve/delete, details, error page, and logout.");
+            System.out.println("Business flow E2E passed: guest routes, CAPTCHA and email-code registration, email verification, password reset, login/session, role authorization, CSRF, opted-in search history, recent views, 30-day popular plants, DB-backed suggestions/comparison/professional/trait/description search, favorites, admin plant/trait CRUD, image lifecycle, details, error page, and logout.");
         } finally {
             try { tomcat.stop(); } finally { tomcat.destroy(); }
-            cleanup(plantId, userId, username, plantName);
+            cleanup(plantId, userId, username, plantName, email);
         }
     }
 
@@ -174,6 +227,28 @@ public final class BusinessFlowE2E {
         }
         return client.send(HttpRequest.newBuilder(uri(port, path)).header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8")
                 .POST(HttpRequest.BodyPublishers.ofString(body.toString())).build(), HttpResponse.BodyHandlers.ofString());
+    }
+    private static HttpResponse<String> postWithCaptcha(HttpClient client,int port,String path,String purpose,Map<String,String> fields)throws Exception {
+        for(int attempt=0;attempt<5;attempt++) {
+            if(attempt>0)Thread.sleep(1700);
+            String suffix=attempt==0?"":"&refresh=1&nonce="+UUID.randomUUID();
+            HttpResponse<byte[]> image=client.send(HttpRequest.newBuilder(uri(port,"/captcha?purpose="+purpose+suffix)).GET().build(),HttpResponse.BodyHandlers.ofByteArray());
+            expect(image,200,purpose+" CAPTCHA image");
+            String code=recognizeCaptcha(image.body());
+            if(!code.matches("^[23456789A-HJ-KM-NP-Z]{6}$"))continue;
+            Map<String,String> values=new LinkedHashMap<>(fields);values.put("captchaCode",code);
+            HttpResponse<String> result=post(client,port,path,values);
+            if(result.statusCode()!=400)return result;
+        }
+        throw new IllegalStateException("Unable to solve a CAPTCHA from its rendered image in the E2E test.");
+    }
+    private static String recognizeCaptcha(byte[] png)throws Exception {
+        Path image=Files.createTempFile("plantscope-captcha-",".png");
+        try {
+            Files.write(image,png);Process process=new ProcessBuilder("swift","scripts/recognize_test_captcha.swift",image.toString()).redirectErrorStream(true).start();
+            byte[] output=process.getInputStream().readAllBytes();if(!process.waitFor(15,java.util.concurrent.TimeUnit.SECONDS)){process.destroyForcibly();return "";}
+            if(process.exitValue()!=0)return "";return new String(output,StandardCharsets.US_ASCII).replaceAll("[^A-Za-z0-9]","").toUpperCase(java.util.Locale.ROOT);
+        } finally {Files.deleteIfExists(image);}
     }
     private static HttpResponse<String> postMultipart(HttpClient client, int port, String path, Map<String, String> values, String filename, String contentType, byte[] file) throws Exception {
         String boundary = "----E2E" + UUID.randomUUID().toString().replace("-", "");
@@ -213,6 +288,22 @@ public final class BusinessFlowE2E {
             p.setString(1, username); try (ResultSet r = p.executeQuery()) { if (!r.next()) throw new IllegalStateException("Registered user missing from database"); return r.getLong(1); }
         }
     }
+    private static boolean emailIsVerified(String username)throws Exception {
+        try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT email_verified_at IS NOT NULL FROM users WHERE username=?")){p.setString(1,username);try(ResultSet r=p.executeQuery()){return r.next()&&r.getBoolean(1);}}
+    }
+    private static String latestEmailCode(String expectedSubject)throws Exception {
+        Path directory=Path.of(System.getenv("MAIL_SINK_DIR"));try(var files=Files.list(directory)){
+            Path message=files.filter(path->path.getFileName().toString().endsWith(".eml")).filter(path->{try{return Files.readString(path,StandardCharsets.UTF_8).contains(expectedSubject);}catch(Exception e){return false;}}).max(java.util.Comparator.comparingLong(path->{try{return Files.getLastModifiedTime(path).toMillis();}catch(Exception e){return 0;}})).orElseThrow(()->new IllegalStateException("Expected development mail is unavailable."));
+            Matcher matcher=Pattern.compile("验证码是：([0-9]{6})").matcher(Files.readString(message,StandardCharsets.UTF_8));if(!matcher.find())throw new IllegalStateException("Development mail did not contain a formatted code.");return matcher.group(1);
+        }
+    }
+    private static String knowledgeSourceId() throws Exception {
+        try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT id FROM plant_knowledge_sources WHERE source_key='course-pdf-2026'")){
+            try(ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("Course PDF knowledge source is missing; run the PlantScope trait migration");return Long.toString(r.getLong(1));}
+        }
+    }
+    private static long otherPublicPlantId(long excluded)throws Exception{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT id FROM plants WHERE is_public=1 AND id<>? ORDER BY id LIMIT 1")){p.setLong(1,excluded);try(ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("Need a second public plant to test comparison.");return r.getLong(1);}}}
+    private static String publicPlantName(long id)throws Exception{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT name_zh FROM plants WHERE id=? AND is_public=1")){p.setLong(1,id);try(ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("Comparison plant missing.");return r.getString(1);}}}
     private static void promoteToAdmin(long id) throws Exception {
         try (Connection c = Database.getConnection(); PreparedStatement p = c.prepareStatement("UPDATE users SET role='ADMIN' WHERE id=?")) { p.setLong(1, id); if (p.executeUpdate() != 1) throw new IllegalStateException("Could not promote temporary test account"); }
     }
@@ -246,9 +337,11 @@ public final class BusinessFlowE2E {
             }
         }
     }
-    private static void cleanup(long plantId, long userId, String username, String plantName) throws Exception {
+    private static void cleanup(long plantId, long userId, String username, String plantName, String email) throws Exception {
         List<String> storedImages = new ArrayList<>();
         try (Connection c = Database.getConnection()) {
+            if(email!=null)try(PreparedStatement p=c.prepareStatement("DELETE FROM auth_email_challenges WHERE email=?")){p.setString(1,email);p.executeUpdate();}
+            try(PreparedStatement p=c.prepareStatement("DELETE FROM auth_events WHERE attempted_username=?")){p.setString(1,username);p.executeUpdate();}
             if (userId == 0) {
                 try (PreparedStatement p = c.prepareStatement("SELECT id FROM users WHERE username=?")) {
                     p.setString(1, username); try (ResultSet r = p.executeQuery()) { if (r.next()) userId = r.getLong(1); }

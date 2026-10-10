@@ -1,6 +1,8 @@
 # 功能验收清单
 
-## 本次已执行
+## 初始验收记录（PlantScope 2.0 升级前）
+
+下列清单记录 2026-10-09 的原有课程系统验收，不代表当前升级版本的完整测试结果。PlantScope 2.0 最新结果与未验证项以 [TEST_REPORT.md](TEST_REPORT.md) 和 [ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md) 为准。
 
 - [x] `mvn clean test`：22 项，19 项通过，3 项数据库集成测试因默认未启用 `db.integration` 而跳过；0 失败、0 错误。
 - [x] `mvn package`：生成 `target/oil-plants-knowledge.war`。

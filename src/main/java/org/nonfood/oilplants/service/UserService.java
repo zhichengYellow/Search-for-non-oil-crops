@@ -11,6 +11,15 @@ public class UserService {
     private final UserDao dao;
     public UserService(){this(new UserDao());} public UserService(UserDao dao){this.dao=dao;}
     public void register(String username,String password,String confirm,String displayName,String email)throws SQLException{
+        dao.create(validatedUser(username,password,confirm,displayName,email),false);
+    }
+    public void registerVerifiedEmail(String username,String password,String confirm,String displayName,String email,String code,EmailVerificationService verification)throws SQLException{
+        User user=validatedUser(username,password,confirm,displayName,email);
+        if(user.getEmail()==null)throw new IllegalArgumentException("注册需要填写并验证邮箱。");
+        if(!verification.consumeRegistrationCode(user.getEmail(),code))throw new IllegalArgumentException("邮箱验证码错误、过期或已使用，请重新获取。");
+        dao.create(user,true);
+    }
+    private User validatedUser(String username,String password,String confirm,String displayName,String email)throws SQLException{
         username=username==null?"":username.trim();displayName=displayName==null?"":displayName.trim();email=email==null||email.isBlank()?null:email.trim();
         if(!Validation.username(username))throw new IllegalArgumentException("用户名需为 4–32 位，以字母开头，只能包含字母、数字和下划线。");
         if(!Validation.password(password))throw new IllegalArgumentException("密码需为 10–72 位，并同时包含字母和数字。");
@@ -18,7 +27,8 @@ public class UserService {
         if(displayName.isBlank()||displayName.length()>80)throw new IllegalArgumentException("请填写 1–80 个字符的显示名称。");
         if(email!=null&&(email.length()>160||!email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")))throw new IllegalArgumentException("邮箱格式不正确。");
         if(dao.usernameExists(username))throw new IllegalArgumentException("该用户名已被使用。");
-        User u=new User();u.setUsername(username);u.setPasswordHash(BCrypt.hashpw(password,BCrypt.gensalt(12)));u.setDisplayName(displayName);u.setEmail(email);u.setRole("USER");dao.create(u);
+        if(email!=null&&dao.emailExists(email.toLowerCase(java.util.Locale.ROOT)))throw new IllegalArgumentException("该邮箱已被使用。");
+        User u=new User();u.setUsername(username);u.setPasswordHash(BCrypt.hashpw(password,BCrypt.gensalt(12)));u.setDisplayName(displayName);u.setEmail(email);u.setRole("USER");return u;
     }
     public Optional<User> authenticate(String username,String password)throws SQLException{
         if(username==null||password==null||password.length()>72)return Optional.empty();Optional<User> u=dao.findByUsername(username.trim());
