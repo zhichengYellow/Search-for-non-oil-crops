@@ -1,0 +1,1236 @@
+{
+  "source_pdf": "docs/课程设计资料.pdf",
+  "verified_values": [
+    {
+      "sample_id": "pdf19-p001-01-p001-r01",
+      "value_pct": "10.65",
+      "source_pdf_page": 1,
+      "source_bbox_normalized": [
+        0.32249,
+        0.07964,
+        0.0355,
+        0.01087
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p001-01-p001-r02",
+      "value_pct": "6.15",
+      "source_pdf_page": 1,
+      "source_bbox_normalized": [
+        0.32249,
+        0.06464,
+        0.03254,
+        0.01294
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p001-01-p001-r03",
+      "value_pct": "25.32",
+      "source_pdf_page": 1,
+      "source_bbox_normalized": [
+        0.31953,
+        0.05172,
+        0.03846,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p001-01-p001-r04",
+      "value_pct": "7.12",
+      "source_pdf_page": 1,
+      "source_bbox_normalized": [
+        0.32249,
+        0.03879,
+        0.03254,
+        0.01085
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p002-01-p003-r01",
+      "value_pct": "23.87",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31065,
+        0.69393,
+        0.0355,
+        0.01081
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p002-01-p003-r02",
+      "value_pct": "4.18",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31065,
+        0.67888,
+        0.0355,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p002-01-p003-r03",
+      "value_pct": "26.89",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31065,
+        0.66379,
+        0.0355,
+        0.01085
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p002-01-p003-r04",
+      "value_pct": "20.14",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31065,
+        0.64857,
+        0.03846,
+        0.01107
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p002-01-p003-r05",
+      "value_pct": "3.7",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31657,
+        0.63143,
+        0.02663,
+        0.01297
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p002-01-p003-r06",
+      "value_pct": "4.19",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31361,
+        0.61853,
+        0.03254,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p002-01-p003-r07",
+      "value_pct": "20.4",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31361,
+        0.60345,
+        0.03254,
+        0.01084
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p002-01-p003-r08",
+      "value_pct": "0.96",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31065,
+        0.58821,
+        0.0355,
+        0.01107
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p002-01-p003-r09",
+      "value_pct": "20.28",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31065,
+        0.57321,
+        0.0355,
+        0.01084
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p002-01-p003-r10",
+      "value_pct": "2.93",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31361,
+        0.55819,
+        0.03254,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p002-01-p003-r11",
+      "value_pct": "35.65",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31065,
+        0.5431,
+        0.03846,
+        0.01083
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p003-01-p003-r01",
+      "value_pct": "23.15",
+      "source_pdf_page": 3,
+      "source_bbox_normalized": [
+        0.31361,
+        0.03664,
+        0.03846,
+        0.01086
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p004-01-p004-r01",
+      "value_pct": "4.12",
+      "source_pdf_page": 4,
+      "source_bbox_normalized": [
+        0.31657,
+        0.54526,
+        0.02959,
+        0.01081
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p004-01-p004-r02",
+      "value_pct": "28.30",
+      "source_pdf_page": 4,
+      "source_bbox_normalized": [
+        0.31361,
+        0.53,
+        0.03846,
+        0.01107
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p004-01-p004-r03",
+      "value_pct": "3.85",
+      "source_pdf_page": 4,
+      "source_bbox_normalized": [
+        0.31657,
+        0.51714,
+        0.03254,
+        0.01087
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p004-02-p004-r01",
+      "value_pct": "26.40",
+      "source_pdf_page": 4,
+      "source_bbox_normalized": [
+        0.31657,
+        0.03879,
+        0.03846,
+        0.00871
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p005-01-p005-r01",
+      "value_pct": "26.62",
+      "source_pdf_page": 5,
+      "source_bbox_normalized": [
+        0.31953,
+        0.5431,
+        0.03846,
+        0.00868
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p005-02-p005-r01",
+      "value_pct": "35.65",
+      "source_pdf_page": 5,
+      "source_bbox_normalized": [
+        0.32249,
+        0.03879,
+        0.03846,
+        0.01085
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p006-01-p006-r01",
+      "value_pct": "47.90",
+      "source_pdf_page": 6,
+      "source_bbox_normalized": [
+        0.31953,
+        0.47414,
+        0.03846,
+        0.01086
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p006-02-p006-r01",
+      "value_pct": "59.70",
+      "source_pdf_page": 6,
+      "source_bbox_normalized": [
+        0.31953,
+        0.04095,
+        0.03846,
+        0.01298
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p007-01-p007-r01",
+      "value_pct": "48.40",
+      "source_pdf_page": 7,
+      "source_bbox_normalized": [
+        0.32544,
+        0.47198,
+        0.03846,
+        0.01087
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p007-02-p007-r01",
+      "value_pct": "46.21",
+      "source_pdf_page": 7,
+      "source_bbox_normalized": [
+        0.3284,
+        0.06893,
+        0.04142,
+        0.01081
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p007-02-p007-r02",
+      "value_pct": "23.15",
+      "source_pdf_page": 7,
+      "source_bbox_normalized": [
+        0.3284,
+        0.05388,
+        0.04142,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p007-02-p007-r03",
+      "value_pct": "18.3",
+      "source_pdf_page": 7,
+      "source_bbox_normalized": [
+        0.33136,
+        0.03879,
+        0.03846,
+        0.01085
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p008-01-p008-r01",
+      "value_pct": "28.40",
+      "source_pdf_page": 8,
+      "source_bbox_normalized": [
+        0.3284,
+        0.5625,
+        0.04734,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p008-02-p008-r01",
+      "value_pct": "8.27",
+      "source_pdf_page": 8,
+      "source_bbox_normalized": [
+        0.3432,
+        0.07964,
+        0.02959,
+        0.01087
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p008-02-p008-r02",
+      "value_pct": "13.20",
+      "source_pdf_page": 8,
+      "source_bbox_normalized": [
+        0.34024,
+        0.06679,
+        0.03846,
+        0.0108
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p008-02-p008-r04",
+      "value_pct": "43.0",
+      "source_pdf_page": 8,
+      "source_bbox_normalized": [
+        0.3432,
+        0.03879,
+        0.03254,
+        0.01085
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p009-01-p009-r01",
+      "value_pct": "44.10",
+      "source_pdf_page": 9,
+      "source_bbox_normalized": [
+        0.31953,
+        0.56034,
+        0.04142,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p009-02-p009-r01",
+      "value_pct": "45.83",
+      "source_pdf_page": 9,
+      "source_bbox_normalized": [
+        0.32249,
+        0.05172,
+        0.04142,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p009-02-p009-r02",
+      "value_pct": "39.30",
+      "source_pdf_page": 9,
+      "source_bbox_normalized": [
+        0.32544,
+        0.03879,
+        0.03846,
+        0.00871
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p010-01-p010-r01",
+      "value_pct": "24.43",
+      "source_pdf_page": 10,
+      "source_bbox_normalized": [
+        0.3284,
+        0.54957,
+        0.04142,
+        0.01293
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p010-01-p010-r02",
+      "value_pct": "36.70",
+      "source_pdf_page": 10,
+      "source_bbox_normalized": [
+        0.3284,
+        0.53664,
+        0.04142,
+        0.01086
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p010-02-p010-r01",
+      "value_pct": "23.48",
+      "source_pdf_page": 10,
+      "source_bbox_normalized": [
+        0.3284,
+        0.0431,
+        0.04142,
+        0.01083
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p012-01-p012-r01",
+      "value_pct": "25.60",
+      "source_pdf_page": 12,
+      "source_bbox_normalized": [
+        0.3284,
+        0.43319,
+        0.03846,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p012-02-p012-r01",
+      "value_pct": "9.86",
+      "source_pdf_page": 12,
+      "source_bbox_normalized": [
+        0.3284,
+        0.05172,
+        0.0355,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p012-02-p012-r02",
+      "value_pct": "24.02",
+      "source_pdf_page": 12,
+      "source_bbox_normalized": [
+        0.3284,
+        0.03879,
+        0.03846,
+        0.01085
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p013-01-p013-r01",
+      "value_pct": "32.70",
+      "source_pdf_page": 13,
+      "source_bbox_normalized": [
+        0.31953,
+        0.51714,
+        0.0355,
+        0.01087
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p013-02-p013-r01",
+      "value_pct": "12.77",
+      "source_pdf_page": 13,
+      "source_bbox_normalized": [
+        0.31953,
+        0.04957,
+        0.03846,
+        0.01079
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p013-02-p013-r02",
+      "value_pct": "22.50",
+      "source_pdf_page": 13,
+      "source_bbox_normalized": [
+        0.31953,
+        0.03448,
+        0.03846,
+        0.01087
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p014-01-p014-r01",
+      "value_pct": "45.30",
+      "source_pdf_page": 14,
+      "source_bbox_normalized": [
+        0.34024,
+        0.51929,
+        0.03846,
+        0.01089
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p014-01-p014-r02",
+      "value_pct": "46.82",
+      "source_pdf_page": 14,
+      "source_bbox_normalized": [
+        0.34024,
+        0.50643,
+        0.03846,
+        0.01081
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p014-02-p014-r01",
+      "value_pct": "28.1",
+      "source_pdf_page": 14,
+      "source_bbox_normalized": [
+        0.34615,
+        0.06893,
+        0.03254,
+        0.01081
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p015-01-p015-r01",
+      "value_pct": "29.40",
+      "source_pdf_page": 15,
+      "source_bbox_normalized": [
+        0.31657,
+        0.11207,
+        0.0355,
+        0.00865
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p015-01-p015-r02",
+      "value_pct": "39.45",
+      "source_pdf_page": 15,
+      "source_bbox_normalized": [
+        0.31657,
+        0.09698,
+        0.03846,
+        0.01087
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p015-01-p015-r03",
+      "value_pct": "46.42",
+      "source_pdf_page": 15,
+      "source_bbox_normalized": [
+        0.31657,
+        0.08179,
+        0.03846,
+        0.01089
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p015-01-p015-r04",
+      "value_pct": "30.88",
+      "source_pdf_page": 15,
+      "source_bbox_normalized": [
+        0.31657,
+        0.05388,
+        0.03846,
+        0.00862
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p015-01-p015-r05",
+      "value_pct": "27.10",
+      "source_pdf_page": 15,
+      "source_bbox_normalized": [
+        0.31657,
+        0.03879,
+        0.03846,
+        0.01085
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p016-01-p016-r01",
+      "value_pct": "10.61",
+      "source_pdf_page": 16,
+      "source_bbox_normalized": [
+        0.3284,
+        0.47845,
+        0.04142,
+        0.01084
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p016-01-p016-r02",
+      "value_pct": "22.40",
+      "source_pdf_page": 16,
+      "source_bbox_normalized": [
+        0.33136,
+        0.46321,
+        0.03846,
+        0.01107
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p016-02-p016-r01",
+      "value_pct": "59.14",
+      "source_pdf_page": 16,
+      "source_bbox_normalized": [
+        0.33136,
+        0.05603,
+        0.04142,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p016-02-p016-r02",
+      "value_pct": "35.24",
+      "source_pdf_page": 16,
+      "source_bbox_normalized": [
+        0.3284,
+        0.04095,
+        0.04438,
+        0.01084
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p017-01-p017-r01",
+      "value_pct": "21.03",
+      "source_pdf_page": 17,
+      "source_bbox_normalized": [
+        0.31065,
+        0.48276,
+        0.0355,
+        0.01081
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p017-01-p017-r02",
+      "value_pct": "36.70",
+      "source_pdf_page": 17,
+      "source_bbox_normalized": [
+        0.31065,
+        0.46983,
+        0.03846,
+        0.01089
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p017-01-p017-r03",
+      "value_pct": "43.50",
+      "source_pdf_page": 17,
+      "source_bbox_normalized": [
+        0.31065,
+        0.45679,
+        0.03846,
+        0.01089
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p017-01-p017-r04",
+      "value_pct": "28.10",
+      "source_pdf_page": 17,
+      "source_bbox_normalized": [
+        0.31065,
+        0.44393,
+        0.03846,
+        0.01081
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p017-02-p017-r01",
+      "value_pct": "7.38",
+      "source_pdf_page": 17,
+      "source_bbox_normalized": [
+        0.31953,
+        0.05172,
+        0.03254,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p017-02-p017-r02",
+      "value_pct": "31.06",
+      "source_pdf_page": 17,
+      "source_bbox_normalized": [
+        0.31657,
+        0.03879,
+        0.03846,
+        0.01085
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p018-01-p018-r01",
+      "value_pct": "30.60",
+      "source_pdf_page": 18,
+      "source_bbox_normalized": [
+        0.33136,
+        0.55819,
+        0.04142,
+        0.00862
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p018-02-p018-r01",
+      "value_pct": "19.34",
+      "source_pdf_page": 18,
+      "source_bbox_normalized": [
+        0.33432,
+        0.06893,
+        0.03846,
+        0.00866
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p018-02-p018-r02",
+      "value_pct": "48.76",
+      "source_pdf_page": 18,
+      "source_bbox_normalized": [
+        0.33728,
+        0.05388,
+        0.0355,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p018-02-p018-r03",
+      "value_pct": "21.69",
+      "source_pdf_page": 18,
+      "source_bbox_normalized": [
+        0.33432,
+        0.03879,
+        0.04142,
+        0.00871
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p019-01-p019-r01",
+      "value_pct": "31.04",
+      "source_pdf_page": 19,
+      "source_bbox_normalized": [
+        0.31065,
+        0.52571,
+        0.03846,
+        0.01107
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p019-01-p019-r02",
+      "value_pct": "43.90",
+      "source_pdf_page": 19,
+      "source_bbox_normalized": [
+        0.31065,
+        0.51071,
+        0.03846,
+        0.01084
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p019-02-p019-r01",
+      "value_pct": "42.02",
+      "source_pdf_page": 19,
+      "source_bbox_normalized": [
+        0.31361,
+        0.12284,
+        0.0355,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p019-02-p019-r02",
+      "value_pct": "6.93",
+      "source_pdf_page": 19,
+      "source_bbox_normalized": [
+        0.31657,
+        0.1056,
+        0.02959,
+        0.01083
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p019-02-p019-r03",
+      "value_pct": "9.12",
+      "source_pdf_page": 19,
+      "source_bbox_normalized": [
+        0.31657,
+        0.08821,
+        0.02959,
+        0.01107
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p019-02-p019-r04",
+      "value_pct": "16.27",
+      "source_pdf_page": 19,
+      "source_bbox_normalized": [
+        0.31361,
+        0.07321,
+        0.0355,
+        0.01084
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p019-02-p019-r05",
+      "value_pct": "6.43",
+      "source_pdf_page": 19,
+      "source_bbox_normalized": [
+        0.31657,
+        0.05819,
+        0.02959,
+        0.01078
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p019-02-p019-r06",
+      "value_pct": "12.66",
+      "source_pdf_page": 19,
+      "source_bbox_normalized": [
+        0.31361,
+        0.0431,
+        0.0355,
+        0.01083
+      ],
+      "verification_method": "visual_cell_check_from_300dpi_page_render",
+      "review_note": "Compared OCR candidate to its exact printed cell in data/images/diagnostics/oil-review contact sheets."
+    },
+    {
+      "sample_id": "pdf19-p011-01-p011-r01",
+      "value_pct": "53.3",
+      "source_pdf_page": 11,
+      "source_bbox_normalized": [
+        0.322,
+        0.2245,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.7665,
+        0.036,
+        0.009
+      ],
+      "verification_method": "visual_table_row_transcription_from_300dpi_page_render",
+      "review_note": "Read the oil-content cell under the printed 含油率（%） header on the visually inspected PDF page 11 table."
+    },
+    {
+      "sample_id": "pdf19-p011-01-p011-r02",
+      "value_pct": "53.54",
+      "source_pdf_page": 11,
+      "source_bbox_normalized": [
+        0.322,
+        0.2077,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.7833,
+        0.036,
+        0.009
+      ],
+      "verification_method": "visual_table_row_transcription_from_300dpi_page_render",
+      "review_note": "Read the oil-content cell under the printed 含油率（%） header on the visually inspected PDF page 11 table."
+    },
+    {
+      "sample_id": "pdf19-p011-01-p011-r03",
+      "value_pct": "53.57",
+      "source_pdf_page": 11,
+      "source_bbox_normalized": [
+        0.322,
+        0.1909,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.8001,
+        0.036,
+        0.009
+      ],
+      "verification_method": "visual_table_row_transcription_from_300dpi_page_render",
+      "review_note": "Read the oil-content cell under the printed 含油率（%） header on the visually inspected PDF page 11 table."
+    },
+    {
+      "sample_id": "pdf19-p011-01-p011-r04",
+      "value_pct": "12.01",
+      "source_pdf_page": 11,
+      "source_bbox_normalized": [
+        0.322,
+        0.1741,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.8169,
+        0.036,
+        0.009
+      ],
+      "verification_method": "visual_table_row_transcription_from_300dpi_page_render",
+      "review_note": "Read the oil-content cell under the printed 含油率（%） header on the visually inspected PDF page 11 table."
+    },
+    {
+      "sample_id": "pdf19-p011-01-p011-r05",
+      "value_pct": "54.65",
+      "source_pdf_page": 11,
+      "source_bbox_normalized": [
+        0.322,
+        0.1573,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.8337,
+        0.036,
+        0.009
+      ],
+      "verification_method": "visual_table_row_transcription_from_300dpi_page_render",
+      "review_note": "Read the oil-content cell under the printed 含油率（%） header on the visually inspected PDF page 11 table."
+    },
+    {
+      "sample_id": "pdf19-p011-01-p011-r06",
+      "value_pct": "46.80",
+      "source_pdf_page": 11,
+      "source_bbox_normalized": [
+        0.322,
+        0.1405,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.8505,
+        0.036,
+        0.009
+      ],
+      "verification_method": "visual_table_row_transcription_from_300dpi_page_render",
+      "review_note": "Read the oil-content cell under the printed 含油率（%） header on the visually inspected PDF page 11 table."
+    },
+    {
+      "sample_id": "pdf19-p011-01-p011-r07",
+      "value_pct": "17.60",
+      "source_pdf_page": 11,
+      "source_bbox_normalized": [
+        0.322,
+        0.1237,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.8673,
+        0.036,
+        0.009
+      ],
+      "verification_method": "visual_table_row_transcription_from_300dpi_page_render",
+      "review_note": "Read the oil-content cell under the printed 含油率（%） header on the visually inspected PDF page 11 table."
+    },
+    {
+      "sample_id": "pdf19-p011-01-p011-r08",
+      "value_pct": "20.16",
+      "source_pdf_page": 11,
+      "source_bbox_normalized": [
+        0.322,
+        0.1069,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.8841,
+        0.036,
+        0.009
+      ],
+      "verification_method": "visual_table_row_transcription_from_300dpi_page_render",
+      "review_note": "Read the oil-content cell under the printed 含油率（%） header on the visually inspected PDF page 11 table."
+    },
+    {
+      "sample_id": "pdf19-p011-01-p011-r09",
+      "value_pct": "49.83",
+      "source_pdf_page": 11,
+      "source_bbox_normalized": [
+        0.322,
+        0.0901,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.9009,
+        0.036,
+        0.009
+      ],
+      "verification_method": "visual_table_row_transcription_from_300dpi_page_render",
+      "review_note": "Read the oil-content cell under the printed 含油率（%） header on the visually inspected PDF page 11 table."
+    },
+    {
+      "sample_id": "pdf19-p011-01-p011-r11",
+      "value_pct": "54.90",
+      "source_pdf_page": 11,
+      "source_bbox_normalized": [
+        0.322,
+        0.0565,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.9345,
+        0.036,
+        0.009
+      ],
+      "verification_method": "visual_table_row_transcription_from_300dpi_page_render",
+      "review_note": "Read the oil-content cell under the printed 含油率（%） header on the visually inspected PDF page 11 table."
+    },
+    {
+      "sample_id": "pdf19-p011-01-p011-r12",
+      "value_pct": "20.90",
+      "source_pdf_page": 11,
+      "source_bbox_normalized": [
+        0.322,
+        0.0397,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.9513,
+        0.036,
+        0.009
+      ],
+      "verification_method": "visual_table_row_transcription_from_300dpi_page_render",
+      "review_note": "Read the oil-content cell under the printed 含油率（%） header on the visually inspected PDF page 11 table."
+    },
+    {
+      "sample_id": "pdf19-p008-02-p008-r03",
+      "value_pct": "45.29",
+      "source_pdf_page": 8,
+      "source_bbox_normalized": [
+        0.322,
+        0.04879,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.94221,
+        0.036,
+        0.009
+      ],
+      "manual_visual_read": true,
+      "verification_method": "visual_oil_cell_check_from_300dpi_page_render",
+      "review_note": "Visible printed oil-content cell checked under 含油率（%） header on PDF page 8; OCR did not align this cell."
+    },
+    {
+      "sample_id": "pdf19-p014-01-p014-r03",
+      "value_pct": "69.20",
+      "source_pdf_page": 14,
+      "source_bbox_normalized": [
+        0.322,
+        0.48903,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.50197,
+        0.036,
+        0.009
+      ],
+      "manual_visual_read": true,
+      "verification_method": "visual_oil_cell_check_from_300dpi_page_render",
+      "review_note": "Visible printed oil-content cell checked under 含油率（%） header on PDF page 14; OCR did not align this cell."
+    },
+    {
+      "sample_id": "pdf19-p014-02-p014-r02",
+      "value_pct": "46.19",
+      "source_pdf_page": 14,
+      "source_bbox_normalized": [
+        0.322,
+        0.05061,
+        0.036,
+        0.009
+      ],
+      "source_bbox_normalized_top_origin": [
+        0.322,
+        0.94039,
+        0.036,
+        0.009
+      ],
+      "manual_visual_read": true,
+      "verification_method": "visual_oil_cell_check_from_300dpi_page_render",
+      "review_note": "Visible printed oil-content cell checked under 含油率（%） header on PDF page 14; OCR did not align this cell."
+    }
+  ]
+}

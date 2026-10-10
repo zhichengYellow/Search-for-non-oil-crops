@@ -1,0 +1,3 @@
+package org.nonfood.oilplants.service;
+import org.junit.jupiter.api.Test;import org.nonfood.oilplants.util.ResultFields;import static org.junit.jupiter.api.Assertions.*;
+class ResultFieldsTest {@Test void acceptsOnlyKnownDisplayFields(){var fields=ResultFields.validate(new String[]{"nameZh","passwordHash","../../users"});assertEquals(1,fields.size());assertTrue(fields.contains("nameZh"));assertFalse(fields.contains("passwordHash"));}@Test void defaultAndResetFieldsAreStable(){assertEquals(ResultFields.DEFAULT,ResultFields.validate(null));assertEquals(ResultFields.DEFAULT,ResultFields.validate(new String[]{"invalid"}));}}

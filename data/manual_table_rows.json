@@ -1,0 +1,24 @@
+{
+  "source_pdf": "docs/课程设计资料.pdf",
+  "source_pdf_sha256": "669e9adbfbdfb855d196e5389b2b8aee763a226fee0ce7f0a7e83bc5bab73685",
+  "verification_method": "Manual transcription and column-by-column visual check against PDF page 11 rendered at 300 DPI.",
+  "coordinate_convention": "source_row_bbox_normalized_top_origin uses x/y from the top-left of the page.",
+  "notes": [
+    "The table prints an explicit percent sign only in the oil-content header. Fatty-acid column units are not printed; raw cells are preserved as candidates and are not cast to percentages.",
+    "The 300 DPI scan visibly has 12 rows. OCR had produced only two unusable fragments, so those OCR rows are replaced by these page-checked row candidates."
+  ],
+  "rows": [
+    {"row_no":1,"collection_unit":"HUST","testing_unit":"HUST","sample_part":"种仁","origin":"湖南桑植","oil_content_pct":"53.3","measurements":{"碘值":"13.71","酸值":"9.71","皂化值":"173.27"},"fatty_acids":{"C12:0":null,"C14:0":"0.39","C16:0":"19.52","C16:1":null,"C18:0":"3.02","C18:1":"41.77","C18:2":"24.81","C18:3":"2.30","C20:0":"0.62","C20:1":"0.58"}},
+    {"row_no":2,"collection_unit":"JSU","testing_unit":"SCBG","sample_part":"种子","origin":"湖南永顺","oil_content_pct":"53.54","measurements":{"碘值":"156.77","酸值":"18.26","皂化值":"268.15"},"fatty_acids":{"C12:0":null,"C14:0":"0.11","C16:0":"9.85","C16:1":"0.09","C18:0":"5.35","C18:1":"47.40","C18:2":"21.55","C18:3":"0.31","C20:0":"0.50","C20:1":"0.39"}},
+    {"row_no":3,"collection_unit":"ICS","testing_unit":"ICS","sample_part":"种子","origin":"山东泰山","oil_content_pct":"53.57","measurements":{"碘值":"133.33","酸值":"12.05","皂化值":"161.39"},"fatty_acids":{"C12:0":null,"C14:0":"0.06","C16:0":"4.60","C16:1":"0.18","C18:0":"1.97","C18:1":"23.03","C18:2":"44.29","C18:3":"13.40","C20:0":"0.43","C20:1":"0.94"}},
+    {"row_no":4,"collection_unit":"HNAU","testing_unit":"ICS","sample_part":"种子","origin":"河南灵宝","oil_content_pct":"12.01","measurements":{"碘值":"40.39","酸值":"34.46","皂化值":"221.58"},"fatty_acids":{"C12:0":null,"C14:0":"0.26","C16:0":"10.76","C16:1":"0.13","C18:0":"4.45","C18:1":"41.30","C18:2":"17.78","C18:3":"0.22","C20:0":"0.92","C20:1":null}},
+    {"row_no":5,"collection_unit":"OCRI","testing_unit":"SCBG","sample_part":"种仁","origin":"湖北神农架","oil_content_pct":"54.65","measurements":{"碘值":"35.08","酸值":"34.05","皂化值":null},"fatty_acids":{"C12:0":null,"C14:0":"0.03","C16:0":"6.09","C16:1":null,"C18:0":"1.48","C18:1":"8.52","C18:2":"75.28","C18:3":"7.38","C20:0":"0.26","C20:1":"0.15"}},
+    {"row_no":6,"collection_unit":"OCRI","testing_unit":"SCBG","sample_part":"种仁","origin":"湖北神农架","oil_content_pct":"46.80","measurements":{"碘值":"42.37","酸值":"16.36","皂化值":"172.18"},"fatty_acids":{"C12:0":null,"C14:0":null,"C16:0":null,"C16:1":"0.22","C18:0":"4.39","C18:1":"81.35","C18:2":"61.60","C18:3":"23.69","C20:0":"0.61","C20:1":"0.46"}},
+    {"row_no":7,"collection_unit":"WHBG","testing_unit":"WHBG","sample_part":"种仁","origin":"湖北神农架","oil_content_pct":"17.60","measurements":{"碘值":"122.53","酸值":"3.88","皂化值":"216.94"},"fatty_acids":{"C12:0":null,"C14:0":"0.051","C16:0":"5.94","C16:1":"0.06","C18:0":"2.65","C18:1":"28.77","C18:2":"60.39","C18:3":"0.34","C20:0":"0.52","C20:1":"1.38"}},
+    {"row_no":8,"collection_unit":"SCU","testing_unit":"SCBG","sample_part":"种仁","origin":"四川泸定","oil_content_pct":"20.16","measurements":{"碘值":"88.99","酸值":null,"皂化值":null},"fatty_acids":{"C12:0":"0.10","C14:0":"0.56","C16:0":"4.27","C16:1":"0.19","C18:0":"1.36","C18:1":"70.40","C18:2":"18.76","C18:3":"0.66","C20:0":"0.28","C20:1":"0.15"}},
+    {"row_no":9,"collection_unit":"KMIB","testing_unit":"KMIB","sample_part":"种仁","origin":"云南麻栗坡","oil_content_pct":"49.83","measurements":{"碘值":"157.90","酸值":"5.70","皂化值":"182.60"},"fatty_acids":{"C12:0":null,"C14:0":null,"C16:0":null,"C16:1":null,"C18:0":null,"C18:1":"4.36","C18:2":"0.13","C18:3":"1.81","C20:0":"47.71","C20:1":"19.93"}},
+    {"row_no":10,"collection_unit":"SAU","testing_unit":"SCBG","sample_part":"种仁","origin":"西藏波密","oil_content_pct":null,"measurements":{"碘值":"33.82","酸值":"23.01","皂化值":"208.60"},"fatty_acids":{"C12:0":"0.02","C14:0":"0.39","C16:0":"29.15","C16:1":"0.48","C18:0":"3.31","C18:1":"21.21","C18:2":"18.44","C18:3":"4.78","C20:0":"0.45","C20:1":"0.02"}},
+    {"row_no":11,"collection_unit":"CAU","testing_unit":"ICS","sample_part":"种子","origin":"陕西眉县","oil_content_pct":"54.90","measurements":{"碘值":"96.38","酸值":"5.44","皂化值":"148.86"},"fatty_acids":{"C12:0":null,"C14:0":"0.09","C16:0":"8.90","C16:1":"0.05","C18:0":"0.62","C18:1":"47.38","C18:2":"39.70","C18:3":"0.43","C20:0":"0.77","C20:1":"2.06"}},
+    {"row_no":12,"collection_unit":"OFPC","testing_unit":null,"sample_part":"种子","origin":"陕西华山","oil_content_pct":"20.90","measurements":{"碘值":"157.90","酸值":null,"皂化值":"189.80"},"fatty_acids":{"C12:0":null,"C14:0":null,"C16:0":"5.10","C16:1":null,"C18:0":"2.20","C18:1":"23.40","C18:2":"48.10","C18:3":"21.20","C20:0":null,"C20:1":null}}
+  ]
+}

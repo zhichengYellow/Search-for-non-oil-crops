@@ -1,0 +1,1085 @@
+{
+  "coordinate_convention": "source_crop_bbox_normalized is [x, y, width, height] from the top-left of the source page",
+  "crops": [
+    {
+      "image_id": "pdf19-p001-01-img01",
+      "path": "data/images/crops/pdf19-p001-01-p001-crop01.jpg",
+      "stored_name": "pdf19-p001-01-p001-crop01.jpg",
+      "plant_id": "pdf19-p001-01",
+      "source_pdf_page": 1,
+      "source_printed_page": 11,
+      "source_crop_bbox_normalized": [
+        0.58566,
+        0.14457,
+        0.38712,
+        0.28769
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1504,
+        510,
+        2498,
+        1526
+      ],
+      "alt_text": "苏铁 图片裁切，源自 PDF 第 1 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p001-01-img02",
+      "path": "data/images/crops/pdf19-p001-01-p001-crop02.jpg",
+      "stored_name": "pdf19-p001-01-p001-crop02.jpg",
+      "plant_id": "pdf19-p001-01",
+      "source_pdf_page": 1,
+      "source_printed_page": 11,
+      "source_crop_bbox_normalized": [
+        0.02397,
+        0.46372,
+        0.95205,
+        0.39171
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        62,
+        1637,
+        2506,
+        3021
+      ],
+      "alt_text": "苏铁 图片裁切，源自 PDF 第 1 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p002-01-img01",
+      "path": "data/images/crops/pdf19-p002-01-p002-crop01.jpg",
+      "stored_name": "pdf19-p002-01-p002-crop01.jpg",
+      "plant_id": "pdf19-p002-01",
+      "source_pdf_page": 2,
+      "source_printed_page": 12,
+      "source_crop_bbox_normalized": [
+        0.59216,
+        0.1162,
+        0.38387,
+        0.79833
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1521,
+        410,
+        2506,
+        3228
+      ],
+      "alt_text": "银杏 图片裁切，源自 PDF 第 2 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p002-01-img02",
+      "path": "data/images/crops/pdf19-p002-01-p002-crop02.jpg",
+      "stored_name": "pdf19-p002-01-p002-crop02.jpg",
+      "plant_id": "pdf19-p002-01",
+      "source_pdf_page": 2,
+      "source_printed_page": 12,
+      "source_crop_bbox_normalized": [
+        0.02397,
+        0.64575,
+        0.5527,
+        0.32315
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        62,
+        2280,
+        1481,
+        3420
+      ],
+      "alt_text": "银杏 图片裁切，源自 PDF 第 2 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p002-01-img03",
+      "path": "data/images/crops/pdf19-p002-01-p003-crop03.jpg",
+      "stored_name": "pdf19-p002-01-p003-crop03.jpg",
+      "plant_id": "pdf19-p002-01",
+      "source_pdf_page": 3,
+      "source_printed_page": 13,
+      "source_crop_bbox_normalized": [
+        0.01423,
+        0.04055,
+        0.95205,
+        0.20731
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        37,
+        143,
+        2481,
+        875
+      ],
+      "alt_text": "银杏 图片裁切，源自 PDF 第 3 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p003-01-img01",
+      "path": "data/images/crops/pdf19-p003-01-p003-crop01.jpg",
+      "stored_name": "pdf19-p003-01-p003-crop01.jpg",
+      "plant_id": "pdf19-p003-01",
+      "source_pdf_page": 3,
+      "source_printed_page": 13,
+      "source_crop_bbox_normalized": [
+        0.58242,
+        0.485,
+        0.38712,
+        0.422
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1496,
+        1713,
+        2490,
+        3203
+      ],
+      "alt_text": "云南黄果冷杉 图片裁切，源自 PDF 第 3 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p004-01-img01",
+      "path": "data/images/crops/pdf19-p004-01-p004-crop01.jpg",
+      "stored_name": "pdf19-p004-01-p004-crop01.jpg",
+      "plant_id": "pdf19-p004-01",
+      "source_pdf_page": 4,
+      "source_printed_page": 14,
+      "source_crop_bbox_normalized": [
+        0.58,
+        0.038,
+        0.391,
+        0.354
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1489,
+        134,
+        2494,
+        1384
+      ],
+      "alt_text": "巴山冷杉 图片裁切，源自 PDF 第 4 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p004-02-img01",
+      "path": "data/images/crops/pdf19-p004-02-p004-crop01.jpg",
+      "stored_name": "pdf19-p004-02-p004-crop01.jpg",
+      "plant_id": "pdf19-p004-02",
+      "source_pdf_page": 4,
+      "source_printed_page": 14,
+      "source_crop_bbox_normalized": [
+        0.58,
+        0.498,
+        0.391,
+        0.404
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1489,
+        1758,
+        2494,
+        3184
+      ],
+      "alt_text": "杉松 图片裁切，源自 PDF 第 4 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p005-01-img01",
+      "path": "data/images/crops/pdf19-p005-01-p005-crop01.jpg",
+      "stored_name": "pdf19-p005-01-p005-crop01.jpg",
+      "plant_id": "pdf19-p005-01",
+      "source_pdf_page": 5,
+      "source_printed_page": 15,
+      "source_crop_bbox_normalized": [
+        0.58566,
+        0.03819,
+        0.38712,
+        0.35625
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1504,
+        135,
+        2498,
+        1393
+      ],
+      "alt_text": "怒江冷杉 图片裁切，源自 PDF 第 5 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p005-02-img01",
+      "path": "data/images/crops/pdf19-p005-02-p005-crop01.jpg",
+      "stored_name": "pdf19-p005-02-p005-crop01.jpg",
+      "plant_id": "pdf19-p005-02",
+      "source_pdf_page": 5,
+      "source_printed_page": 15,
+      "source_crop_bbox_normalized": [
+        0.59216,
+        0.64339,
+        0.38712,
+        0.25223
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1521,
+        2272,
+        2515,
+        3162
+      ],
+      "alt_text": "雪松 图片裁切，源自 PDF 第 5 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p005-02-img02",
+      "path": "data/images/crops/pdf19-p005-02-p005-crop02.jpg",
+      "stored_name": "pdf19-p005-02-p005-crop02.jpg",
+      "plant_id": "pdf19-p005-02",
+      "source_pdf_page": 5,
+      "source_printed_page": 15,
+      "source_crop_bbox_normalized": [
+        0.02397,
+        0.72377,
+        0.5527,
+        0.17421
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        62,
+        2556,
+        1481,
+        3171
+      ],
+      "alt_text": "雪松 图片裁切，源自 PDF 第 5 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p006-01-img01",
+      "path": "data/images/crops/pdf19-p006-01-p006-crop01.jpg",
+      "stored_name": "pdf19-p006-01-p006-crop01.jpg",
+      "plant_id": "pdf19-p006-01",
+      "source_pdf_page": 6,
+      "source_printed_page": 16,
+      "source_crop_bbox_normalized": [
+        0.023,
+        0.158,
+        0.534,
+        0.304
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        59,
+        558,
+        1430,
+        1631
+      ],
+      "alt_text": "铁坚油杉 图片裁切，源自 PDF 第 6 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p006-01-img02",
+      "path": "data/images/crops/pdf19-p006-01-p006-crop02.jpg",
+      "stored_name": "pdf19-p006-01-p006-crop02.jpg",
+      "plant_id": "pdf19-p006-01",
+      "source_pdf_page": 6,
+      "source_printed_page": 16,
+      "source_crop_bbox_normalized": [
+        0.598,
+        0.253,
+        0.364,
+        0.209
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1536,
+        893,
+        2470,
+        1631
+      ],
+      "alt_text": "铁坚油杉 图片裁切，源自 PDF 第 6 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p006-02-img01",
+      "path": "data/images/crops/pdf19-p006-02-p006-crop01.jpg",
+      "stored_name": "pdf19-p006-02-p006-crop01.jpg",
+      "plant_id": "pdf19-p006-02",
+      "source_pdf_page": 6,
+      "source_printed_page": 16,
+      "source_crop_bbox_normalized": [
+        0.58891,
+        0.54646,
+        0.38387,
+        0.34679
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1512,
+        1929,
+        2498,
+        3153
+      ],
+      "alt_text": "云南油杉 图片裁切，源自 PDF 第 6 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p007-01-img01",
+      "path": "data/images/crops/pdf19-p007-01-p007-crop01.jpg",
+      "stored_name": "pdf19-p007-01-p007-crop01.jpg",
+      "plant_id": "pdf19-p007-01",
+      "source_pdf_page": 7,
+      "source_printed_page": 17,
+      "source_crop_bbox_normalized": [
+        0.02722,
+        0.21313,
+        0.54945,
+        0.24986
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        70,
+        753,
+        1481,
+        1635
+      ],
+      "alt_text": "油杉 图片裁切，源自 PDF 第 7 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p007-01-img02",
+      "path": "data/images/crops/pdf19-p007-01-p007-crop02.jpg",
+      "stored_name": "pdf19-p007-01-p007-crop02.jpg",
+      "plant_id": "pdf19-p007-01",
+      "source_pdf_page": 7,
+      "source_printed_page": 17,
+      "source_crop_bbox_normalized": [
+        0.59216,
+        0.21313,
+        0.38712,
+        0.24986
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1521,
+        753,
+        2515,
+        1635
+      ],
+      "alt_text": "油杉 图片裁切，源自 PDF 第 7 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p007-02-img01",
+      "path": "data/images/crops/pdf19-p007-02-p007-crop01.jpg",
+      "stored_name": "pdf19-p007-02-p007-crop01.jpg",
+      "plant_id": "pdf19-p007-02",
+      "source_pdf_page": 7,
+      "source_printed_page": 17,
+      "source_crop_bbox_normalized": [
+        0.5954,
+        0.61975,
+        0.38712,
+        0.24513
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1529,
+        2188,
+        2523,
+        3054
+      ],
+      "alt_text": "落叶松 图片裁切，源自 PDF 第 7 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p008-01-img01",
+      "path": "data/images/crops/pdf19-p008-01-p008-crop01.jpg",
+      "stored_name": "pdf19-p008-01-p008-crop01.jpg",
+      "plant_id": "pdf19-p008-01",
+      "source_pdf_page": 8,
+      "source_printed_page": 18,
+      "source_crop_bbox_normalized": [
+        0.60514,
+        0.03819,
+        0.38062,
+        0.33261
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1554,
+        135,
+        2531,
+        1309
+      ],
+      "alt_text": "黄花落叶松 图片裁切，源自 PDF 第 8 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p008-02-img01",
+      "path": "data/images/crops/pdf19-p008-02-p008-crop01.jpg",
+      "stored_name": "pdf19-p008-02-p008-crop01.jpg",
+      "plant_id": "pdf19-p008-02",
+      "source_pdf_page": 8,
+      "source_printed_page": 18,
+      "source_crop_bbox_normalized": [
+        0.60839,
+        0.50627,
+        0.38062,
+        0.34915
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1562,
+        1787,
+        2540,
+        3020
+      ],
+      "alt_text": "云杉 图片裁切，源自 PDF 第 8 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p009-01-img01",
+      "path": "data/images/crops/pdf19-p009-01-p009-crop01.jpg",
+      "stored_name": "pdf19-p009-01-p009-crop01.jpg",
+      "plant_id": "pdf19-p009-01",
+      "source_pdf_page": 9,
+      "source_printed_page": 19,
+      "source_crop_bbox_normalized": [
+        0.02397,
+        0.18003,
+        0.5527,
+        0.19313
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        62,
+        636,
+        1481,
+        1318
+      ],
+      "alt_text": "鱼鳞云杉 图片裁切，源自 PDF 第 9 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p009-02-img01",
+      "path": "data/images/crops/pdf19-p009-02-p009-crop01.jpg",
+      "stored_name": "pdf19-p009-02-p009-crop01.jpg",
+      "plant_id": "pdf19-p009-02",
+      "source_pdf_page": 9,
+      "source_printed_page": 19,
+      "source_crop_bbox_normalized": [
+        0.02722,
+        0.60084,
+        0.5527,
+        0.28296
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        70,
+        2122,
+        1489,
+        3121
+      ],
+      "alt_text": "红皮云杉 图片裁切，源自 PDF 第 9 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p009-02-img02",
+      "path": "data/images/crops/pdf19-p009-02-p009-crop02.jpg",
+      "stored_name": "pdf19-p009-02-p009-crop02.jpg",
+      "plant_id": "pdf19-p009-02",
+      "source_pdf_page": 9,
+      "source_printed_page": 19,
+      "source_crop_bbox_normalized": [
+        0.64735,
+        0.7214,
+        0.29945,
+        0.14348
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1662,
+        2547,
+        2431,
+        3054
+      ],
+      "alt_text": "红皮云杉 图片裁切，源自 PDF 第 9 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p010-01-img01",
+      "path": "data/images/crops/pdf19-p010-01-p010-crop01.jpg",
+      "stored_name": "pdf19-p010-01-p010-crop01.jpg",
+      "plant_id": "pdf19-p010-01",
+      "source_pdf_page": 10,
+      "source_printed_page": 20,
+      "source_crop_bbox_normalized": [
+        0.59865,
+        0.03819,
+        0.38062,
+        0.34443
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1537,
+        135,
+        2515,
+        1351
+      ],
+      "alt_text": "西伯利亚云杉 图片裁切，源自 PDF 第 10 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p010-02-img01",
+      "path": "data/images/crops/pdf19-p010-02-p010-crop01.jpg",
+      "stored_name": "pdf19-p010-02-p010-crop01.jpg",
+      "plant_id": "pdf19-p010-02",
+      "source_pdf_page": 10,
+      "source_printed_page": 20,
+      "source_crop_bbox_normalized": [
+        0.6019,
+        0.48736,
+        0.38062,
+        0.39643
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1546,
+        1720,
+        2523,
+        3120
+      ],
+      "alt_text": "青杄 图片裁切，源自 PDF 第 10 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p011-01-img01",
+      "path": "data/images/crops/pdf19-p011-01-p011-crop01.jpg",
+      "stored_name": "pdf19-p011-01-p011-crop01.jpg",
+      "plant_id": "pdf19-p011-01",
+      "source_pdf_page": 11,
+      "source_printed_page": 21,
+      "source_crop_bbox_normalized": [
+        0.58891,
+        0.04055,
+        0.38712,
+        0.66357
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1512,
+        143,
+        2506,
+        2486
+      ],
+      "alt_text": "华山松 图片裁切，源自 PDF 第 11 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p012-01-img01",
+      "path": "data/images/crops/pdf19-p012-01-p012-crop01.jpg",
+      "stored_name": "pdf19-p012-01-p012-crop01.jpg",
+      "plant_id": "pdf19-p012-01",
+      "source_pdf_page": 12,
+      "source_printed_page": 22,
+      "source_crop_bbox_normalized": [
+        0.59865,
+        0.14221,
+        0.38062,
+        0.35861
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1537,
+        502,
+        2515,
+        1768
+      ],
+      "alt_text": "白皮松 图片裁切，源自 PDF 第 12 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p012-01-img02",
+      "path": "data/images/crops/pdf19-p012-01-p012-crop02.jpg",
+      "stored_name": "pdf19-p012-01-p012-crop02.jpg",
+      "plant_id": "pdf19-p012-01",
+      "source_pdf_page": 12,
+      "source_printed_page": 22,
+      "source_crop_bbox_normalized": [
+        0.03047,
+        0.27696,
+        0.5527,
+        0.22386
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        78,
+        978,
+        1498,
+        1768
+      ],
+      "alt_text": "白皮松 图片裁切，源自 PDF 第 12 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p012-02-img01",
+      "path": "data/images/crops/pdf19-p012-02-p012-crop01.jpg",
+      "stored_name": "pdf19-p012-02-p012-crop01.jpg",
+      "plant_id": "pdf19-p012-02",
+      "source_pdf_page": 12,
+      "source_printed_page": 22,
+      "source_crop_bbox_normalized": [
+        0.59865,
+        0.58902,
+        0.38062,
+        0.29951
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1537,
+        2079,
+        2515,
+        3136
+      ],
+      "alt_text": "高山松 图片裁切，源自 PDF 第 12 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p013-01-img01",
+      "path": "data/images/crops/pdf19-p013-01-p013-crop01.jpg",
+      "stored_name": "pdf19-p013-01-p013-crop01.jpg",
+      "plant_id": "pdf19-p013-01",
+      "source_pdf_page": 13,
+      "source_printed_page": 23,
+      "source_crop_bbox_normalized": [
+        0.58566,
+        0.03819,
+        0.38712,
+        0.37279
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1504,
+        135,
+        2498,
+        1451
+      ],
+      "alt_text": "赤松 图片裁切，源自 PDF 第 13 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p013-02-img01",
+      "path": "data/images/crops/pdf19-p013-02-p013-crop01.jpg",
+      "stored_name": "pdf19-p013-02-p013-crop01.jpg",
+      "plant_id": "pdf19-p013-02",
+      "source_pdf_page": 13,
+      "source_printed_page": 23,
+      "source_crop_bbox_normalized": [
+        0.58891,
+        0.71668,
+        0.38712,
+        0.17421
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1512,
+        2531,
+        2506,
+        3146
+      ],
+      "alt_text": "湿地松 图片裁切，源自 PDF 第 13 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p013-02-img02",
+      "path": "data/images/crops/pdf19-p013-02-p013-crop02.jpg",
+      "stored_name": "pdf19-p013-02-p013-crop02.jpg",
+      "plant_id": "pdf19-p013-02",
+      "source_pdf_page": 13,
+      "source_printed_page": 23,
+      "source_crop_bbox_normalized": [
+        0.02397,
+        0.75214,
+        0.54945,
+        0.14112
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        62,
+        2656,
+        1473,
+        3154
+      ],
+      "alt_text": "湿地松 图片裁切，源自 PDF 第 13 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p014-01-img01",
+      "path": "data/images/crops/pdf19-p014-01-p014-crop01.jpg",
+      "stored_name": "pdf19-p014-01-p014-crop01.jpg",
+      "plant_id": "pdf19-p014-01",
+      "source_pdf_page": 14,
+      "source_printed_page": 24,
+      "source_crop_bbox_normalized": [
+        0.60839,
+        0.03819,
+        0.38062,
+        0.37516
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1562,
+        135,
+        2540,
+        1459
+      ],
+      "alt_text": "红松 图片裁切，源自 PDF 第 14 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p014-02-img01",
+      "path": "data/images/crops/pdf19-p014-02-p014-crop01.jpg",
+      "stored_name": "pdf19-p014-02-p014-crop01.jpg",
+      "plant_id": "pdf19-p014-02",
+      "source_pdf_page": 14,
+      "source_printed_page": 24,
+      "source_crop_bbox_normalized": [
+        0.61164,
+        0.52755,
+        0.38062,
+        0.19076
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1571,
+        1862,
+        2548,
+        2536
+      ],
+      "alt_text": "华南五针松 图片裁切，源自 PDF 第 14 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p014-02-img02",
+      "path": "data/images/crops/pdf19-p014-02-p014-crop02.jpg",
+      "stored_name": "pdf19-p014-02-p014-crop02.jpg",
+      "plant_id": "pdf19-p014-02",
+      "source_pdf_page": 14,
+      "source_printed_page": 24,
+      "source_crop_bbox_normalized": [
+        0.61164,
+        0.73322,
+        0.38062,
+        0.13166
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1571,
+        2588,
+        2548,
+        3053
+      ],
+      "alt_text": "华南五针松 图片裁切，源自 PDF 第 14 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p015-01-img01",
+      "path": "data/images/crops/pdf19-p015-01-p015-crop01.jpg",
+      "stored_name": "pdf19-p015-01-p015-crop01.jpg",
+      "plant_id": "pdf19-p015-01",
+      "source_pdf_page": 15,
+      "source_printed_page": 25,
+      "source_crop_bbox_normalized": [
+        0.588,
+        0.148,
+        0.384,
+        0.674
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1510,
+        523,
+        2496,
+        2902
+      ],
+      "alt_text": "马尾松 图片裁切，源自 PDF 第 15 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p015-01-img02",
+      "path": "data/images/crops/pdf19-p015-01-p015-crop02.jpg",
+      "stored_name": "pdf19-p015-01-p015-crop02.jpg",
+      "plant_id": "pdf19-p015-01",
+      "source_pdf_page": 15,
+      "source_printed_page": 25,
+      "source_crop_bbox_normalized": [
+        0.018,
+        0.548,
+        0.554,
+        0.274
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        46,
+        1935,
+        1469,
+        2902
+      ],
+      "alt_text": "马尾松 图片裁切，源自 PDF 第 15 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p016-01-img01",
+      "path": "data/images/crops/pdf19-p016-01-p016-crop01.jpg",
+      "stored_name": "pdf19-p016-01-p016-crop01.jpg",
+      "plant_id": "pdf19-p016-01",
+      "source_pdf_page": 16,
+      "source_printed_page": 26,
+      "source_crop_bbox_normalized": [
+        0.598,
+        0.038,
+        0.384,
+        0.404
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1536,
+        134,
+        2522,
+        1560
+      ],
+      "alt_text": "台湾五针松 图片裁切，源自 PDF 第 16 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p016-02-img01",
+      "path": "data/images/crops/pdf19-p016-02-p016-crop01.jpg",
+      "stored_name": "pdf19-p016-02-p016-crop01.jpg",
+      "plant_id": "pdf19-p016-02",
+      "source_pdf_page": 16,
+      "source_printed_page": 26,
+      "source_crop_bbox_normalized": [
+        0.60514,
+        0.55356,
+        0.38062,
+        0.34443
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1554,
+        1954,
+        2531,
+        3170
+      ],
+      "alt_text": "新疆五针松 图片裁切，源自 PDF 第 16 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p017-01-img01",
+      "path": "data/images/crops/pdf19-p017-01-p017-crop01.jpg",
+      "stored_name": "pdf19-p017-01-p017-crop01.jpg",
+      "plant_id": "pdf19-p017-01",
+      "source_pdf_page": 17,
+      "source_printed_page": 27,
+      "source_crop_bbox_normalized": [
+        0.58242,
+        0.03819,
+        0.39036,
+        0.40589
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1496,
+        135,
+        2498,
+        1568
+      ],
+      "alt_text": "樟子松 图片裁切，源自 PDF 第 17 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p017-02-img01",
+      "path": "data/images/crops/pdf19-p017-02-p017-crop01.jpg",
+      "stored_name": "pdf19-p017-02-p017-crop01.jpg",
+      "plant_id": "pdf19-p017-02",
+      "source_pdf_page": 17,
+      "source_printed_page": 27,
+      "source_crop_bbox_normalized": [
+        0.58891,
+        0.68122,
+        0.38387,
+        0.10093
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1512,
+        2405,
+        2498,
+        2762
+      ],
+      "alt_text": "油松 图片裁切，源自 PDF 第 17 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p017-02-img02",
+      "path": "data/images/crops/pdf19-p017-02-p017-crop02.jpg",
+      "stored_name": "pdf19-p017-02-p017-crop02.jpg",
+      "plant_id": "pdf19-p017-02",
+      "source_pdf_page": 17,
+      "source_printed_page": 27,
+      "source_crop_bbox_normalized": [
+        0.58891,
+        0.80178,
+        0.19231,
+        0.08201
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1512,
+        2831,
+        2006,
+        3121
+      ],
+      "alt_text": "油松 图片裁切，源自 PDF 第 17 页",
+      "is_primary": false,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p018-01-img01",
+      "path": "data/images/crops/pdf19-p018-01-p018-crop01.jpg",
+      "stored_name": "pdf19-p018-01-p018-crop01.jpg",
+      "plant_id": "pdf19-p018-01",
+      "source_pdf_page": 18,
+      "source_printed_page": 28,
+      "source_crop_bbox_normalized": [
+        0.60514,
+        0.04055,
+        0.37738,
+        0.33733
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1554,
+        143,
+        2523,
+        1334
+      ],
+      "alt_text": "黑松 图片裁切，源自 PDF 第 18 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p018-02-img01",
+      "path": "data/images/crops/pdf19-p018-02-p018-crop01.jpg",
+      "stored_name": "pdf19-p018-02-p018-crop01.jpg",
+      "plant_id": "pdf19-p018-02",
+      "source_pdf_page": 18,
+      "source_printed_page": 28,
+      "source_crop_bbox_normalized": [
+        0.60514,
+        0.52046,
+        0.38062,
+        0.32551
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1554,
+        1837,
+        2531,
+        2986
+      ],
+      "alt_text": "云南松 图片裁切，源自 PDF 第 18 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p019-01-img01",
+      "path": "data/images/crops/pdf19-p019-01-p019-crop01.jpg",
+      "stored_name": "pdf19-p019-01-p019-crop01.jpg",
+      "plant_id": "pdf19-p019-01",
+      "source_pdf_page": 19,
+      "source_printed_page": 29,
+      "source_crop_bbox_normalized": [
+        0.57917,
+        0.03583,
+        0.38712,
+        0.37043
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1487,
+        126,
+        2481,
+        1434
+      ],
+      "alt_text": "金钱松 图片裁切，源自 PDF 第 19 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    },
+    {
+      "image_id": "pdf19-p019-02-img01",
+      "path": "data/images/crops/pdf19-p019-02-p019-crop01.jpg",
+      "stored_name": "pdf19-p019-02-p019-crop01.jpg",
+      "plant_id": "pdf19-p019-02",
+      "source_pdf_page": 19,
+      "source_printed_page": 29,
+      "source_crop_bbox_normalized": [
+        0.58,
+        0.696,
+        0.394,
+        0.109
+      ],
+      "source_crop_bbox_pixels_300dpi": [
+        1489,
+        2458,
+        2501,
+        2842
+      ],
+      "alt_text": "柳杉 图片裁切，源自 PDF 第 19 页",
+      "is_primary": true,
+      "verification_status": "VERIFIED_SOURCE_CROP",
+      "review_flags": []
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+package org.nonfood.oilplants.model;
+import java.util.List;
+public class Page<T> {
+    private final List<T> items; private final int page,pageSize; private final long total;
+    public Page(List<T> items,int page,int pageSize,long total){this.items=items;this.page=page;this.pageSize=pageSize;this.total=total;}
+    public List<T> getItems(){return items;} public int getPage(){return page;} public int getPageSize(){return pageSize;} public long getTotal(){return total;}
+    public long getTotalPages(){return Math.max(1,(total+pageSize-1)/pageSize);}
+}

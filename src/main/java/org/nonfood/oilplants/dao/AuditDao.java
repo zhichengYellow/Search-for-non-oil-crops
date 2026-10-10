@@ -1,0 +1,6 @@
+package org.nonfood.oilplants.dao;
+import org.nonfood.oilplants.config.Database;import java.sql.*;import java.util.*;
+public class AuditDao {
+ public void log(Long actor,String action,String type,Long entity,String detail,String ip)throws SQLException{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("INSERT INTO audit_logs(actor_user_id,action,entity_type,entity_id,detail,ip_address) VALUES(?,?,?,?,?,?)")){if(actor==null)p.setNull(1,Types.BIGINT);else p.setLong(1,actor);p.setString(2,action);p.setString(3,type);if(entity==null)p.setNull(4,Types.BIGINT);else p.setLong(4,entity);p.setString(5,detail);p.setString(6,ip);p.executeUpdate();}}
+ public List<String[]> recent(int limit)throws SQLException{List<String[]> a=new ArrayList<>();try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT l.action,l.entity_type,l.entity_id,l.detail,l.created_at,u.username FROM audit_logs l LEFT JOIN users u ON u.id=l.actor_user_id ORDER BY l.id DESC LIMIT ?")){p.setInt(1,Math.max(1,Math.min(limit,100)));try(ResultSet r=p.executeQuery()){while(r.next())a.add(new String[]{r.getString(1),r.getString(2),r.getString(3),r.getString(4),r.getString(5),r.getString(6)});}}return a;}
+}

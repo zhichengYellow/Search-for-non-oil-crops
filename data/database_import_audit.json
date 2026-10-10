@@ -1,0 +1,50 @@
+{
+  "status" : "COMPLETED",
+  "completed_at_utc" : "2026-10-09T13:34:57.541954Z",
+  "source_pdf_sha256" : "669e9adbfbdfb855d196e5389b2b8aee763a226fee0ce7f0a7e83bc5bab73685",
+  "plants_inserted_this_run" : 0,
+  "plants_updated_this_run" : 33,
+  "ocr_row_candidates_inserted_this_run" : 0,
+  "ocr_row_candidates_updated_this_run" : 89,
+  "images_inserted_this_run" : 0,
+  "images_updated_this_run" : 45,
+  "verified_fatty_acid_components_upserted_this_run" : 0,
+  "plant_count_for_source" : 33,
+  "ocr_row_candidate_count_for_source" : 89,
+  "image_count_for_source" : 45,
+  "verified_oil_values_for_source" : 88,
+  "verified_fatty_acid_components_for_source" : 0,
+  "sample_checks" : [ {
+    "source_key" : "pdf19-p001-01",
+    "pdf_page" : 1,
+    "name_zh_matches" : true,
+    "scientific_name_matches" : true,
+    "family_zh_matches" : true,
+    "genus_zh_matches" : true,
+    "source_pages_matches" : true,
+    "database_image_count" : 2,
+    "database_verified_oil_count" : 4
+  }, {
+    "source_key" : "pdf19-p010-02",
+    "pdf_page" : 10,
+    "name_zh_matches" : true,
+    "scientific_name_matches" : true,
+    "family_zh_matches" : true,
+    "genus_zh_matches" : true,
+    "source_pages_matches" : true,
+    "database_image_count" : 1,
+    "database_verified_oil_count" : 1
+  }, {
+    "source_key" : "pdf19-p019-02",
+    "pdf_page" : 19,
+    "name_zh_matches" : true,
+    "scientific_name_matches" : true,
+    "family_zh_matches" : true,
+    "genus_zh_matches" : true,
+    "source_pages_matches" : true,
+    "database_image_count" : 1,
+    "database_verified_oil_count" : 6
+  } ],
+  "expected_source_plants" : 33,
+  "expected_ocr_row_candidates" : 89
+}

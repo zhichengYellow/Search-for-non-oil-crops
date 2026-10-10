@@ -1,0 +1,3 @@
+package org.nonfood.oilplants.web;
+import jakarta.servlet.*;import jakarta.servlet.annotation.WebServlet;import jakarta.servlet.http.*;import org.nonfood.oilplants.service.PlantService;import java.io.*;
+@WebServlet("/admin/plants") public class AdminPlantsServlet extends HttpServlet{protected void doGet(HttpServletRequest r,HttpServletResponse s)throws ServletException,IOException{try{WebSupport.requireAdmin(r);var svc=new PlantService();var c=svc.criteria(r.getParameterMap());r.setAttribute("pageData",svc.dao().search(c,true));r.setAttribute("criteria",c);WebSupport.view(r,s,"admin/plants");}catch(Exception e){WebSupport.error(r,s,e,"植物管理列表暂时不可用。");}}}

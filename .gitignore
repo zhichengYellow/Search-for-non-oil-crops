@@ -1,0 +1,17 @@
+target/
+logs/
+uploads/*
+!uploads/.gitkeep
+.DS_Store
+.idea/
+.vscode/
+.config/
+.env
+.env.*
+!.env.example
+tmp/
+__pycache__/
+*.py[cod]
+data/images/diagnostics/
+data/ocr/*.log
+data/ocr/test.json

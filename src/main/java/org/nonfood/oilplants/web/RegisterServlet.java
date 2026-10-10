@@ -1,0 +1,6 @@
+package org.nonfood.oilplants.web;
+import jakarta.servlet.*;import jakarta.servlet.annotation.WebServlet;import jakarta.servlet.http.*;import org.nonfood.oilplants.dao.UserDao;import org.nonfood.oilplants.service.UserService;import java.io.*;import java.sql.SQLException;
+@WebServlet("/register") public class RegisterServlet extends HttpServlet{
+ protected void doGet(HttpServletRequest r,HttpServletResponse s)throws ServletException,IOException{WebSupport.view(r,s,"auth/register");}
+ protected void doPost(HttpServletRequest r,HttpServletResponse s)throws ServletException,IOException{try{new UserService().register(r.getParameter("username"),r.getParameter("password"),r.getParameter("confirmPassword"),r.getParameter("displayName"),r.getParameter("email"));r.getSession().setAttribute("flash","注册成功，请使用新账户登录。");s.sendRedirect(r.getContextPath()+"/login");}catch(IllegalArgumentException|SQLException e){r.setAttribute("error",e instanceof IllegalArgumentException?e.getMessage():"注册失败，请检查用户名或邮箱是否已使用。");r.setAttribute("username",r.getParameter("username"));r.setAttribute("displayName",r.getParameter("displayName"));r.setAttribute("email",r.getParameter("email"));WebSupport.view(r,s,"auth/register");}}
+}

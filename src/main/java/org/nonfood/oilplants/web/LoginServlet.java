@@ -1,0 +1,6 @@
+package org.nonfood.oilplants.web;
+import jakarta.servlet.*;import jakarta.servlet.annotation.WebServlet;import jakarta.servlet.http.*;import org.nonfood.oilplants.service.UserService;import java.io.*;
+@WebServlet("/login") public class LoginServlet extends HttpServlet{
+ protected void doGet(HttpServletRequest r,HttpServletResponse s)throws ServletException,IOException{WebSupport.view(r,s,"auth/login");}
+ protected void doPost(HttpServletRequest r,HttpServletResponse s)throws ServletException,IOException{try{var user=new UserService().authenticate(r.getParameter("username"),r.getParameter("password"));if(user.isEmpty()){r.setAttribute("error","用户名或密码不正确，或账户已停用。");WebSupport.view(r,s,"auth/login");return;}String next=r.getParameter("next");HttpSession old=r.getSession(false);if(old!=null)old.invalidate();HttpSession session=r.getSession(true);user.get().setPasswordHash(null);session.setAttribute(WebSupport.USER,user.get());String token=java.util.UUID.randomUUID().toString()+java.util.UUID.randomUUID();session.setAttribute("csrfToken",token);if(next==null||!next.startsWith("/")||next.startsWith("//")||next.startsWith("/login"))next="/";s.sendRedirect(r.getContextPath()+next);}catch(Exception e){WebSupport.error(r,s,e,"登录服务暂时不可用。");}}
+}

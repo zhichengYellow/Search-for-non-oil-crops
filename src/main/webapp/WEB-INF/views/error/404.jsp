@@ -1,0 +1,1 @@
+<%@ page contentType="text/html;charset=UTF-8" %><%@ include file="../common/header.jspf" %><section class="error-page"><span>404</span><p class="eyebrow">PAGE NOT FOUND</p><h1>这条路径尚未生根。</h1><p>检查链接地址，或回到植物名录继续检索。</p><a href="${pageContext.request.contextPath}/plants" class="button primary">浏览植物名录</a></section><%@ include file="../common/footer.jspf" %>

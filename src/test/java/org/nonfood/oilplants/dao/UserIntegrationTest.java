@@ -1,0 +1,5 @@
+package org.nonfood.oilplants.dao;
+import org.junit.jupiter.api.*;import org.junit.jupiter.api.condition.EnabledIfSystemProperty;import org.nonfood.oilplants.config.Database;import org.nonfood.oilplants.service.UserService;import java.sql.*;import java.util.*;import static org.junit.jupiter.api.Assertions.*;
+@EnabledIfSystemProperty(named="db.integration",matches="true") class UserIntegrationTest {
+ @Test void registrationUniquenessAndLoginRoundTrip()throws Exception{String username="test"+UUID.randomUUID().toString().replace("-","").substring(0,12);try{UserService service=new UserService();service.register(username,"Integration12","Integration12","Integration Test",null);assertTrue(service.authenticate(username,"Integration12").isPresent());assertTrue(service.authenticate(username,"wrongpass12").isEmpty());assertThrows(IllegalArgumentException.class,()->service.register(username,"Integration12","Integration12","Duplicate",null));}finally{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("DELETE FROM users WHERE username=?")){p.setString(1,username);p.executeUpdate();}}}
+}
