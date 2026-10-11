@@ -12,18 +12,19 @@ public final class DescriptionParser {
     private static final List<String> NEGATIONS = List.of("并不是", "不是", "并非", "没有", "不属于", "不长", "非");
 
     public record ParseResult(List<TraitCriterion> criteria, List<String> recognizedTerms, List<String> ignoredTerms,
-                              List<String> warnings) {
+                              List<String> warnings, boolean hasConflicts) {
         public ParseResult { criteria = List.copyOf(criteria); recognizedTerms = List.copyOf(recognizedTerms); ignoredTerms = List.copyOf(ignoredTerms); warnings = List.copyOf(warnings); }
         public boolean hasRecognizedCriteria() { return !criteria.isEmpty(); }
     }
     private record Word(String trait, String option) { }
 
     public ParseResult parse(String input) {
-        if (input == null || input.isBlank()) return new ParseResult(List.of(), List.of(), List.of(), List.of());
+        if (input == null || input.isBlank()) return new ParseResult(List.of(), List.of(), List.of(), List.of(),false);
         if (input.length() > MAX_LENGTH) throw new IllegalArgumentException("描述最多 500 个字符。");
         String text = input.toLowerCase(Locale.ROOT).replaceAll("[，。！？、；：\\s]+", " ").trim();
         Map<String, TraitCriterion> found = new LinkedHashMap<>();
         List<String> recognized = new ArrayList<>();
+        boolean conflictingValues=false;
         Set<Integer> occupied = new HashSet<>();
         for (String term : TERMS) {
             int from = 0;
@@ -39,22 +40,40 @@ public final class DescriptionParser {
                 if (trait == null) continue;
                 String option = word.option;
                 boolean negated = isNegated(text, at);
-                found.putIfAbsent(trait, new TraitCriterion(trait, option, negated));
+                TraitCriterion candidate=new TraitCriterion(trait,option,negated);
+                TraitCriterion prior=found.putIfAbsent(trait,candidate);
+                if(prior!=null&&(!prior.optionCode().equals(candidate.optionCode())||prior.negated()!=candidate.negated()))conflictingValues=true;
                 recognized.add(term);
                 for (int i = at; i < at + term.length(); i++) occupied.add(i);
             }
         }
         List<String> ignored = new ArrayList<>();
         for (String word : List.of("树", "草", "叶", "叶子", "叶片", "花", "果实", "果子", "秋天", "冬天", "绿色", "黄色")) {
+            if (isContextWord(word, found.keySet())) continue;
             if (text.contains(word) && recognized.stream().noneMatch(t -> t.contains(word) || word.contains(t))) ignored.add(word);
         }
         List<String> warnings=new ArrayList<>();
+        if(conflictingValues)warnings.add("同一特征出现互相矛盾的描述；请在下方检查并修正后再查询。系统不会替你选择其中一个值。");
         if(recognized.stream().anyMatch(term->Set.of("松塔","松果","球果","球果状").contains(term)))
             warnings.add("识别到的是球果/松塔形态线索，不代表已经确认植物属种。");
         if(recognized.stream().anyMatch(term->Set.of("常年绿色","冬天也是绿色","冬季仍然绿色").contains(term)))
             warnings.add("“常绿”与“冬季仍保持绿色”含义接近但不完全相同，请检查提取条件。");
         if(found.isEmpty()&&!input.isBlank())warnings.add("未识别的描述保留为原文；可改用图形特征筛选。");
-        return new ParseResult(new ArrayList<>(found.values()), recognized, ignored, warnings);
+        return new ParseResult(new ArrayList<>(found.values()), recognized, ignored, warnings,conflictingValues);
+    }
+
+    private static boolean isContextWord(String word, Set<String> foundTraits) {
+        return switch (word) {
+            case "叶", "叶子", "叶片" -> foundTraits.stream().anyMatch(code -> code.startsWith("leaf_") || code.equals("autumn_leaf_color"));
+            case "花" -> foundTraits.contains("flower_color") || foundTraits.contains("flower_shape") || foundTraits.contains("flowering_season");
+            case "果实", "果子" -> foundTraits.contains("fruit_shape") || foundTraits.contains("fruit_color") || foundTraits.contains("fruit_size") || foundTraits.contains("cone_shape");
+            case "树" -> foundTraits.contains("plant_form") || foundTraits.contains("bark_color") || foundTraits.contains("bark_texture");
+            case "草" -> foundTraits.contains("plant_form");
+            case "秋天" -> foundTraits.contains("autumn_leaf_color");
+            case "冬天" -> foundTraits.contains("leaf_persistence") || foundTraits.contains("winter_appearance");
+            case "绿色", "黄色" -> foundTraits.contains("leaf_color") || foundTraits.contains("fruit_color") || foundTraits.contains("flower_color") || foundTraits.contains("autumn_leaf_color");
+            default -> false;
+        };
     }
 
     private static String contextualTrait(String text,int at,String term,Word word){
@@ -103,8 +122,10 @@ public final class DescriptionParser {
         add(m,"leaf_color","reddish","红叶","红色叶片"); add(m,"leaf_color","blue_green","蓝绿色叶片");
         add(m,"leaf_margin","serrated","锯齿叶缘","锯齿缘"); add(m,"leaf_margin","entire","全缘叶");
         add(m,"leaf_arrangement","opposite","对生叶"); add(m,"leaf_arrangement","alternate","互生叶");
-        add(m,"flower_color","yellow","黄色花","黄花"); add(m,"flower_color","white","白花","白色花朵");
-        add(m,"flower_color","pink","粉色花","粉花"); add(m,"flower_color","red","红花");
+        add(m,"flower_color","yellow","黄色花","黄色花朵","黄花","开黄花","开黄色花"); add(m,"flower_color","white","白花","白色花","白色花朵","开白花","开白色花");
+        add(m,"flower_color","pink","粉色花","粉花","粉色花朵","开粉花","开粉色花");
+        add(m,"flower_color","red","红花","红色花","红色花朵","开红花","开红色花");
+        add(m,"flower_color","purple","紫花","紫色花","紫色花朵","开紫花","开紫色花");
         add(m,"cone_shape","cone","松塔","松果","球果","球果状");
         add(m,"fruit_shape","pod","豆荚","荚果"); add(m,"fruit_shape","berry","浆果");
         add(m,"fruit_shape","elongated","细长果实","果实细长","长条形果实");

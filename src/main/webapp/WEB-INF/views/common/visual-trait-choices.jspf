@@ -1,0 +1,14 @@
+<%@ page pageEncoding="UTF-8" %>
+<div class="visual-trait-choices" role="group" aria-label="常见外观线索">
+  <c:forEach items="${traits}" var="trait">
+    <c:forEach items="${trait.options}" var="option">
+      <c:if test="${(trait.code eq 'leaf_shape' and (option.code eq 'needle' or option.code eq 'fan_shaped' or option.code eq 'ovate' or option.code eq 'elliptic' or option.code eq 'lanceolate')) or (trait.code eq 'flower_color' and (option.code eq 'white' or option.code eq 'yellow' or option.code eq 'red' or option.code eq 'pink' or option.code eq 'purple')) or (trait.code eq 'plant_form' and (option.code eq 'tree' or option.code eq 'shrub' or option.code eq 'herb' or option.code eq 'vine'))}">
+        <button type="button" class="visual-trait-chip" data-quick-trait="${trait.code}" data-quick-option="${option.code}" aria-pressed="${selectedOptions[trait.code] eq option.code}">
+          <span class="trait-glyph" data-trait-code="${trait.code}" data-option-code="${option.code}" aria-hidden="true"></span>
+          <span><c:choose><c:when test="${trait.code eq 'leaf_shape' and option.code eq 'needle'}">像细针</c:when><c:when test="${trait.code eq 'leaf_shape' and option.code eq 'fan_shaped'}">像扇子</c:when><c:when test="${trait.code eq 'leaf_shape' and option.code eq 'ovate'}">卵形叶片</c:when><c:when test="${trait.code eq 'leaf_shape' and option.code eq 'elliptic'}">椭圆叶片</c:when><c:when test="${trait.code eq 'leaf_shape' and option.code eq 'lanceolate'}">披针形叶片</c:when><c:when test="${trait.code eq 'flower_color' and option.code eq 'white'}">白色花朵</c:when><c:when test="${trait.code eq 'flower_color' and option.code eq 'yellow'}">黄色花朵</c:when><c:when test="${trait.code eq 'flower_color' and option.code eq 'red'}">红色花朵</c:when><c:when test="${trait.code eq 'flower_color' and option.code eq 'pink'}">粉色花朵</c:when><c:when test="${trait.code eq 'flower_color' and option.code eq 'purple'}">紫色花朵</c:when><c:when test="${trait.code eq 'plant_form' and option.code eq 'tree'}">乔木</c:when><c:when test="${trait.code eq 'plant_form' and option.code eq 'shrub'}">灌木</c:when><c:when test="${trait.code eq 'plant_form' and option.code eq 'herb'}">草本</c:when><c:otherwise>藤本</c:otherwise></c:choose></span>
+          <small><c:choose><c:when test="${option.confirmedPlantCount gt 0}">可检索 <c:out value="${option.confirmedPlantCount}"/> 株</c:when><c:otherwise>暂无已核验记录</c:otherwise></c:choose></small>
+        </button>
+      </c:if>
+    </c:forEach>
+  </c:forEach>
+</div>

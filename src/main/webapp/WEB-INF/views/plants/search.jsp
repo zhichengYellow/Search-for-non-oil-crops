@@ -8,6 +8,12 @@
   <p>组合名称、科属、用途与样本条件。每项结果来自当前数据库记录。</p>
 </section>
 
+<c:choose>
+  <c:when test="${resultState eq 'INVALID_INPUT' or resultState eq 'NETWORK_ERROR' or resultState eq 'RATE_LIMITED'}"><div class="search-result-state" data-result-state="${resultState}" role="alert"><c:out value="${error}"/></div></c:when>
+  <c:when test="${resultState eq 'SUCCESS'}"><div class="search-result-state" data-result-state="${resultState}" role="status" aria-live="polite">检索完成：当前查询返回 <c:out value="${pageData.total}"/> 条记录。</div></c:when>
+  <c:when test="${resultState eq 'NO_RESULTS'}"><div class="search-result-state" data-result-state="${resultState}" role="status" aria-live="polite">没有找到符合条件的植物；可以放宽范围或减少筛选条件。</div></c:when>
+</c:choose>
+
 <div class="search-layout">
   <aside class="search-sidebar" aria-label="植物检索筛选">
     <details class="filters-card" open>
@@ -91,7 +97,7 @@
           </tr></thead><tbody>
             <c:forEach items="${pageData.items}" var="p"><tr>
               <c:if test="${fields.contains('image')}"><td data-label="图片"><c:choose><c:when test="${not empty p.imageStoredName}"><img class="table-thumb" src="${pageContext.request.contextPath}/image/${p.imageStoredName}" alt="植物图片" loading="lazy"></c:when><c:otherwise><span class="table-thumb-placeholder" aria-label="暂无图片">✳</span></c:otherwise></c:choose></td></c:if>
-              <c:if test="${fields.contains('nameZh')}"><td data-label="中文名称"><a class="row-title" href="${pageContext.request.contextPath}/plant?id=${p.id}"><c:out value="${p.nameZh}"/></a></td></c:if>
+              <c:if test="${fields.contains('nameZh')}"><td data-label="中文名称"><a class="row-title" href="${pageContext.request.contextPath}/plant?id=${p.id}"><c:out value="${p.nameZh}"/></a><c:if test="${not empty p.scientificName and p.nameZh eq p.scientificName}"><small class="name-pending">中文名待核</small></c:if></td></c:if>
               <c:if test="${fields.contains('scientificName')}"><td data-label="拉丁学名"><i><c:out value="${p.scientificName}" default="暂无数据"/></i></td></c:if><c:if test="${fields.contains('family')}"><td data-label="科"><c:out value="${p.familyZh}" default="暂无数据"/></td></c:if><c:if test="${fields.contains('genus')}"><td data-label="属"><c:out value="${p.genusZh}" default="暂无数据"/></td></c:if><c:if test="${fields.contains('distribution')}"><td class="wrap-cell" data-label="分布"><c:out value="${p.distribution}" default="暂无数据"/></td></c:if><c:if test="${fields.contains('uses')}"><td class="wrap-cell" data-label="用途"><c:out value="${p.uses}" default="暂无数据"/></td></c:if><c:if test="${fields.contains('oilContent')}"><td class="wrap-cell" data-label="含油率样本"><c:out value="${p.oilContentSummary}" default="暂无数据"/></td></c:if>
               <td data-label="详情"><a class="arrow-link" href="${pageContext.request.contextPath}/plant?id=${p.id}" aria-label="查看<c:out value='${p.nameZh}'/>详情">↗</a></td>
             </tr></c:forEach>
@@ -101,7 +107,7 @@
           <c:forEach items="${pageData.items}" var="p"><article class="search-mobile-card" role="listitem">
             <c:if test="${fields.contains('image')}"><a class="search-mobile-image" href="${pageContext.request.contextPath}/plant?id=${p.id}" tabindex="-1" aria-hidden="true"><c:choose><c:when test="${not empty p.imageStoredName}"><img src="${pageContext.request.contextPath}/image/${p.imageStoredName}" alt="" loading="lazy"></c:when><c:otherwise><span class="table-thumb-placeholder" aria-label="暂无图片">✳</span></c:otherwise></c:choose></a></c:if>
             <div class="search-mobile-card-body">
-              <c:if test="${fields.contains('nameZh')}"><h3><a class="row-title" href="${pageContext.request.contextPath}/plant?id=${p.id}"><c:out value="${p.nameZh}"/></a></h3></c:if>
+              <c:if test="${fields.contains('nameZh')}"><h3><a class="row-title" href="${pageContext.request.contextPath}/plant?id=${p.id}"><c:out value="${p.nameZh}"/></a><c:if test="${not empty p.scientificName and p.nameZh eq p.scientificName}"> <small class="name-pending">中文名待核</small></c:if></h3></c:if>
               <c:if test="${fields.contains('scientificName')}"><i class="search-mobile-scientific"><c:out value="${p.scientificName}" default="暂无数据"/></i></c:if>
               <c:if test="${fields.contains('family') or fields.contains('genus')}"><p class="search-mobile-taxonomy"><c:if test="${fields.contains('family')}"><c:out value="${p.familyZh}" default="暂无数据"/></c:if><c:if test="${fields.contains('family') and fields.contains('genus')}"> · </c:if><c:if test="${fields.contains('genus')}"><c:out value="${p.genusZh}" default="暂无数据"/></c:if></p></c:if>
               <dl class="search-mobile-fields"><c:if test="${fields.contains('distribution')}"><div><dt>分布</dt><dd><c:out value="${p.distribution}" default="暂无数据"/></dd></div></c:if><c:if test="${fields.contains('uses')}"><div><dt>用途</dt><dd><c:out value="${p.uses}" default="暂无数据"/></dd></div></c:if><c:if test="${fields.contains('oilContent')}"><div><dt>含油率样本</dt><dd><c:out value="${p.oilContentSummary}" default="暂无数据"/></dd></div></c:if></dl>

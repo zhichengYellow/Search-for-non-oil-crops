@@ -2,9 +2,14 @@ package org.nonfood.oilplants.model;
 
 public class KnowledgeSource {
     private long id;
-    private String sourceName, sourceUrl, citation, licenseCode, verificationStatus, sourceType;
+    private long pendingTraitCount, pendingFattyAcidCount, pendingTaxonCount;
+    private String sourceKey, sourceName, sourceUrl, citation, licenseCode, verificationStatus, sourceType, sourceDate;
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
+    public String getSourceKey() { return sourceKey; }
+    public void setSourceKey(String sourceKey) { this.sourceKey = sourceKey; }
+    public String getSourceDate() { return sourceDate; }
+    public void setSourceDate(String sourceDate) { this.sourceDate = sourceDate; }
     public String getSourceName() { return sourceName; }
     public void setSourceName(String sourceName) { this.sourceName = sourceName; }
     public String getSourceUrl() { return sourceUrl; }
@@ -17,4 +22,10 @@ public class KnowledgeSource {
     public void setVerificationStatus(String verificationStatus) { this.verificationStatus = verificationStatus; }
     public String getSourceType() { return sourceType; }
     public void setSourceType(String sourceType) { this.sourceType = sourceType; }
+    public long getPendingTraitCount() { return pendingTraitCount; }
+    public void setPendingTraitCount(long pendingTraitCount) { this.pendingTraitCount = pendingTraitCount; }
+    public long getPendingFattyAcidCount() { return pendingFattyAcidCount; }
+    public void setPendingFattyAcidCount(long pendingFattyAcidCount) { this.pendingFattyAcidCount = pendingFattyAcidCount; }
+    public long getPendingTaxonCount() { return pendingTaxonCount; }
+    public void setPendingTaxonCount(long pendingTaxonCount) { this.pendingTaxonCount = pendingTaxonCount; }
 }

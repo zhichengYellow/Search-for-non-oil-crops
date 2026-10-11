@@ -19,14 +19,36 @@ public class TraitService {
 
     public List<TraitCriterion> selections(Map<String,String[]> parameters,List<TraitDefinition> catalog) {
         List<TraitCriterion> out=new ArrayList<>();
+        Set<String> codes=new HashSet<>();
+        for(TraitDefinition trait:catalog)codes.add(trait.getCode());
+        for(String key:parameters.keySet()) {
+            if(key.equals("page")||key.equals("saveSearch")||codes.contains(key))continue;
+            if(key.startsWith("not_")&&codes.contains(key.substring(4)))continue;
+            throw new IllegalArgumentException("不支持的特征筛选字段："+key+"。");
+        }
         for(TraitDefinition trait:catalog) {
-            String[] raw=parameters.get(trait.getCode());if(raw==null||raw.length==0||raw[0]==null||raw[0].isBlank())continue;
+            String[] raw=parameters.get(trait.getCode());if(raw==null||raw.length==0)continue;if(raw.length>1)throw new IllegalArgumentException("每种外观特征只能选择一个值。");if(raw[0]==null||raw[0].isBlank())continue;
             String option=raw[0].trim();boolean valid=trait.getOptions().stream().anyMatch(o->o.getCode().equals(option));
             if(!valid)throw new IllegalArgumentException("特征选项无效，请刷新后重试。");
-            String[] negative=parameters.get("not_"+trait.getCode());boolean negated=negative!=null&&negative.length>0&&"true".equals(negative[0]);
+            String[] negative=parameters.get("not_"+trait.getCode());if(negative!=null&&negative.length>1)throw new IllegalArgumentException("特征否定参数重复。");
+            String negativeValue=negative==null||negative.length==0||negative[0]==null?"false":negative[0].trim();
+            if(!negativeValue.isEmpty()&&!Set.of("true","false").contains(negativeValue))throw new IllegalArgumentException("特征否定参数无效。");
+            boolean negated="true".equals(negativeValue);
             out.add(new TraitCriterion(trait.getCode(),option,negated));
         }
         return List.copyOf(out);
+    }
+
+    /** True only when every requested trait has at least one confirmed public option value. */
+    public static boolean hasConfirmedCoverage(List<TraitCriterion> criteria,List<TraitDefinition> catalog) {
+        if(criteria==null||criteria.isEmpty())return false;
+        Map<String,TraitDefinition> byCode=new HashMap<>();
+        for(TraitDefinition trait:catalog)byCode.put(trait.getCode(),trait);
+        for(TraitCriterion criterion:criteria) {
+            TraitDefinition trait=byCode.get(criterion.traitCode());
+            if(trait==null||trait.getOptions().stream().noneMatch(option->option.getConfirmedPlantCount()>0))return false;
+        }
+        return true;
     }
 
     public long saveValue(long id,long plantId,String traitCode,String optionCode,String status,long sourceId,

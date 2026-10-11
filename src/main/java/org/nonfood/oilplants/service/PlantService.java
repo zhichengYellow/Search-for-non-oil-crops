@@ -16,7 +16,13 @@ public class PlantService {
         c.setOilMin(decimal(value(parameters,"oilMin",20),"含油率下限"));c.setOilMax(decimal(value(parameters,"oilMax",20),"含油率上限"));c.setComponentMin(decimal(value(parameters,"componentMin",20),"组分下限"));c.setComponentMax(decimal(value(parameters,"componentMax",20),"组分上限"));
         for(BigDecimal n:List.of(c.getOilMin()==null?BigDecimal.ZERO:c.getOilMin(),c.getOilMax()==null?BigDecimal.ZERO:c.getOilMax(),c.getComponentMin()==null?BigDecimal.ZERO:c.getComponentMin(),c.getComponentMax()==null?BigDecimal.ZERO:c.getComponentMax()))if(!Validation.percent(n))throw new IllegalArgumentException("百分比必须在 0–100 之间。");
         if(!Validation.range(c.getOilMin(),c.getOilMax())||!Validation.range(c.getComponentMin(),c.getComponentMax()))throw new IllegalArgumentException("范围下限不能大于上限。");
-        c.setExact("exact".equals(value(parameters,"matchMode",10)));c.setSort("oilContent".equals(value(parameters,"sort",20))?"oilContent":"name");c.setDirection("desc".equalsIgnoreCase(value(parameters,"direction",8))?"desc":"asc");c.setPage(parsePage(value(parameters,"page",10)));c.setPageSize(12);return c;
+        String matchMode=value(parameters,"matchMode",10);
+        if(!matchMode.isBlank()&&!Set.of("fuzzy","exact").contains(matchMode))throw new IllegalArgumentException("匹配方式无效，请选择模糊或精确匹配。");
+        String sort=value(parameters,"sort",20);
+        if(!sort.isBlank()&&!Set.of("name","oilContent").contains(sort))throw new IllegalArgumentException("排序字段无效。");
+        String direction=value(parameters,"direction",8);
+        if(!direction.isBlank()&&!Set.of("asc","desc").contains(direction.toLowerCase(Locale.ROOT)))throw new IllegalArgumentException("排序顺序无效。");
+        c.setExact("exact".equals(matchMode));c.setSort("oilContent".equals(sort)?"oilContent":"name");c.setDirection("desc".equalsIgnoreCase(direction)?"desc":"asc");c.setPage(parsePage(value(parameters,"page",10)));c.setPageSize(12);return c;
     }
     public long save(Plant p,String sampleLabel,String oil,String samplePages,String sampleNote,String components,String sampleStatus,String oilContentStatus,String componentStatus)throws SQLException{
         if(p.getNameZh()==null||p.getNameZh().isBlank()||p.getNameZh().trim().length()>160)throw new IllegalArgumentException("中文名称为必填项，最多 160 个字符。");
@@ -40,7 +46,7 @@ public class PlantService {
         if(value.length()>4000)throw new IllegalArgumentException("组分录入内容过长。");for(String line:value.split("\\R")){if(line.isBlank())continue;String[] pair=line.split("=",2);if(pair.length!=2||pair[0].trim().isEmpty()||pair[0].trim().length()>120)throw new IllegalArgumentException("组分名称需为 1–120 个字符，并按“名称=百分比”逐行填写；未知百分比可留空。");BigDecimal pct=decimal(pair[1].trim(),"组分百分比");if(!Validation.percent(pct))throw new IllegalArgumentException("组分百分比必须在 0–100 之间。");FattyAcid a=new FattyAcid();a.setName(bound(pair[0],120));a.setPercentage(pct);a.setVerificationStatus("NEEDS_REVIEW");out.add(a);}return out;
     }
     private BigDecimal decimal(String s,String label){if(s==null||s.isBlank())return null;if(s.length()>24)throw new IllegalArgumentException(label+"数值过长。");try{BigDecimal value=new BigDecimal(s.trim());if(value.stripTrailingZeros().scale()>3)throw new IllegalArgumentException(label+"最多支持 3 位小数。");return value;}catch(NumberFormatException e){throw new IllegalArgumentException(label+"必须是有效数字。");}}
-    private static String value(Map<String,String[]> p,String key,int max){String[] v=p.get(key);if(v==null||v.length==0)return null;return Validation.bounded(v[0],max);}
-    private static int parsePage(String p){try{return p==null?1:Math.max(1,Math.min(100000,Integer.parseInt(p)));}catch(NumberFormatException e){return 1;}}
+    private static String value(Map<String,String[]> p,String key,int max){String[] v=p.get(key);if(v==null||v.length==0)return "";if(v.length>1)throw new IllegalArgumentException("查询参数重复："+key+"。");String raw=v[0]==null?"":v[0].trim();if(raw.length()>max)throw new IllegalArgumentException("查询字段长度超过限制："+key+"。");return raw;}
+    private static int parsePage(String p){if(p==null||p.isBlank())return 1;try{int page=Integer.parseInt(p);if(page<1||page>100000)throw new IllegalArgumentException("页码必须在 1 到 100000 之间。");return page;}catch(NumberFormatException e){throw new IllegalArgumentException("页码格式无效，请输入正整数。",e);}}
     private static String bound(String s,int max){return s==null?null:s.trim().substring(0,Math.min(s.trim().length(),max));}private static int len(String s){return s==null?0:s.length();}
 }

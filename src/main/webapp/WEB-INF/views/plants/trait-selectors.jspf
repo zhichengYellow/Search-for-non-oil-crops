@@ -1,19 +1,45 @@
-<form action="${pageContext.request.contextPath}/find-by-traits" method="get" class="trait-filter-form">
-  <div class="trait-select-grid">
+<%@ page pageEncoding="UTF-8" %>
+<form action="${pageContext.request.contextPath}/find-by-traits" method="get" class="trait-filter-form" data-trait-filter-form>
+  <div class="trait-filter-heading"><p>选择你能确认的特征；不确定就跳过。</p></div>
+  <div class="current-trait-conditions" data-current-traits role="group" aria-label="当前筛选条件" aria-live="polite" hidden><span>当前条件：</span><div data-current-trait-list></div></div>
+  <div class="trait-select-grid trait-select-primary">
     <c:forEach items="${traits}" var="trait">
-      <fieldset class="trait-choice">
-        <legend><c:out value="${trait.label}"/></legend>
-        <label class="sr-only" for="trait-${trait.code}"><c:out value="${trait.label}"/></label>
-        <select id="trait-${trait.code}" name="${trait.code}">
-          <option value="">不确定，跳过</option>
-          <c:forEach items="${trait.options}" var="option">
-            <option value="${option.code}" <c:if test="${selectedOptions[trait.code] eq option.code}">selected</c:if>><c:out value="${option.label}"/></option>
-          </c:forEach>
-        </select>
-        <label class="trait-negation"><input type="checkbox" name="not_${trait.code}" value="true" <c:if test="${negativeTraits.contains(trait.code)}">checked</c:if>> 我确定不是这个特征</label>
-      </fieldset>
+      <c:if test="${trait.code eq 'leaf_shape' or trait.code eq 'flower_color' or trait.code eq 'plant_form'}">
+        <fieldset class="trait-choice" data-trait-choice="${trait.code}">
+          <legend><c:out value="${trait.label}"/></legend>
+          <button type="button" class="trait-clear" data-clear-trait="${trait.code}" aria-label="清除${trait.label}条件">清除</button>
+          <label class="sr-only" for="trait-${trait.code}"><c:out value="${trait.label}"/></label>
+          <select id="trait-${trait.code}" name="${trait.code}" data-trait-select="${trait.code}">
+            <option value="">不确定，跳过</option>
+            <c:forEach items="${trait.options}" var="option"><option value="${option.code}" data-confirmed-plants="${option.confirmedPlantCount}" <c:if test="${selectedOptions[trait.code] eq option.code}">selected</c:if>><c:out value="${option.label}"/></option></c:forEach>
+          </select>
+          <small class="trait-coverage" data-trait-coverage><c:choose><c:when test="${not empty selectedOptions[trait.code]}"><c:forEach items="${trait.options}" var="option"><c:if test="${selectedOptions[trait.code] eq option.code}"><c:choose><c:when test="${option.confirmedPlantCount gt 0}">当前选择可检索 <c:out value="${option.confirmedPlantCount}"/> 株</c:when><c:otherwise>当前选择暂无已核验记录</c:otherwise></c:choose></c:if></c:forEach></c:when><c:otherwise>不确定的特征可以跳过</c:otherwise></c:choose></small>
+          <label class="trait-negation"><input type="checkbox" name="not_${trait.code}" value="true" <c:if test="${negativeTraits.contains(trait.code)}">checked</c:if> <c:if test="${empty selectedOptions[trait.code]}">disabled</c:if>> 我确定不是这个特征</label>
+        </fieldset>
+      </c:if>
     </c:forEach>
   </div>
+  <details class="trait-secondary-fields" data-secondary-traits>
+    <summary>更多可选特征 <span>叶缘、花朵形状、果实、常绿/落叶与生境</span></summary>
+    <div class="trait-select-grid">
+      <c:forEach items="${traits}" var="trait">
+        <c:if test="${trait.code ne 'leaf_shape' and trait.code ne 'flower_color' and trait.code ne 'plant_form'}">
+          <fieldset class="trait-choice" data-trait-choice="${trait.code}">
+            <legend><c:out value="${trait.label}"/></legend>
+            <button type="button" class="trait-clear" data-clear-trait="${trait.code}" aria-label="清除${trait.label}条件">清除</button>
+            <label class="sr-only" for="trait-${trait.code}"><c:out value="${trait.label}"/></label>
+            <select id="trait-${trait.code}" name="${trait.code}" data-trait-select="${trait.code}">
+              <option value="">不确定，跳过</option>
+              <c:forEach items="${trait.options}" var="option"><option value="${option.code}" data-confirmed-plants="${option.confirmedPlantCount}" <c:if test="${selectedOptions[trait.code] eq option.code}">selected</c:if>><c:out value="${option.label}"/></option></c:forEach>
+            </select>
+            <small class="trait-coverage" data-trait-coverage><c:choose><c:when test="${not empty selectedOptions[trait.code]}"><c:forEach items="${trait.options}" var="option"><c:if test="${selectedOptions[trait.code] eq option.code}"><c:choose><c:when test="${option.confirmedPlantCount gt 0}">当前选择可检索 <c:out value="${option.confirmedPlantCount}"/> 株</c:when><c:otherwise>当前选择暂无已核验记录</c:otherwise></c:choose></c:if></c:forEach></c:when><c:otherwise>不确定的特征可以跳过</c:otherwise></c:choose></small>
+            <label class="trait-negation"><input type="checkbox" name="not_${trait.code}" value="true" <c:if test="${negativeTraits.contains(trait.code)}">checked</c:if> <c:if test="${empty selectedOptions[trait.code]}">disabled</c:if>> 我确定不是这个特征</label>
+          </fieldset>
+        </c:if>
+      </c:forEach>
+    </div>
+  </details>
   <c:if test="${not empty sessionScope.currentUser}"><label class="history-opt-in"><input type="checkbox" name="saveSearch" value="1" <c:if test="${param.saveSearch eq '1'}">checked</c:if>> 保存此次检索到我的历史</label></c:if>
-  <div class="trait-form-actions"><button class="button primary" type="submit">查找候选植物</button><a class="button secondary" href="${pageContext.request.contextPath}/find-by-traits">重置特征</a></div>
+  <p class="filter-change-status" data-filter-status role="status" aria-live="polite"></p>
+  <div class="trait-form-actions"><button class="button primary" type="submit" data-loading-text="正在检索…">查找候选植物 <span aria-hidden="true">↗</span></button><button type="button" class="button secondary" data-reset-traits>清除全部条件</button></div>
 </form>

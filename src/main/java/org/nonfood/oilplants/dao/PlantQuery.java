@@ -12,7 +12,7 @@ public final class PlantQuery {
         StringBuilder sql = new StringBuilder(" FROM plants p LEFT JOIN plant_genera g ON g.id=p.genus_id LEFT JOIN plant_families f ON f.id=g.family_id LEFT JOIN plant_images im ON im.id=(SELECT ii.id FROM plant_images ii WHERE ii.plant_id=p.id AND ii.is_primary=1 ORDER BY ii.id DESC LIMIT 1) WHERE 1=1");
         List<Object> args = new ArrayList<>();
         if (!admin) sql.append(" AND p.is_public=1");
-        keyword(sql,args,c.getKeyword(),c.isExact());
+        keyword(sql,args,c.getKeyword(),c.isExact(),admin);
         match(sql,args,"f.family_name_zh ?",c.getFamily(),c.isExact());
         match(sql,args,"(g.genus_name_zh ? OR g.genus_name_latin ?)",c.getGenus(),c.isExact());
         match(sql,args,"p.name_zh ?",c.getNameZh(),c.isExact());
@@ -44,12 +44,13 @@ public final class PlantQuery {
         String direction = "desc".equalsIgnoreCase(c.getDirection()) ? "DESC" : "ASC";
         return " ORDER BY " + (oilSort ? "(" + order + ") IS NULL ASC, " : "") + order + ' ' + direction + ", p.id ASC";
     }
-    private static void keyword(StringBuilder sql,List<Object> args,String value,boolean exact){
+    private static void keyword(StringBuilder sql,List<Object> args,String value,boolean exact,boolean admin){
         if(value==null||value.isBlank())return;
-        String op=exact?" = ?":" LIKE ?";String text=exact?value.trim():"%"+value.trim()+"%";
+        String op=exact?" = ?":" LIKE ? ESCAPE '!'";String text=exact?value.trim():"%"+escapeLike(value.trim())+"%";
         sql.append(" AND (p.name_zh").append(op).append(" OR p.scientific_name").append(op).append(" OR p.name_en").append(op)
            .append(" OR p.morphology").append(op).append(" OR p.distribution").append(op).append(" OR p.cultivation").append(op).append(" OR p.uses").append(op)
-           .append(" OR EXISTS (SELECT 1 FROM plant_aliases a WHERE a.plant_id=p.id AND a.alias").append(op).append(")")
+           .append(" OR EXISTS (SELECT 1 FROM plant_aliases a WHERE a.plant_id=p.id")
+           .append(admin?"":" AND a.source_status='VERIFIED'").append(" AND a.alias").append(op).append(")")
            .append(" OR EXISTS (SELECT 1 FROM plant_oil_samples ks JOIN fatty_acid_components kf ON kf.sample_id=ks.id WHERE ks.plant_id=p.id AND kf.verification_status='VERIFIED' AND kf.component_name").append(op).append(")");
         for(int i=0;i<9;i++)args.add(text);
         try{java.math.BigDecimal numeric=new java.math.BigDecimal(value.trim());if(numeric.compareTo(java.math.BigDecimal.ZERO)>=0&&numeric.compareTo(new java.math.BigDecimal("100"))<=0){sql.append(" OR EXISTS (SELECT 1 FROM plant_oil_samples kn WHERE kn.plant_id=p.id AND kn.oil_content_status='VERIFIED' AND kn.oil_content_pct=?) OR EXISTS (SELECT 1 FROM plant_oil_samples sn JOIN fatty_acid_components fn ON fn.sample_id=sn.id WHERE sn.plant_id=p.id AND fn.verification_status='VERIFIED' AND fn.percentage=?)");args.add(numeric);args.add(numeric);}}catch(NumberFormatException ignored){ }
@@ -57,12 +58,13 @@ public final class PlantQuery {
     }
     private static void match(StringBuilder sql,List<Object> args,String clause,String value,boolean exact){
         if(value!=null && !value.isBlank()){
-            String operator=exact?"=":"LIKE";
-            String expression=clause.replace("?",operator+" ?");
+            String operator=exact?"= ?":"LIKE ? ESCAPE '!'";
+            String expression=clause.replace("?",operator);
             sql.append(" AND ").append(expression);
             int count=(int)clause.chars().filter(ch->ch=='?').count();
-            String parameter=exact?value.trim():"%"+value.trim()+"%";
+            String parameter=exact?value.trim():"%"+escapeLike(value.trim())+"%";
             for(int i=0;i<count;i++) args.add(parameter);
         }
     }
+    private static String escapeLike(String value){return value.replace("!","!!").replace("%","!%").replace("_","!_");}
 }

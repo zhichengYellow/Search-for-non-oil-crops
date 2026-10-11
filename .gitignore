@@ -18,3 +18,6 @@ data/ocr/*.log
 data/ocr/test.json
 # Local source datasets; retain generated import artifacts and review manifests in Git.
 data/raw/
+data/backups/
+data/pdf_extract/literature_fatty_acids/
+data/fatty_acid_literature_extraction.json

@@ -1,5 +1,7 @@
 package org.nonfood.oilplants.web;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.connector.Connector;
 import org.nonfood.oilplants.config.Database;
@@ -62,6 +64,32 @@ public final class BusinessFlowE2E {
 
             HttpResponse<String> home = get(client, port, "/");
             expect(home, 200, "guest home");
+            HttpResponse<String> technology=get(client,port,"/technology");expect(technology,200,"public read-only technology dashboard");
+            contains(technology.body(),"技术架构与数据中心","technology dashboard title");
+            contains(technology.body(),"正式脂肪酸组分","technology dashboard exposes live knowledge metrics");
+            contains(technology.body(),"Servlet 6.0 / Filter","technology dashboard documents the actual Java Web stack");
+            require(!technology.body().contains("jdbc:mysql://")&&!technology.body().contains("DB_PASSWORD")&&!technology.body().contains("/Users/"),
+                    "public technology dashboard leaked connection settings or a local absolute path");
+            String homeRequestId=home.headers().firstValue("X-Request-ID").orElse("");
+            require(homeRequestId.matches("[0-9a-f-]{36}"),"request correlation header was missing or malformed");
+            contains(home.body(),"描述搜索","homepage uses the shared description-search entry");
+            contains(home.body(),"外观筛选","homepage exposes beginner appearance mode");
+            contains(home.body(),"叶子像针，树上长着松塔","homepage offers a parser-backed description example");
+            long publicTargetId=firstPublicPlantId();String publicTargetName=publicPlantScientificName(publicTargetId);
+            HttpResponse<String> homeSuggestions=get(client,port,"/suggest?q="+enc(publicTargetName.substring(0,Math.min(4,publicTargetName.length()))));expect(homeSuggestions,200,"database-backed name suggestions");contains(homeSuggestions.body(),publicTargetName,"scientific name suggestion from the public database");
+            JsonNode suggestionEnvelope=new ObjectMapper().readTree(homeSuggestions.body());require(suggestionEnvelope.path("success").asBoolean()&&"SUCCESS".equals(suggestionEnvelope.path("status").asText()),"suggestion API did not return its success contract");require(homeSuggestions.headers().firstValue("X-Request-ID").orElse("").equals(suggestionEnvelope.path("meta").path("requestId").asText()),"suggestion response request ID did not match the response header");
+            HttpResponse<String> invalidSuggestion=get(client,port,"/suggest?q=");expect(invalidSuggestion,400,"invalid suggestion input");require("INVALID_INPUT".equals(new ObjectMapper().readTree(invalidSuggestion.body()).path("status").asText()),"invalid suggestion status was not machine-readable");
+            HttpResponse<String> nameSearch=get(client,port,"/discover?q="+enc(publicTargetName));expect(nameSearch,200,"guest scientific-name search");contains(nameSearch.body(),"名称检索结果","scientific names route to name search");contains(nameSearch.body(),publicTargetName,"database-backed name result");
+            HttpResponse<String> chineseNameSearch=get(client,port,"/discover?q="+enc("苏铁"));expect(chineseNameSearch,200,"guest Chinese plant-name search");contains(chineseNameSearch.body(),"名称检索结果","Chinese name is routed to name search");contains(chineseNameSearch.body(),"苏铁","real Chinese course plant is returned");
+            HttpResponse<String> explicitName=get(client,port,"/discover?mode=name&q="+enc("叶片像扇子"));expect(explicitName,200,"explicit name mode does not parse description as appearance");contains(explicitName.body(),"没有找到符合的植物名称","explicit name mode stays name-only");contains(explicitName.body(),"value=\"叶片像扇子\"","explicit search retains original input");
+            HttpResponse<String> guestPlant=get(client,port,"/plant?id="+publicTargetId);expect(guestPlant,200,"guest public plant detail");contains(guestPlant.body(),"登录后收藏","guest favorite sign-in entry");
+            HttpResponse<String> noEvidenceDescription=get(client,port,"/discover?q="+enc("叶子像针"));expect(noEvidenceDescription,200,"guest description with no confirmed trait evidence");contains(noEvidenceDescription.body(),"不足以可靠判断","no evidence is stated honestly");require(!noEvidenceDescription.body().contains("DATABASE-BACKED CANDIDATES"),"description search claimed a candidate before evidence existed");
+            HttpResponse<String> parsedAppearance=get(client,port,"/discover?q="+enc("开白色花的树"));expect(parsedAppearance,200,"natural-language appearance parsing");contains(parsedAppearance.body(),"data-quick-option=\"white\"","white flowers map to flower color, not leaf color");contains(parsedAppearance.body(),"data-quick-trait=\"plant_form\"","tree form is available for correction");contains(parsedAppearance.body(),"INSUFFICIENT_EVIDENCE","zero confirmed evidence is reported separately from no results");
+            HttpResponse<String> unknownAppearance=get(client,port,"/discover?mode=appearance&q="+enc("我看到一株紫色的小植物"));expect(unknownAppearance,200,"unrecognized appearance description state");contains(unknownAppearance.body(),"NO_RECOGNIZED_TRAITS","unrecognized description receives a distinct state");contains(unknownAppearance.body(),"我看到一株紫色的小植物","unrecognized text is retained");
+            HttpResponse<String> guided=get(client,port,"/find-by-traits");expect(guided,200,"guided appearance filter page");contains(guided.body(),"像细针","beginner visual trait choice");contains(guided.body(),"披针形叶片","lanceolate leaf is presented in plain Chinese");contains(guided.body(),"红色花朵","red flower option maps to the existing trait vocabulary");contains(guided.body(),"紫色花朵","purple flower option maps to the existing trait vocabulary");contains(guided.body(),"藤本","vine option maps to the existing trait vocabulary");contains(guided.body(),"data-reset-traits","appearance filter has a clear-all control");contains(guided.body(),"暂无已核验记录","coverage is based on confirmed public trait evidence");
+            HttpResponse<String> guidedConditions=get(client,port,"/find-by-traits?leaf_shape=needle&flower_color=white");expect(guidedConditions,200,"appearance filters preserve selected conditions");contains(guidedConditions.body(),"data-current-traits","selected traits have a summary component");contains(guidedConditions.body(),"value=\"needle\"","needle leaf selection is retained");contains(guidedConditions.body(),"value=\"white\"","white flower selection is retained");contains(guidedConditions.body(),"现有已核验特征不足以给出候选","selected empty-evidence query is distinguished from no match");
+            HttpResponse<String> invalidTraitPage=get(client,port,"/find-by-traits?leaf_shape=needle&page=oops");expect(invalidTraitPage,400,"malformed appearance page is rejected");contains(invalidTraitPage.body(),"INVALID_INPUT","appearance validation state is rendered");
+            HttpResponse<String> conflictingDescription=get(client,port,"/discover?q="+enc("叶片不是针形，而是像扇子"));expect(conflictingDescription,200,"contradictory description handling");contains(conflictingDescription.body(),"先修正互相矛盾的条件","contradictory traits are not searched as a confident result");
             expect(get(client, port, "/admin"), 302, "guest admin redirect");
             expect(get(client, port, "/favorites"), 302, "guest favorites redirect");
             expect(get(client, port, "/history"), 302, "guest history redirect");
@@ -96,13 +124,25 @@ public final class BusinessFlowE2E {
                     "emailCode",resetCode,"password",RESET_PASSWORD,"confirmPassword",RESET_PASSWORD));
             expect(reset,302,"password reset submit");
 
-            HttpResponse<String> loginPage = get(client, port, "/login");
+            String resumedTarget="/search/advanced?oilMin=20&component=oleic";
+            HttpResponse<String> protectedRedirect=get(client,port,resumedTarget);expect(protectedRedirect,302,"guest advanced-search redirect");
+            String protectedLocation=protectedRedirect.headers().firstValue("Location").orElse("");contains(protectedLocation,"next=%2Fsearch%2Fadvanced%3FoilMin%3D20%26component%3Doleic","advanced query preserved through login redirect");
+            HttpResponse<String> loginPage = get(client, port, "/login?next="+enc(resumedTarget));
             expect(loginPage, 200, "login form");
             HttpResponse<String> login = postWithCaptcha(client, port, "/login", "login", fields(
-                    "csrfToken", csrf(loginPage.body()), "username", username, "password", RESET_PASSWORD));
+                    "csrfToken", csrf(loginPage.body()), "username", username, "password", RESET_PASSWORD,"next",resumedTarget));
             expect(login, 302, "login submit");
+            contains(login.headers().firstValue("Location").orElse(""),"/e2e"+resumedTarget,"login resumes the original protected query");
+            expect(get(client,port,resumedTarget),200,"resumed advanced search");
             HttpResponse<String> profile = get(client, port, "/profile");
             expect(profile, 200, "authenticated profile/session");
+            VerifiedCourseSample courseSample=firstVerifiedCourseSample();
+            HttpResponse<String> realOilSearch=get(client,port,"/search/advanced?scientificName="+enc(courseSample.scientificName())+"&oilMin="+courseSample.oilContent().toPlainString());
+            expect(realOilSearch,200,"advanced search against a verified course oil sample");
+            contains(realOilSearch.body(),courseSample.scientificName(),"real course plant returned by name and verified oil range");
+            HttpResponse<String> realSampleDetail=get(client,port,"/plant?id="+courseSample.plantId());
+            expect(realSampleDetail,200,"real course plant sample detail");
+            contains(realSampleDetail.body(),courseSample.oilContent().toPlainString()+"%","verified course oil value shown without coercing missing data to zero");
             expect(get(client, port, "/admin"), 403, "ordinary user admin denial");
             expect(get(client,port,"/admin/fatty-acids"),403,"ordinary user fatty-acid review denial");
             expect(get(client,port,"/admin/taxa"),403,"ordinary user external taxonomy review denial");
@@ -110,6 +150,7 @@ public final class BusinessFlowE2E {
             expect(get(client,port,"/admin/evidence?path=data/pdf_extract/table_crops/pdf19-p011-01-pdf-page-11.jpg"),403,"ordinary user source crop denial");
 
             userId = userId(username);
+            guestFavoriteFlow(port,publicTargetId,username,RESET_PASSWORD);
             promoteToAdmin(userId);
             HttpResponse<String> adminHome = get(client, port, "/admin");
             expect(adminHome, 200, "promoted administrator session");
@@ -120,7 +161,14 @@ public final class BusinessFlowE2E {
             contains(fattyQueue.body(),"脂肪酸列没有印出单位","strict fatty-acid unit gate");
             String candidateId=match(fattyQueue.body(),"/admin/fatty-acids\\?id=([0-9]+)","pending fatty-acid candidate link");
             HttpResponse<String> fattyReview=get(client,port,"/admin/fatty-acids?id="+candidateId);expect(fattyReview,200,"admin source-backed fatty-acid review page");
-            contains(fattyReview.body(),"手工核验数值","fatty-acid manual review control");
+            contains(fattyReview.body(),"该候选尚不能写入正式组分","fatty-acid candidate remains blocked until source and unit evidence are confirmed");
+            String courseCandidateId=coursePendingFattyAcidCandidateId();
+            HttpResponse<String> courseCandidate=get(client,port,"/admin/fatty-acids?id="+courseCandidateId);expect(courseCandidate,200,"course fatty-acid candidate with no printed unit");
+            long componentsBeforeRejectedConfirmation=verifiedFattyComponentCount();
+            HttpResponse<String> blockedCourseConfirmation=post(client,port,"/admin/fatty-acids",fields("csrfToken",csrf(courseCandidate.body()),"id",courseCandidateId,"action","confirm","reviewedValue","1.25","reviewedUnit","%","reviewSourceId",knowledgeSourceId(),"sourceExcerpt","Synthetic test excerpt cannot add a unit to the source","reason","E2E verifies that an unprinted unit is blocked"));
+            expect(blockedCourseConfirmation,200,"unsubstantiated course percentage confirmation is blocked");
+            contains(blockedCourseConfirmation.body(),"没有明确记录百分比单位","server rejects unsupported fatty-acid unit");
+            require(verifiedFattyComponentCount()==componentsBeforeRejectedConfirmation,"unsupported fatty-acid percentage was written as formal data");
             HttpResponse<byte[]> evidence=client.send(HttpRequest.newBuilder(uri(port,"/admin/evidence?path=data/pdf_extract/table_crops/pdf19-p011-01-pdf-page-11.jpg")).GET().build(),HttpResponse.BodyHandlers.ofByteArray());
             expect(evidence,200,"admin-only source crop preview");require(evidence.body().length>5000,"source crop response was empty");
             HttpResponse<String> taxaReview=get(client,port,"/admin/taxa");expect(taxaReview,200,"GBIF external taxonomy candidate workflow");
@@ -160,9 +208,12 @@ public final class BusinessFlowE2E {
             HttpResponse<String> publicSearch = get(client, port, "/plants?q=" + enc(plantName) + "&oilMin=40&oilMax=50&component=oleic&componentMin=20");
             expect(publicSearch, 200, "public multi-condition search");
             contains(publicSearch.body(), plantName, "verified sample result");
+            HttpResponse<String> noBasicResults=get(client,port,"/plants?q="+enc("NoSuchPlantScopeTaxon"));expect(noBasicResults,200,"empty basic search remains a successful HTTP request");contains(noBasicResults.body(),"data-result-state=\"NO_RESULTS\"","basic search exposes its no-result state");
+            HttpResponse<String> invalidBasicRange=get(client,port,"/plants?oilMin=101");expect(invalidBasicRange,400,"invalid basic range is rejected");contains(invalidBasicRange.body(),"data-result-state=\"INVALID_INPUT\"","invalid basic query exposes its error state");
             HttpResponse<String> suggestions=get(client,port,"/suggest?q="+enc(plantName.substring(0,4)));expect(suggestions,200,"database-backed name suggestions");contains(suggestions.body(),plantName,"plant suggestion");
             long otherPlantId=otherPublicPlantId(plantId);String otherPlantName=publicPlantName(otherPlantId);
-            HttpResponse<String> comparison=get(client,port,"/compare?id="+plantId+"&id="+otherPlantId);expect(comparison,200,"public plant comparison data");contains(comparison.body(),plantName,"comparison selected plant");contains(comparison.body(),otherPlantName,"comparison second plant");contains(comparison.body(),"first sample","sample-preserving comparison");
+            HttpResponse<String> comparison=get(client,port,"/compare?id="+plantId+"&id="+otherPlantId);expect(comparison,200,"public plant comparison data");contains(comparison.body(),plantName,"comparison selected plant");contains(comparison.body(),otherPlantName,"comparison second plant");contains(comparison.body(),"first sample","sample-preserving comparison");contains(comparison.body(),"清空当前比较","comparison reset action");contains(comparison.body(),"继续浏览植物","return-to-search action");
+            HttpResponse<String> clearedComparison=get(client,port,"/compare");expect(clearedComparison,200,"comparison reset destination");require(!Pattern.compile("<input[^>]*name=\"id\"[^>]*checked").matcher(clearedComparison.body()).find(),"comparison selections persisted after clear");
 
             HttpResponse<String> traitsPage=get(client,port,"/admin/traits");expect(traitsPage,200,"admin trait evidence page");
             String courseSourceId=knowledgeSourceId();
@@ -171,7 +222,9 @@ public final class BusinessFlowE2E {
                     "sourceExcerpt","Temporary synthetic test fixture only","status","CONFIRMED");
             expect(post(client,port,"/admin/traits",trait),302,"admin trait evidence create");
             HttpResponse<String> appearance=get(client,port,"/find-by-traits?leaf_shape=needle");expect(appearance,200,"database-backed appearance search");
-            contains(appearance.body(),plantName,"confirmed trait candidate");contains(appearance.body(),"针形","trait explanation");
+            contains(appearance.body(),plantName,"confirmed trait candidate");contains(appearance.body(),"针形","trait explanation");contains(appearance.body(),"可检索 1 株","public trait option coverage comes from the confirmed database record");
+            HttpResponse<String> unsupportedCombined=get(client,port,"/find-by-traits?leaf_shape=needle&flower_color=white");expect(unsupportedCombined,200,"combined appearance query with one unsupported trait");contains(unsupportedCombined.body(),"INSUFFICIENT_EVIDENCE","every requested trait must have confirmed coverage");contains(unsupportedCombined.body(),plantName,"partial candidates remain visible when one condition has no evidence");contains(unsupportedCombined.body(),"以下候选仅按有证据的特征排序","partial candidates are not presented as satisfying the full combination");
+            HttpResponse<String> coveredNonMatch=get(client,port,"/find-by-traits?leaf_shape=fan_shaped");expect(coveredNonMatch,200,"known trait with no plant matching the selected option");contains(coveredNonMatch.body(),"没有植物同时符合这些条件","supported trait with a missing option is a true no-match");require(!coveredNonMatch.body().contains("不足以可靠判断"),"a supported trait option with no match was mislabeled as missing evidence");
             HttpResponse<String> described=get(client,port,"/discover?q="+enc("叶子像针"));expect(described,200,"database-backed description search");
             contains(described.body(),plantName,"rule-parsed description candidate");
 
@@ -206,6 +259,8 @@ public final class BusinessFlowE2E {
             HttpResponse<String> advanced = get(client, port, "/search/advanced?oilMin=40&component=linoleic&componentMin=15");
             expect(advanced, 200, "authenticated advanced combination search");
             contains(advanced.body(), plantName, "updated verified sample result");
+            HttpResponse<String> noAdvancedResults=get(client,port,"/search/advanced?nameZh="+enc("NoSuchPlantScopeTaxon"));expect(noAdvancedResults,200,"empty advanced search remains a successful HTTP request");contains(noAdvancedResults.body(),"data-result-state=\"NO_RESULTS\"","advanced search exposes its no-result state");
+            HttpResponse<String> invalidAdvanced=get(client,port,"/search/advanced?sort=bogus");expect(invalidAdvanced,400,"invalid sort parameter is rejected");contains(invalidAdvanced.body(),"排序字段无效","invalid sort has a clear server-side message");
 
             HttpResponse<String> imageForm = get(client, port, "/admin/plants/form?id=" + plantId);
             expect(imageForm, 200, "admin image form");
@@ -232,7 +287,10 @@ public final class BusinessFlowE2E {
             expect(logoutPage, 200, "session before logout");
             expect(post(client, port, "/logout", fields("csrfToken", csrf(logoutPage.body()))), 302, "logout");
             expect(get(client, port, "/favorites"), 302, "session invalidated on logout");
-            System.out.println("Business flow E2E passed: guest routes, CAPTCHA and email-code registration, email verification, password reset, login/session, role authorization, CSRF, opted-in search history, recent views, 30-day popular plants, DB-backed suggestions/comparison/professional/trait/description search, favorites, admin quality dashboard, fatty-acid/taxon candidate queues and source crop, trait/plant CRUD, image lifecycle, details, error page, and logout.");
+            boolean rateLimited=false;
+            for(int i=0;i<125;i++){HttpResponse<String> searchAttempt=get(client,port,"/discover?mode=appearance&q="+enc("叶子像针"));if(searchAttempt.statusCode()==429){contains(searchAttempt.body(),"RATE_LIMITED","search limit has a stable business state");rateLimited=true;break;}expect(searchAttempt,200,"search frequency allowance");}
+            require(rateLimited,"server-side public-search rate limit was not enforced");
+            System.out.println("Business flow E2E passed: guest home/shared-search modes/name suggestions and truthful empty-evidence description flows; query-preserving login; explicit guest favorite continuation; CAPTCHA and email registration/reset; authorization; history; real DB search and comparison; admin reviews and CRUD; image lifecycle; errors; logout. The temporary trait fixture verifies evidence-count plumbing only, not real plant knowledge.");
         } finally {
             try { tomcat.stop(); } finally { tomcat.destroy(); }
             cleanup(plantId, userId, username, plantName, email);
@@ -302,7 +360,11 @@ public final class BusinessFlowE2E {
         if (response.statusCode() != status) throw new IllegalStateException(label + " returned HTTP " + response.statusCode() + " (expected " + status + ")");
     }
     private static void contains(String body, String value, String label) {
-        if (!body.contains(value)) throw new IllegalStateException(label + " did not contain expected text");
+        if (!body.contains(value)) {
+            String states=Pattern.compile("data-result-state=\\\"[^\\\"]*\\\"").matcher(body).results()
+                    .map(java.util.regex.MatchResult::group).distinct().toList().toString();
+            throw new IllegalStateException(label + " did not contain expected text; rendered states="+states);
+        }
     }
     private static void require(boolean condition, String message) { if (!condition) throw new IllegalStateException(message); }
 
@@ -325,12 +387,46 @@ public final class BusinessFlowE2E {
             try(ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("Course PDF knowledge source is missing; run the PlantScope trait migration");return Long.toString(r.getLong(1));}
         }
     }
+    private static String coursePendingFattyAcidCandidateId() throws Exception {
+        String sql="SELECT c.id FROM fatty_acid_candidates c JOIN plant_knowledge_sources s ON s.id=c.source_id WHERE s.source_key='course-pdf-2026' AND c.unit_candidate IS NULL AND c.verification_status IN ('EXTRACTED','REVIEW_PENDING') ORDER BY c.id LIMIT 1";
+        try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement(sql);ResultSet r=p.executeQuery()){
+            if(!r.next())throw new IllegalStateException("No unreviewed course fatty-acid candidate with missing unit was found.");
+            return Long.toString(r.getLong(1));
+        }
+    }
+    private static long verifiedFattyComponentCount() throws Exception {
+        try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT COUNT(*) FROM fatty_acid_components WHERE verification_status='VERIFIED' AND percentage IS NOT NULL");ResultSet r=p.executeQuery()){
+            if(!r.next())throw new IllegalStateException("Unable to count verified fatty-acid components.");
+            return r.getLong(1);
+        }
+    }
     private static long traitValueId(long plantId)throws Exception{
         try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT v.id FROM plant_trait_values v JOIN plant_traits t ON t.id=v.trait_id WHERE v.plant_id=? AND t.code='leaf_shape' AND v.source_page='E2E fixture' ORDER BY v.id DESC LIMIT 1")){
             p.setLong(1,plantId);try(ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("Temporary test trait evidence missing.");return r.getLong(1);}
         }
     }
     private static long otherPublicPlantId(long excluded)throws Exception{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT id FROM plants WHERE is_public=1 AND id<>? ORDER BY id LIMIT 1")){p.setLong(1,excluded);try(ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("Need a second public plant to test comparison.");return r.getLong(1);}}}
+    private static long firstPublicPlantId()throws Exception{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT id FROM plants WHERE is_public=1 ORDER BY id LIMIT 1");ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("No public plant is available for the guest path.");return r.getLong(1);}}
+    private static String publicPlantScientificName(long id)throws Exception{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT scientific_name FROM plants WHERE id=? AND is_public=1")){p.setLong(1,id);try(ResultSet r=p.executeQuery()){if(!r.next()||r.getString(1)==null)throw new IllegalStateException("A public scientific name is required for the name-search path.");return r.getString(1);}}}
+    private record VerifiedCourseSample(long plantId,String scientificName,BigDecimal oilContent) { }
+    private static VerifiedCourseSample firstVerifiedCourseSample()throws Exception{
+        String sql="SELECT p.id,p.scientific_name,s.oil_content_pct FROM plants p JOIN plant_oil_samples s ON s.plant_id=p.id WHERE p.is_public=1 AND p.source_key LIKE 'pdf19-%' AND s.oil_content_status='VERIFIED' AND s.oil_content_pct IS NOT NULL ORDER BY p.id,s.id LIMIT 1";
+        try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement(sql);ResultSet r=p.executeQuery()){
+            if(!r.next())throw new IllegalStateException("No verified course oil sample is available for the professional search path.");
+            return new VerifiedCourseSample(r.getLong(1),r.getString(2),r.getBigDecimal(3));
+        }
+    }
+    private static void guestFavoriteFlow(int port,long plantId,String username,String password)throws Exception{
+        CookieManager jar=new CookieManager(null,CookiePolicy.ACCEPT_ALL);HttpClient guest=HttpClient.newBuilder().cookieHandler(jar).followRedirects(HttpClient.Redirect.NEVER).build();
+        HttpResponse<String> detail=get(guest,port,"/plant?id="+plantId);expect(detail,200,"guest plant page before favorite login");contains(detail.body(),"登录后收藏","guest is offered a return-to-plant favorite path");
+        String next="/plant?id="+plantId;HttpResponse<String> loginPage=get(guest,port,"/login?next="+enc(next));expect(loginPage,200,"favorite login return form");
+        HttpResponse<String> login=postWithCaptcha(guest,port,"/login","login",fields("csrfToken",csrf(loginPage.body()),"username",username,"password",password,"next",next));expect(login,302,"login from favorite action");contains(login.headers().firstValue("Location").orElse(""),"/e2e"+next,"favorite login returns to the same plant");
+        HttpResponse<String> returned=get(guest,port,next);expect(returned,200,"return to plant after favorite login");contains(returned.body(),"☆ 收藏植物","favorite action remains explicit after login");
+        HttpResponse<String> added=post(guest,port,"/favorites/toggle",fields("csrfToken",csrf(returned.body()),"plantId",Long.toString(plantId)));expect(added,302,"continue favorite after login");
+        HttpResponse<String> feedback=get(guest,port,next);expect(feedback,200,"favorite confirmation message");contains(feedback.body(),"已加入收藏","favorite operation feedback");contains(feedback.body(),"★ 已收藏","favorite state is synchronized on detail");
+        contains(get(guest,port,"/favorites").body(),publicPlantScientificName(plantId),"favorite persisted in the account list");
+        expect(post(guest,port,"/favorites/toggle",fields("csrfToken",csrf(feedback.body()),"plantId",Long.toString(plantId))),302,"favorite removal from the detail page");
+    }
     private static String publicPlantName(long id)throws Exception{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT name_zh FROM plants WHERE id=? AND is_public=1")){p.setLong(1,id);try(ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("Comparison plant missing.");return r.getString(1);}}}
     private static void promoteToAdmin(long id) throws Exception {
         try (Connection c = Database.getConnection(); PreparedStatement p = c.prepareStatement("UPDATE users SET role='ADMIN' WHERE id=?")) { p.setLong(1, id); if (p.executeUpdate() != 1) throw new IllegalStateException("Could not promote temporary test account"); }

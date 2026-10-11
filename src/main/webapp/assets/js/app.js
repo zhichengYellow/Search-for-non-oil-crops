@@ -130,6 +130,7 @@
     if (type === 'description') {
       if (!f.q.value.trim()) return fail('请填写植物名称或外观描述。');
       if (f.q.value.length > 500) return fail('描述最多 500 个字符。');
+      if (f.mode && f.mode.value === 'name' && f.q.value.trim().length > 160) return fail('名称搜索请控制在 160 个字符以内；也可以切换到智能搜索。');
     }
 
     if (type === 'compare') {
@@ -249,37 +250,365 @@
 
   function initPlantSuggestions() {
     document.querySelectorAll('[data-plant-suggest]').forEach(input => {
-      const list = input.list;
-      if (!list) return;
+      const root = input.closest('[data-unified-search]') || input.form;
+      const list = root && root.querySelector('[role="listbox"]');
+      const nativeList = input.list;
+      const status = root && root.querySelector('[data-suggestion-status]');
+      if (!list && !nativeList) return;
       let timer = 0;
       let controller = null;
+      let sequence = 0;
+      let activeIndex = -1;
+      let items = [];
+      let options = [];
+      const close = () => {
+        if (!list) return;
+        list.hidden = true;
+        list.replaceChildren();
+        options = [];
+        activeIndex = -1;
+        input.setAttribute('aria-expanded', 'false');
+        input.removeAttribute('aria-activedescendant');
+      };
+      const selectItem = item => {
+        input.value = item.nameZh || item.scientificName || '';
+        const mode = root && root.querySelector('[data-search-mode-value]');
+        if (mode) {
+          mode.value = 'name';
+          root.dataset.activeMode = 'name';
+          root.querySelectorAll('[data-search-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.searchMode === 'name')));
+          const panel = root.querySelector('[data-appearance-panel]');
+          const form = root.querySelector('[data-search-mode-form]');
+          const examples = root.querySelector('[data-description-examples]');
+          if (panel) panel.hidden = true;
+          if (form) form.hidden = false;
+          if (examples) examples.hidden = true;
+          input.placeholder = '输入中文名、别名或拉丁学名……';
+        }
+        close();
+        if (status) status.textContent = '已选中名称建议，正在搜索。';
+        input.form.requestSubmit();
+      };
+      const renderList = results => {
+        if (!list) return;
+        items = results;
+        options = [];
+        list.replaceChildren();
+        results.forEach((item, index) => {
+          const option = document.createElement('li');
+          option.id = `plant-suggestion-${sequence}-${index}`;
+          option.setAttribute('role', 'option');
+          option.setAttribute('aria-selected', 'false');
+          const name = document.createElement('span');
+          name.className = 'suggestion-name';
+          name.textContent = item.nameZh || item.scientificName || '未命名植物';
+          const scientific = document.createElement('i');
+          scientific.textContent = item.scientificName || '学名待核验';
+          option.append(name, scientific);
+          option.addEventListener('mousedown', event => event.preventDefault());
+          option.addEventListener('click', () => selectItem(item));
+          list.append(option);
+          options.push(option);
+        });
+        list.hidden = results.length === 0;
+        input.setAttribute('aria-expanded', String(results.length > 0));
+      };
       input.addEventListener('input', () => {
         window.clearTimeout(timer);
         if (controller) controller.abort();
+        sequence++;
+        close();
         const query = input.value.trim();
-        if (!query || query.length > 100) { list.replaceChildren(); return; }
+        if (status) status.textContent = '';
+        if (query.length < 2 || query.length > 100) {
+          if (nativeList) nativeList.replaceChildren();
+          return;
+        }
+        const mode = root && root.querySelector('[data-search-mode-value]');
+        if (mode && mode.value === 'appearance') return;
+        if (mode && mode.value === 'smart' && /(叶片|叶子|叶缘|花朵|果实|果子|像|形状|树皮|长着|长有|开.{0,4}花|秋天|秋季|冬天|生长在|松塔|松果|球果)/.test(query)) {
+          if (status) status.textContent = '这看起来像外观描述；提交后会提取特征，不显示名称建议。';
+          return;
+        }
         timer = window.setTimeout(async () => {
+          const currentSequence = sequence;
           controller = new AbortController();
+          if (status) status.textContent = '正在查找名称建议…';
           try {
             const response = await fetch(`${window.APP_CONTEXT || ''}/suggest?q=${encodeURIComponent(query)}`, { signal: controller.signal, headers: { Accept: 'application/json' } });
-            if (!response.ok) return;
-            const items = await response.json();
-            if (input.value.trim() !== query || !Array.isArray(items)) return;
-            list.replaceChildren(...items.map(item => {
+            const payload = await response.json();
+            const items = Array.isArray(payload) ? payload : payload && payload.success === true && payload.status === 'SUCCESS' && Array.isArray(payload.data) ? payload.data : null;
+            if (!response.ok || !items) {
+              const error = new Error('suggestion request failed');
+              error.status = payload && payload.status;
+              throw error;
+            }
+            if (currentSequence !== sequence || input.value.trim() !== query) return;
+            if (list) renderList(items.slice(0, 10));
+            if (nativeList) nativeList.replaceChildren(...items.slice(0, 10).map(item => {
               const option = document.createElement('option');
               option.value = item.nameZh || '';
-              option.label = item.scientificName || '学名待核验';
+              option.label = item.nameZh && item.nameZh === item.scientificName
+                ? `中文名待核 · 学名 ${item.scientificName}`
+                : item.scientificName || '学名待核验';
               return option;
             }));
+            if (status && list) status.textContent = items.length ? `找到 ${Math.min(items.length, 10)} 条名称建议；可用方向键选择。` : '没有名称建议，仍可直接搜索。';
           } catch (error) {
-            if (error.name !== 'AbortError') list.replaceChildren();
+            if (error.name !== 'AbortError' && currentSequence === sequence) {
+              if (nativeList) nativeList.replaceChildren();
+              close();
+              if (status) status.textContent = error.status === 'RATE_LIMITED'
+                ? '名称建议请求较频繁，请稍后重试；你仍可直接搜索。'
+                : '名称建议暂不可用，你仍可直接搜索。';
+            }
           }
-        }, 180);
+        }, 220);
+      });
+      input.addEventListener('keydown', event => {
+        if (!list) return;
+        if (event.key === 'Escape' && !list.hidden) {
+          event.preventDefault();
+          close();
+          if (status) status.textContent = '已关闭名称建议。';
+        } else if (!list.hidden && options.length && event.key === 'ArrowDown') {
+          event.preventDefault();
+          activeIndex = (activeIndex + 1) % options.length;
+          options.forEach((option, index) => option.setAttribute('aria-selected', String(index === activeIndex)));
+          input.setAttribute('aria-activedescendant', options[activeIndex].id);
+          options[activeIndex].scrollIntoView({ block: 'nearest' });
+        } else if (!list.hidden && options.length && event.key === 'ArrowUp') {
+          event.preventDefault();
+          activeIndex = activeIndex < 1 ? options.length - 1 : activeIndex - 1;
+          options.forEach((option, index) => option.setAttribute('aria-selected', String(index === activeIndex)));
+          input.setAttribute('aria-activedescendant', options[activeIndex].id);
+          options[activeIndex].scrollIntoView({ block: 'nearest' });
+        } else if (!list.hidden && options.length && event.key === 'Enter' && activeIndex >= 0) {
+          event.preventDefault();
+          if (items[activeIndex]) selectItem(items[activeIndex]);
+        }
       });
     });
   }
 
+  function markSearchResultsStale(root) {
+    const previous = document.querySelectorAll('[data-result-state], .parsed-description, .search-results, .match-results, section.empty-state');
+    let changed = false;
+    previous.forEach(result => {
+      if (result.hidden) return;
+      result.hidden = true;
+      changed = true;
+    });
+    const notice = root && root.querySelector('[data-stale-results-notice]');
+    if (changed && notice) notice.hidden = false;
+  }
+
+  function initUnifiedSearch() {
+    document.querySelectorAll('[data-unified-search]').forEach(root => {
+      const input = root.querySelector('[data-plant-suggest]');
+      const searchForm = root.querySelector('[data-search-mode-form]');
+      const modeValue = root.querySelector('[data-search-mode-value]');
+      const appearancePanel = root.querySelector('[data-appearance-panel]');
+      const professionalLink = root.querySelector('[data-professional-link]');
+      const hint = root.querySelector('[data-search-hint]');
+      const modeHint = root.querySelector('[data-mode-hint]');
+      const examples = root.querySelector('[data-description-examples]');
+      const setMode = mode => {
+        const next = ['smart', 'name', 'appearance'].includes(mode) ? mode : 'smart';
+        const previousMode = modeValue ? modeValue.value : root.dataset.activeMode;
+        if (previousMode !== next) markSearchResultsStale(root);
+        root.dataset.activeMode = next;
+        if (modeValue) modeValue.value = next;
+        root.querySelectorAll('[data-search-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.searchMode === next)));
+        const isAppearance = next === 'appearance';
+        if (examples) examples.hidden = next === 'name';
+        if (searchForm) searchForm.hidden = isAppearance;
+        if (appearancePanel) appearancePanel.hidden = !isAppearance;
+        if (input) input.placeholder = next === 'name' ? '输入中文名、别名或拉丁学名……' : '描述你看到的叶片、花朵、颜色或果实……';
+        if (modeHint) {
+          const text = next === 'name' ? '按中文名、别名或拉丁学名查找；可以不选建议直接提交。'
+            : isAppearance ? '只选择你确定的外观；不确定的特征可以跳过。'
+              : '描述日常所见即可；也可直接输入中文名或拉丁学名。';
+          const status = hint.querySelector('[data-suggestion-status]');
+          modeHint.textContent = text;
+          if (status) status.textContent = '';
+        }
+        const list = root.querySelector('[role="listbox"]');
+        if (list) {
+          list.hidden = true;
+          if (input) input.setAttribute('aria-expanded', 'false');
+        }
+        if (input) input.dispatchEvent(new Event('input', { bubbles: true }));
+        if (isAppearance) {
+          const first = root.querySelector('[data-quick-trait]') || root.querySelector('[data-trait-select]');
+          if (first) first.focus();
+        } else if (input) input.focus();
+      };
+      root.querySelectorAll('[data-search-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.searchMode)));
+      if (input && professionalLink) input.addEventListener('input', () => {
+        const url = new URL(professionalLink.href, window.location.origin);
+        const query = input.value.trim();
+        if (query) url.searchParams.set('q', query); else url.searchParams.delete('q');
+        professionalLink.href = url.pathname + url.search;
+        markSearchResultsStale(root);
+      });
+      root.querySelectorAll('[data-search-example]').forEach(example => example.addEventListener('click', () => {
+        if (!input) return;
+        input.value = example.dataset.searchExample || '';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.focus();
+      }));
+      const clear = root.querySelector('.search-clear');
+      if (clear) clear.addEventListener('click', () => window.setTimeout(() => {
+        if (input) { input.value = ''; input.dispatchEvent(new Event('input', { bubbles: true })); input.focus(); }
+        const status = root.querySelector('[data-suggestion-status]');
+        if (status) status.textContent = '已清空搜索内容。';
+      }, 0));
+      const initial = root.dataset.activeMode;
+      if (examples && initial === 'name') examples.hidden = true;
+      if (initial === 'appearance') {
+        if (searchForm) searchForm.hidden = true;
+        if (appearancePanel) appearancePanel.hidden = false;
+      }
+    });
+    document.querySelectorAll('[data-search-mode]').forEach(button => {
+      if (button.closest('[data-unified-search]')) return;
+      button.addEventListener('click', () => {
+        const root = document.querySelector('[data-unified-search]');
+        const target = root && Array.from(root.querySelectorAll('.search-mode-button')).find(item => item.dataset.searchMode === button.dataset.searchMode);
+        if (target) target.click();
+      });
+    });
+  }
+
+  function initTraitSelectors() {
+    document.querySelectorAll('[data-trait-filter-form]').forEach(form => {
+      const root = form.closest('[data-unified-search]') || form.closest('.trait-explorer-panel') || document;
+      const syncVisualChoices = () => root.querySelectorAll('[data-quick-trait]').forEach(button => {
+        const select = Array.from(form.querySelectorAll('[data-trait-select]')).find(item => item.dataset.traitSelect === button.dataset.quickTrait);
+        button.setAttribute('aria-pressed', String(!!select && select.value === button.dataset.quickOption));
+      });
+      const renderCurrent = () => {
+        const summary = form.querySelector('[data-current-traits]');
+        const list = form.querySelector('[data-current-trait-list]');
+        if (!summary || !list) return;
+        list.replaceChildren();
+        form.querySelectorAll('[data-trait-select]').forEach(select => {
+          if (!select.value) return;
+          const fieldset = select.closest('[data-trait-choice]');
+          const legend = fieldset && fieldset.querySelector('legend');
+          const selected = select.selectedOptions[0];
+          if (!fieldset || !legend || !selected) return;
+          const chip = document.createElement('span');
+          chip.className = 'current-trait-chip';
+          const label = document.createElement('span');
+          const negative = fieldset.querySelector('.trait-negation input');
+          label.textContent = `${legend.textContent.trim()}：${negative && negative.checked ? '不含 ' : ''}${selected.textContent.trim()}`;
+          const clear = document.createElement('button');
+          clear.type = 'button';
+          clear.dataset.clearTrait = select.dataset.traitSelect;
+          clear.setAttribute('aria-label', `移除${legend.textContent.trim()}条件`);
+          clear.textContent = '移除';
+          chip.append(label, clear);
+          list.append(chip);
+        });
+        summary.hidden = list.childElementCount === 0;
+      };
+      const update = select => {
+        const fieldset = select.closest('[data-trait-choice]');
+        if (!fieldset) return;
+        const negative = fieldset.querySelector('.trait-negation input');
+        if (negative) {
+          negative.disabled = !select.value;
+          if (!select.value) negative.checked = false;
+        }
+        const option = select.selectedOptions[0];
+        const count = option ? Number(option.dataset.confirmedPlants || 0) : 0;
+        const coverage = fieldset.querySelector('[data-trait-coverage]');
+        if (coverage) coverage.textContent = select.value ? (count > 0 ? `当前选择可检索 ${count} 株` : '当前选择暂无已核验记录') : '不确定的特征可以跳过';
+      };
+      form.querySelectorAll('[data-trait-select]').forEach(select => {
+        select.addEventListener('change', () => {
+          update(select);
+          syncVisualChoices();
+          markSearchResultsStale(root);
+          const status = form.querySelector('[data-filter-status]');
+          if (status) status.textContent = '条件已修改；运行检索后更新结果。';
+          renderCurrent();
+        });
+        update(select);
+      });
+      form.querySelectorAll('.trait-negation input').forEach(input => input.addEventListener('change', () => { markSearchResultsStale(root); renderCurrent(); }));
+      form.querySelector('[data-reset-traits]')?.addEventListener('click', () => {
+        form.querySelectorAll('[data-trait-select]').forEach(select => { select.value = ''; update(select); });
+        form.querySelectorAll('.trait-negation input').forEach(input => { input.checked = false; input.disabled = true; });
+        syncVisualChoices();
+        renderCurrent();
+        markSearchResultsStale(root);
+        const status = form.querySelector('[data-filter-status]');
+        if (status) status.textContent = '已清除全部特征条件。';
+      });
+      form.addEventListener('click', event => {
+        const button = event.target.closest('[data-clear-trait]');
+        if (!button) return;
+        const select = Array.from(form.querySelectorAll('[data-trait-select]')).find(item => item.dataset.traitSelect === button.dataset.clearTrait);
+        if (!select) return;
+        select.value = '';
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+        select.focus();
+      });
+      const secondary = form.querySelector('[data-secondary-traits]');
+      if (secondary && Array.from(secondary.querySelectorAll('[data-trait-select]')).some(select => select.value)) secondary.open = true;
+      syncVisualChoices();
+      renderCurrent();
+    });
+    document.querySelectorAll('[data-quick-trait]').forEach(button => button.addEventListener('click', () => {
+      const form = button.closest('[data-unified-search], .trait-explorer-panel')?.querySelector('[data-trait-filter-form]');
+      if (!form) return;
+      const select = Array.from(form.querySelectorAll('[data-trait-select]')).find(item => item.dataset.traitSelect === button.dataset.quickTrait);
+      if (!select) return;
+      select.value = select.value === button.dataset.quickOption ? '' : button.dataset.quickOption;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+      const status = form.querySelector('[data-filter-status]');
+      if (status) status.textContent = '已更新外观条件；运行检索后查看结果。';
+    }));
+    document.querySelectorAll('[data-clear-trait]').forEach(button => button.addEventListener('click', () => {
+      if (button.closest('[data-trait-filter-form]')) return;
+      const select = Array.from(document.querySelectorAll('[data-trait-select]')).find(item => item.dataset.traitSelect === button.dataset.clearTrait);
+      if (!select) return;
+      select.value = '';
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+      select.focus();
+    }));
+  }
+
+  function showPlantImageFallback(image) {
+    if (!image || image.dataset.fallbackShown === 'true') return;
+    image.dataset.fallbackShown = 'true';
+    const frame = image.closest('[data-image-frame]');
+    const frameFallback = frame && frame.querySelector('[data-image-fallback]');
+    if (frameFallback) {
+      image.hidden = true;
+      frameFallback.hidden = false;
+      return;
+    }
+    const fallback = document.createElement('span');
+    fallback.className = 'image-fallback-generic';
+    fallback.setAttribute('role', 'img');
+    fallback.setAttribute('aria-label', '暂无可用图片');
+    fallback.textContent = '暂无可用图片';
+    image.replaceWith(fallback);
+  }
+
+  function initPlantImageFallbacks() {
+    document.querySelectorAll('.detail-photo img, .candidate-image img, .plant-card-image img, .history-plant img').forEach(image => {
+      image.addEventListener('error', () => showPlantImageFallback(image), { once: true });
+      if (image.complete && image.naturalWidth === 0) showPlantImageFallback(image);
+    });
+  }
+
   function init() {
+    initPlantImageFallbacks();
     const navToggle = document.querySelector('.nav-toggle');
     const nav = document.getElementById('main-nav');
     if (navToggle && nav) {
@@ -451,6 +780,8 @@
     if (confirmPassword) confirmPassword.addEventListener('input', updatePasswordHint);
     initUsernameCheck();
     initPlantSuggestions();
+    initUnifiedSearch();
+    initTraitSelectors();
 
     document.querySelectorAll('[data-search-form] input, [data-search-form] select').forEach(input => {
       input.addEventListener('input', () => {
@@ -520,6 +851,8 @@
         const label = button.dataset.loadingText || '正在提交…';
         button.dataset.originalLabel = button.textContent.trim();
         button.textContent = label;
+        const loadingStatus = form.querySelector('[data-loading-status], [data-filter-status]');
+        if (loadingStatus) loadingStatus.textContent = label;
       });
     });
 

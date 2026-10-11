@@ -1,12 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="../common/header.jspf" %>
+<div class="guided-search-page">
 <section class="page-intro compact"><p class="eyebrow">GUIDED APPEARANCE SEARCH</p><h1>通过外观特征找植物</h1><p>只选择你确定的特征；不确定的项目可以跳过。当前结果只依据已核验的植物特征记录。</p></section>
-<c:if test="${not empty traits}"><section class="trait-explorer-panel"><%@ include file="trait-selectors.jspf" %></section></c:if>
+<%@ include file="../common/unified-search.jspf" %>
 <c:choose>
-  <c:when test="${empty criteria}"><section class="empty-state trait-empty"><div class="empty-symbol" aria-hidden="true">✳</div><h2>从一个熟悉的特征开始</h2><p>例如选择“针形叶片”或“果实为球果”。你可以随时添加更多条件。</p></section></c:when>
-  <c:when test="${empty pageData.items}"><section class="empty-state trait-empty"><div class="empty-symbol" aria-hidden="true">⌕</div><h2>现有已核验特征不足以给出候选</h2><p>这不代表数据库中的植物都不符合。当前 33 条课程植物资料尚未建立可供匹配的已核验外观特征记录；请尝试植物名录或专业检索，管理员可先补充有来源的特征资料。</p><div class="empty-actions"><a class="button secondary" href="${pageContext.request.contextPath}/plants">浏览植物名录</a><a class="text-link" href="${pageContext.request.contextPath}/search/advanced">专业数据检索</a></div></section></c:when>
+  <c:when test="${resultState eq 'INVALID_INPUT' or resultState eq 'RATE_LIMITED' or resultState eq 'NETWORK_ERROR'}"><div class="search-result-state" data-result-state="${resultState}" role="alert"><c:out value="${error}"/><c:if test="${resultState eq 'NETWORK_ERROR'}">你可以稍后重新提交，已选条件会保留。</c:if></div></c:when>
+  <c:when test="${empty criteria}"><section class="empty-state trait-empty"><div class="empty-symbol" aria-hidden="true">✳</div><h2>从一个看得清的特征开始</h2><p>每个选项旁会显示有多少公开植物具备该项已核验记录。数量为 0 时，当前知识库还不能用该特征可靠匹配。</p></section></c:when>
+  <c:when test="${empty pageData.items}"><section class="empty-state trait-empty" data-result-state="${resultState}" role="status" aria-live="polite"><div class="empty-symbol" aria-hidden="true">⌕</div><h2><c:choose><c:when test="${resultState eq 'INSUFFICIENT_EVIDENCE'}">现有已核验特征不足以给出候选</c:when><c:otherwise>没有植物同时符合这些条件</c:otherwise></c:choose></h2><p><c:choose><c:when test="${resultState eq 'INSUFFICIENT_EVIDENCE'}">至少一个所选特征没有已确认的公开记录。这不代表数据库中的植物都不符合；自动提取和待核验线索不会作为正式结果。</c:when><c:otherwise>所选特征都有已核验记录，但没有公开植物符合当前组合。可以减少条件后重试。</c:otherwise></c:choose></p><div class="empty-actions"><a class="button secondary" href="${pageContext.request.contextPath}/plants">浏览植物名录</a><a class="text-link" href="${pageContext.request.contextPath}/categories">浏览植物分类</a><a class="text-link" href="${pageContext.request.contextPath}/search/advanced">专业数据检索</a></div></section></c:when>
   <c:otherwise>
-    <section class="match-results" aria-labelledby="match-results-title"><div class="section-heading"><div><p class="eyebrow">EVIDENCE-BASED CANDIDATES</p><h2 id="match-results-title">候选植物</h2></div><p><c:out value="${pageData.total}"/> 个有明确匹配依据的候选</p></div>
+    <section class="match-results" data-result-state="${resultState}" aria-labelledby="match-results-title"><c:if test="${resultState eq 'INSUFFICIENT_EVIDENCE'}"><p class="search-result-state" role="status" aria-live="polite">至少一个所选特征没有已核验的公开记录。以下候选仅按有证据的特征排序，不能视为符合完整条件组合。</p></c:if><div class="section-heading"><div><p class="eyebrow">EVIDENCE-BASED CANDIDATES</p><h2 id="match-results-title">候选植物</h2></div><p><c:out value="${pageData.total}"/> 个有明确匹配依据的候选</p></div>
       <p class="match-caveat">匹配分数是按特征权重计算的启发式排序值，不是识别概率；数据覆盖度单独展示。待核验、未知和争议记录不会当作冲突。</p>
       <div class="candidate-list"><c:forEach items="${pageData.items}" var="candidate"><article class="candidate-card">
         <a class="candidate-image" href="${pageContext.request.contextPath}/plant?id=${candidate.plantId}"><c:choose><c:when test="${not empty candidate.imageStoredName}"><img src="${pageContext.request.contextPath}/image/${candidate.imageStoredName}" alt="" loading="lazy"></c:when><c:otherwise><span aria-hidden="true">✳</span></c:otherwise></c:choose></a>
@@ -21,4 +23,5 @@
     </section>
   </c:otherwise>
 </c:choose>
+</div>
 <%@ include file="../common/footer.jspf" %>

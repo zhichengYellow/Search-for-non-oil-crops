@@ -7,10 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173d32">
   <title><c:out value="${pageTitle}" default="PlantScope · 植知"/> · PlantScope</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/site.css?v=botanical-7">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/site.css?v=botanical-12">
   <script>window.APP_CONTEXT = '<c:out value="${pageContext.request.contextPath}"/>';</script>
   <script src="${pageContext.request.contextPath}/assets/js/jquery-3.7.1.min.js?v=botanical-4" defer></script>
-  <script src="${pageContext.request.contextPath}/assets/js/app.js?v=botanical-6" defer></script>
+  <script src="${pageContext.request.contextPath}/assets/js/app.js?v=botanical-9" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">跳至主要内容</a>

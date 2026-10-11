@@ -24,10 +24,41 @@ public class PlantDao {
         }
         return new Page<>(items,page,size,total);
     }
+    /** Name-only search for the public discovery entry point; descriptive fields never masquerade as name hits. */
+    public Page<Plant> searchByName(String query,int requestedPage,int requestedSize) throws SQLException {
+        String value=query==null?"":query.trim();
+        int page=Math.max(1,requestedPage),size=Math.max(1,Math.min(50,requestedSize));
+        if(value.isEmpty())return new Page<>(List.of(),page,size,0);
+        if(value.length()>160)throw new IllegalArgumentException("植物名称请控制在 160 个字符以内。");
+        String escaped=escapeLike(value),contains="%"+escaped+"%",prefix=escaped+"%";
+        String where=" WHERE p.is_public=1 AND (p.name_zh LIKE ? ESCAPE '!' OR p.scientific_name LIKE ? ESCAPE '!' OR p.name_en LIKE ? ESCAPE '!' OR EXISTS(SELECT 1 FROM plant_aliases a WHERE a.plant_id=p.id AND a.source_status='VERIFIED' AND a.alias LIKE ? ESCAPE '!'))";
+        long total;
+        try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement("SELECT COUNT(*) FROM plants p"+where)){
+            for(int i=1;i<=4;i++)ps.setString(i,contains);
+            try(ResultSet rs=ps.executeQuery()){rs.next();total=rs.getLong(1);}
+        }
+        String order=" ORDER BY CASE WHEN p.name_zh=? OR p.scientific_name=? OR p.name_en=? OR EXISTS(SELECT 1 FROM plant_aliases ae WHERE ae.plant_id=p.id AND ae.source_status='VERIFIED' AND ae.alias=?) THEN 0 "
+                +"WHEN p.name_zh LIKE ? ESCAPE '!' OR p.scientific_name LIKE ? ESCAPE '!' OR p.name_en LIKE ? ESCAPE '!' OR EXISTS(SELECT 1 FROM plant_aliases ap WHERE ap.plant_id=p.id AND ap.source_status='VERIFIED' AND ap.alias LIKE ? ESCAPE '!') THEN 1 ELSE 2 END,p.name_zh,p.id";
+        String sql=SELECT+" FROM plants p LEFT JOIN plant_genera g ON g.id=p.genus_id LEFT JOIN plant_families f ON f.id=g.family_id LEFT JOIN plant_images im ON im.id=(SELECT ii.id FROM plant_images ii WHERE ii.plant_id=p.id AND ii.is_primary=1 ORDER BY ii.id DESC LIMIT 1)"+where+order+" LIMIT ? OFFSET ?";
+        List<Plant> items=new ArrayList<>();
+        try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){
+            int i=1;for(int n=0;n<4;n++)ps.setString(i++,contains);
+            ps.setString(i++,value);ps.setString(i++,value);ps.setString(i++,value);ps.setString(i++,value);
+            for(int n=0;n<4;n++)ps.setString(i++,prefix);
+            ps.setInt(i++,size);ps.setInt(i,(page-1)*size);
+            try(ResultSet rs=ps.executeQuery()){while(rs.next())items.add(map(rs));}
+        }
+        return new Page<>(items,page,size,total);
+    }
+    public boolean hasExactPublicName(String query)throws SQLException {
+        String value=query==null?"":query.trim();if(value.isEmpty()||value.length()>160)return false;
+        String sql="SELECT 1 FROM plants p WHERE p.is_public=1 AND (p.name_zh=? OR p.scientific_name=? OR p.name_en=? OR EXISTS(SELECT 1 FROM plant_aliases a WHERE a.plant_id=p.id AND a.source_status='VERIFIED' AND a.alias=?)) LIMIT 1";
+        try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){for(int i=1;i<=4;i++)ps.setString(i,value);try(ResultSet rs=ps.executeQuery()){return rs.next();}}
+    }
     public List<PlantSuggestion> suggestions(String query,int requestedLimit)throws SQLException {
-        String value=query==null?"":query.trim();if(value.isEmpty()||value.length()>100)return List.of();String prefix=value+"%";
-        String sql="SELECT p.id,p.name_zh,p.scientific_name FROM plants p WHERE p.is_public=1 AND (p.name_zh LIKE ? OR p.scientific_name LIKE ? OR EXISTS(SELECT 1 FROM plant_aliases a WHERE a.plant_id=p.id AND a.alias LIKE ?)) ORDER BY CASE WHEN p.name_zh LIKE ? THEN 0 WHEN p.scientific_name LIKE ? THEN 1 ELSE 2 END,p.name_zh,p.id LIMIT ?";
-        List<PlantSuggestion> out=new ArrayList<>();try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){ps.setString(1,prefix);ps.setString(2,prefix);ps.setString(3,prefix);ps.setString(4,prefix);ps.setString(5,prefix);ps.setInt(6,Math.max(1,Math.min(12,requestedLimit)));try(ResultSet rs=ps.executeQuery()){while(rs.next())out.add(new PlantSuggestion(rs.getLong("id"),rs.getString("name_zh"),rs.getString("scientific_name")));}}return out;
+        String value=query==null?"":query.trim();if(value.isEmpty()||value.length()>100)return List.of();String prefix=escapeLike(value)+"%";
+        String sql="SELECT p.id,p.name_zh,p.scientific_name FROM plants p WHERE p.is_public=1 AND (p.name_zh LIKE ? ESCAPE '!' OR p.scientific_name LIKE ? ESCAPE '!' OR p.name_en LIKE ? ESCAPE '!' OR EXISTS(SELECT 1 FROM plant_aliases a WHERE a.plant_id=p.id AND a.source_status='VERIFIED' AND a.alias LIKE ? ESCAPE '!')) ORDER BY CASE WHEN p.name_zh LIKE ? ESCAPE '!' THEN 0 WHEN p.scientific_name LIKE ? ESCAPE '!' OR p.name_en LIKE ? ESCAPE '!' THEN 1 ELSE 2 END,p.name_zh,p.id LIMIT ?";
+        List<PlantSuggestion> out=new ArrayList<>();try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){for(int i=1;i<=7;i++)ps.setString(i,prefix);ps.setInt(8,Math.max(1,Math.min(12,requestedLimit)));try(ResultSet rs=ps.executeQuery()){while(rs.next())out.add(new PlantSuggestion(rs.getLong("id"),rs.getString("name_zh"),rs.getString("scientific_name")));}}return out;
     }
     public List<Plant> publicPlantOptions()throws SQLException {
         List<Plant> out=new ArrayList<>();String sql="SELECT id,name_zh,scientific_name FROM plants WHERE is_public=1 ORDER BY name_zh,id LIMIT 1000";
@@ -36,6 +67,16 @@ public class PlantDao {
     public Optional<Plant> findById(long id, boolean admin) throws SQLException {
         String sql=SELECT+" FROM plants p LEFT JOIN plant_genera g ON g.id=p.genus_id LEFT JOIN plant_families f ON f.id=g.family_id LEFT JOIN plant_images im ON im.id=(SELECT ii.id FROM plant_images ii WHERE ii.plant_id=p.id AND ii.is_primary=1 ORDER BY ii.id DESC LIMIT 1) WHERE p.id=?"+(admin?"":" AND p.is_public=1");
         try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){ps.setLong(1,id);try(ResultSet rs=ps.executeQuery()){if(!rs.next())return Optional.empty();Plant p=map(rs);p.setSamples(findSamples(id,c));p.setAliases(findAliases(id,c));return Optional.of(p);}}
+    }
+    public List<KnowledgeSource> knowledgeSources(long plantId)throws SQLException {
+        String sql="SELECT DISTINCT s.id,s.source_type,s.source_name,s.source_url,s.citation,s.license_code,s.verification_status FROM plant_knowledge_sources s WHERE s.id IN ("
+                +"SELECT source_id FROM plant_taxonomy_references WHERE plant_id=? UNION SELECT source_id FROM plant_dataset_relations WHERE plant_id=? "
+                +"UNION SELECT source_id FROM plant_knowledge_entries WHERE plant_id=? UNION SELECT source_id FROM plant_trait_values WHERE plant_id=? "
+                +"UNION SELECT source_id FROM plant_category_relations WHERE plant_id=? UNION SELECT source_id FROM plant_image_references WHERE plant_id=? "
+                +"UNION SELECT source_id FROM plant_external_identifiers WHERE plant_id=?) ORDER BY s.source_name,s.id";
+        List<KnowledgeSource> out=new ArrayList<>();
+        try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){for(int i=1;i<=7;i++)ps.setLong(i,plantId);try(ResultSet rs=ps.executeQuery()){while(rs.next()){KnowledgeSource source=new KnowledgeSource();source.setId(rs.getLong("id"));source.setSourceType(rs.getString("source_type"));source.setSourceName(rs.getString("source_name"));source.setSourceUrl(rs.getString("source_url"));source.setCitation(rs.getString("citation"));source.setLicenseCode(rs.getString("license_code"));source.setVerificationStatus(rs.getString("verification_status"));out.add(source);}}}
+        return out;
     }
     private List<OilSample> findSamples(long plantId,Connection c)throws SQLException{
         List<OilSample> samples=new ArrayList<>();Map<Long,OilSample> byId=new LinkedHashMap<>();
@@ -70,7 +111,7 @@ public class PlantDao {
     public List<String[]> listGenera()throws SQLException{List<String[]> rows=new ArrayList<>();try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement("SELECT g.id,CONCAT(COALESCE(g.genus_name_zh,''),' · ',g.genus_name_latin,' — ',f.family_name_zh) FROM plant_genera g JOIN plant_families f ON f.id=g.family_id ORDER BY f.family_name_zh,g.genus_name_latin");ResultSet rs=ps.executeQuery()){while(rs.next())rows.add(new String[]{rs.getString(1),rs.getString(2)});}return rows;}
     public List<String[]> listFamilies()throws SQLException{List<String[]> rows=new ArrayList<>();try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement("SELECT id,family_name_zh FROM plant_families ORDER BY family_name_zh");ResultSet rs=ps.executeQuery()){while(rs.next())rows.add(new String[]{rs.getString(1),rs.getString(2)});}return rows;}
 
-    private List<String> findAliases(long plantId,Connection c)throws SQLException{List<String> out=new ArrayList<>();try(PreparedStatement ps=c.prepareStatement("SELECT alias FROM plant_aliases WHERE plant_id=? ORDER BY language,alias")){ps.setLong(1,plantId);try(ResultSet rs=ps.executeQuery()){while(rs.next())out.add(rs.getString(1));}}return out;}
+    private List<String> findAliases(long plantId,Connection c)throws SQLException{List<String> out=new ArrayList<>();try(PreparedStatement ps=c.prepareStatement("SELECT alias FROM plant_aliases WHERE plant_id=? AND source_status='VERIFIED' ORDER BY language,alias")){ps.setLong(1,plantId);try(ResultSet rs=ps.executeQuery()){while(rs.next())out.add(rs.getString(1));}}return out;}
     public void addAlias(long plantId,String alias,String language)throws SQLException{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("INSERT INTO plant_aliases(plant_id,alias,language) VALUES(?,?,?)")){p.setLong(1,plantId);p.setString(2,alias);p.setString(3,language);p.executeUpdate();}}
     public void removeAlias(long plantId,long aliasId)throws SQLException{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("DELETE FROM plant_aliases WHERE plant_id=? AND id=?")){p.setLong(1,plantId);p.setLong(2,aliasId);p.executeUpdate();}}
     public List<String[]> aliases(long plantId)throws SQLException{List<String[]> out=new ArrayList<>();try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT id,alias,language FROM plant_aliases WHERE plant_id=? ORDER BY id")){p.setLong(1,plantId);try(ResultSet r=p.executeQuery()){while(r.next())out.add(new String[]{r.getString(1),r.getString(2),r.getString(3)});}}return out;}
@@ -108,4 +149,5 @@ public class PlantDao {
     public static Plant map(ResultSet rs)throws SQLException{Plant p=new Plant();p.setId(rs.getLong("id"));long gid=rs.getLong("genus_id");if(!rs.wasNull())p.setGenusId(gid);p.setNameZh(rs.getString("name_zh"));p.setScientificName(rs.getString("scientific_name"));p.setNameEn(rs.getString("name_en"));p.setMorphology(rs.getString("morphology"));p.setDistribution(rs.getString("distribution"));p.setCultivation(rs.getString("cultivation"));p.setUses(rs.getString("uses"));p.setSourcePages(rs.getString("source_pages"));p.setVerificationStatus(rs.getString("verification_status"));p.setFamilyZh(rs.getString("family_name_zh"));p.setFamilyLatin(rs.getString("family_name_latin"));p.setGenusZh(rs.getString("genus_name_zh"));p.setGenusLatin(rs.getString("genus_name_latin"));p.setImageStoredName(rs.getString("stored_name"));p.setImageAlt(rs.getString("alt_text"));p.setOilContentSummary(rs.getString("oil_content_summary"));return p;}
     private static int bind(PreparedStatement ps,List<Object> values)throws SQLException{int i=1;for(Object v:values){if(v instanceof String s)ps.setString(i++,s);else if(v instanceof java.math.BigDecimal n)ps.setBigDecimal(i++,n);else ps.setObject(i++,v);}return i;}
     private static String emptyNull(String s){return s==null||s.isBlank()?null:s.trim();}
+    private static String escapeLike(String value){return value.replace("!","!!").replace("%","!%").replace("_","!_");}
 }

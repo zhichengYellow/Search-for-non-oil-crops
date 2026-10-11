@@ -13,20 +13,23 @@ public class FattyAcidCandidateDao {
     private static final ObjectMapper JSON = new ObjectMapper();
 
     public List<FattyAcidCandidate> listPending(int limit) throws SQLException {
-        String sql = "SELECT c.id,c.sample_id,c.source_id,p.name_zh,p.scientific_name,s.sample_label," +
+        String sql = "SELECT c.id,c.sample_id,c.source_id,c.row_no,c.candidate_type,ks.source_name,ks.source_url,ks.citation,ks.verification_status source_status,ks.license_code source_license,p.name_zh,p.scientific_name,s.sample_label," +
                 "c.component_code,c.raw_value_text,c.numeric_value_candidate,c.unit_candidate," +
                 "c.collection_unit_candidate,c.testing_unit_candidate,c.sample_part_candidate,c.origin_candidate," +
                 "c.source_pdf_page,c.source_printed_page,c.evidence_image_reference,c.source_record_reference,c.qc_flags,c.verification_status " +
                 "FROM fatty_acid_candidates c JOIN plant_oil_samples s ON s.id=c.sample_id " +
+                "JOIN plant_knowledge_sources ks ON ks.id=c.source_id " +
                 "JOIN plants p ON p.id=s.plant_id WHERE c.verification_status IN ('EXTRACTED','REVIEW_PENDING') " +
-                "ORDER BY c.source_pdf_page,c.row_no,c.component_code,c.id LIMIT ?";
+                "ORDER BY ks.source_name,c.source_pdf_page,c.row_no,c.component_code,c.id LIMIT ?";
         List<FattyAcidCandidate> rows = new ArrayList<>();
         try (Connection c = Database.getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
-            p.setInt(1, Math.max(1, Math.min(limit, 300)));
+            p.setInt(1, Math.max(1, Math.min(limit, 500)));
             try (ResultSet r = p.executeQuery()) {
                 while (r.next()) {
                     FattyAcidCandidate x = new FattyAcidCandidate();
                     x.setId(r.getLong("id")); x.setSampleId(r.getLong("sample_id")); x.setSourceId(r.getLong("source_id"));
+                    x.setRowNo(r.getLong("row_no"));x.setCandidateType(r.getString("candidate_type"));x.setSourceName(r.getString("source_name"));
+                    x.setSourceUrl(r.getString("source_url"));x.setCitation(r.getString("citation"));x.setSourceVerificationStatus(r.getString("source_status"));x.setSourceLicense(r.getString("source_license"));
                     x.setPlantName(r.getString("name_zh")); x.setScientificName(r.getString("scientific_name"));
                     x.setSampleLabel(r.getString("sample_label")); x.setComponentCode(r.getString("component_code"));
                     x.setRawValueText(r.getString("raw_value_text")); x.setNumericValueCandidate(r.getString("numeric_value_candidate"));
@@ -48,8 +51,8 @@ public class FattyAcidCandidateDao {
             c.setAutoCommit(false);
             try {
                 String sql = "SELECT id,sample_id,source_id,component_code,raw_value_text,numeric_value_candidate," +
-                        "source_pdf_page,source_bbox,evidence_image_reference,verification_status FROM fatty_acid_candidates WHERE id=? FOR UPDATE";
-                long sampleId, sourceId; String component, raw, bbox, image, status; BigDecimal candidateValue;
+                        "source_pdf_page,source_bbox,evidence_image_reference,unit_candidate,verification_status FROM fatty_acid_candidates WHERE id=? FOR UPDATE";
+                long sampleId, sourceId; String component, raw, bbox, image, unitCandidate, status; BigDecimal candidateValue;
                 try (PreparedStatement p = c.prepareStatement(sql)) {
                     p.setLong(1, candidateId);
                     try (ResultSet r = p.executeQuery()) {
@@ -57,7 +60,7 @@ public class FattyAcidCandidateDao {
                         sampleId = r.getLong("sample_id"); sourceId = r.getLong("source_id");
                         component = r.getString("component_code"); raw = r.getString("raw_value_text");
                         candidateValue = r.getBigDecimal("numeric_value_candidate"); bbox = r.getString("source_bbox");
-                        image = r.getString("evidence_image_reference"); status = r.getString("verification_status");
+                        image = r.getString("evidence_image_reference"); unitCandidate=r.getString("unit_candidate"); status = r.getString("verification_status");
                     }
                 }
                 if (!"EXTRACTED".equals(status) && !"REVIEW_PENDING".equals(status))
@@ -76,6 +79,8 @@ public class FattyAcidCandidateDao {
                 }
                 if (!"confirm".equals(action)) throw new SQLException("审核操作无效。");
                 if (!"%".equals(unit)) throw new SQLException("脂肪酸组分单位必须有明确来源证据并为 %，否则不能确认。");
+                if (sourceId != reviewSourceId) throw new SQLException("审核来源必须与该候选关联的原始来源一致。");
+                if (!"%".equals(unitCandidate)) throw new SQLException("候选原始来源没有明确记录百分比单位；不能将其确认成 %。");
                 if (component == null || component.isBlank()) throw new SQLException("组分编码缺失，不能确认。");
                 if (reviewedValue == null || reviewedValue.compareTo(BigDecimal.ZERO) < 0 || reviewedValue.compareTo(new BigDecimal("100")) > 0)
                     throw new SQLException("请核对来源图像并输入 0–100 范围内的组分数值。");

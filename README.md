@@ -20,6 +20,8 @@ mysql -u root -p nonfood_oil_plants < database/migrations/20261011_account_secur
 mysql -u root -p nonfood_oil_plants < database/migrations/20261012_user_discovery.sql
 mysql -u root -p nonfood_oil_plants < database/migrations/20261013_knowledge_expansion.sql
 mysql -u root -p nonfood_oil_plants < database/migrations/20261014_plant_knowledge_expansion.sql
+mysql -u root -p nonfood_oil_plants < database/migrations/20261015_fix_trait_labels.sql
+mysql -u root -p nonfood_oil_plants < database/migrations/20261016_fix_fruit_shape_label.sql
 ```
 
 上面的迁移分别增加课程 PDF 溯源、可追溯的外观特征/知识来源、账户安全字段、用户发现统计、审核候选以及 3.2 多对多类别/数据集、外部来源标识、知识来源引用和批次导入模型。旧数据库只需运行尚未应用的迁移，按时间顺序执行。之后配置 `DB_URL`、`DB_USER`、`DB_PASSWORD`，运行 `scripts/import_pdf_data.sh` 导入来源数据；导入按稳定 source key 幂等，可重复运行。导入抽样核验结果写入 `data/database_import_audit.json`。

@@ -6,15 +6,8 @@
     <p class="eyebrow">BOTANICAL RESEARCH / KNOWLEDGE EXPLORER</p>
     <h1>认识你遇见的植物，<br><em>从描述所见开始。</em></h1>
     <p class="hero-intro">按名称搜索，或描述叶片、颜色、形状与生长环境。每个候选都展示数据依据与未知信息。</p>
-    <form class="hero-search" action="${pageContext.request.contextPath}/discover" method="get" data-search-form>
-      <label class="sr-only" for="home-query">输入植物名称，或描述所见的叶片、颜色和形状</label>
-      <span class="search-mark" aria-hidden="true">⌕</span>
-      <input id="home-query" name="q" maxlength="500" list="plant-name-suggestions" data-plant-suggest placeholder="输入植物名称，或描述你看到的叶片、颜色和形状……">
-      <datalist id="plant-name-suggestions"></datalist>
-      <button type="submit" class="button primary" data-loading-text="检索中…">开始探索 <span aria-hidden="true">↗</span></button>
-    </form>
+    <%@ include file="common/unified-search.jspf" %>
     <div class="hero-meta"><span><i aria-hidden="true"></i>来源页码可追溯</span><span>样本记录独立关联</span></div>
-    <div class="home-search-modes" aria-label="更多植物检索方式"><a href="${pageContext.request.contextPath}/discover">描述找植物</a><a href="${pageContext.request.contextPath}/find-by-traits">外观特征筛选</a><a href="${pageContext.request.contextPath}/search/advanced">专业数据检索</a></div>
   </div>
   <div class="hero-art" aria-hidden="true">
     <div class="art-orbit art-orbit-one"></div><div class="art-orbit art-orbit-two"></div>
@@ -63,7 +56,7 @@
   <c:choose><c:when test="${not empty plantCategories}"><div class="home-category-chips"><c:forEach items="${plantCategories}" var="category"><c:if test="${category.publishedPlantCount gt 0}"><a href="${pageContext.request.contextPath}/categories?key=${category.key}"><span><c:out value="${category.label}"/></span><b><c:out value="${category.publishedPlantCount}"/></b></a></c:if></c:forEach></div></c:when><c:otherwise><p class="empty-inline">类别资料暂不可用。</p></c:otherwise></c:choose>
 </section>
 
-<c:if test="${not empty popularPlants}"><section class="section-block popular-section"><div class="section-heading"><div><p class="eyebrow">POPULAR / LAST 30 DAYS</p><h2>近期热门植物</h2><p>按最近 30 日的详情页访问量汇总</p></div><a class="text-link" href="${pageContext.request.contextPath}/plants">浏览全部植物 →</a></div><div class="plant-grid"><c:forEach items="${popularPlants}" var="p"><a class="plant-card" href="${pageContext.request.contextPath}/plant?id=${p.id}"><div class="plant-card-image"><c:choose><c:when test="${not empty p.imageStoredName}"><img src="${pageContext.request.contextPath}/image/${p.imageStoredName}" alt="" loading="lazy"></c:when><c:otherwise><div class="image-placeholder" aria-hidden="true">✳</div></c:otherwise></c:choose></div><div class="plant-card-body"><span class="taxonomy"><c:out value="${p.familyZh}" default="科名待补"/> · <c:out value="${p.genusZh}" default="属名待补"/></span><h3><c:out value="${p.nameZh}"/></h3><i><c:out value="${p.scientificName}" default="学名待核验"/></i></div></a></c:forEach></div></section></c:if>
+<c:if test="${not empty popularPlants}"><section class="section-block popular-section"><div class="section-heading"><div><p class="eyebrow">POPULAR / LAST 30 DAYS</p><h2>近期热门植物</h2><p>按最近 30 日的详情页访问量汇总</p></div><a class="text-link" href="${pageContext.request.contextPath}/plants">浏览全部植物 →</a></div><div class="plant-grid"><c:forEach items="${popularPlants}" var="p"><a class="plant-card" href="${pageContext.request.contextPath}/plant?id=${p.id}"><div class="plant-card-image"><c:choose><c:when test="${not empty p.imageStoredName}"><img src="${pageContext.request.contextPath}/image/${p.imageStoredName}" alt="" loading="lazy"></c:when><c:otherwise><div class="image-placeholder" aria-hidden="true">✳</div></c:otherwise></c:choose></div><div class="plant-card-body"><span class="taxonomy"><c:out value="${p.familyZh}" default="科名待补"/> · <c:out value="${p.genusZh}" default="属名待补"/></span><h3><c:out value="${p.nameZh}"/><c:if test="${not empty p.scientificName and p.nameZh eq p.scientificName}"> <small class="name-pending">中文名待核</small></c:if></h3><c:if test="${p.nameZh ne p.scientificName}"><i><c:out value="${p.scientificName}" default="学名待核验"/></i></c:if></div></a></c:forEach></div></section></c:if>
 <section class="section-block featured-section">
   <div class="section-heading">
     <div><p class="eyebrow">PLANT INDEX</p><h2>植物名录</h2><p>精选条目来自实际检索结果</p></div>
@@ -79,9 +72,9 @@
           <a class="plant-card" href="${pageContext.request.contextPath}/plant?id=${p.id}">
             <div class="plant-card-image">
               <c:choose><c:when test="${not empty p.imageStoredName}"><img src="${pageContext.request.contextPath}/image/${p.imageStoredName}" alt="<c:out value='${p.imageAlt}' default='${p.nameZh}'/>" loading="lazy"></c:when><c:otherwise><div class="image-placeholder" aria-label="暂无植物图片">✳</div></c:otherwise></c:choose>
-              <span class="verification"><c:out value="${p.verificationStatus}"/></span>
+              <span class="verification"><c:choose><c:when test="${p.verificationStatus eq 'VERIFIED'}">记录已核验</c:when><c:when test="${p.verificationStatus eq 'NEEDS_REVIEW'}">资料待核验</c:when><c:otherwise>状态待确认</c:otherwise></c:choose></span>
             </div>
-            <div class="plant-card-body"><span class="taxonomy"><c:out value="${p.familyZh}" default="科名待补"/> · <c:out value="${p.genusZh}" default="属名待补"/></span><h3><c:out value="${p.nameZh}"/></h3><i><c:out value="${p.scientificName}" default="学名待核验"/></i></div>
+            <div class="plant-card-body"><span class="taxonomy"><c:out value="${p.familyZh}" default="科名待补"/> · <c:out value="${p.genusZh}" default="属名待补"/></span><h3><c:out value="${p.nameZh}"/><c:if test="${not empty p.scientificName and p.nameZh eq p.scientificName}"> <small class="name-pending">中文名待核</small></c:if></h3><c:if test="${p.nameZh ne p.scientificName}"><i><c:out value="${p.scientificName}" default="学名待核验"/></i></c:if></div>
           </a>
         </c:forEach>
       </div>

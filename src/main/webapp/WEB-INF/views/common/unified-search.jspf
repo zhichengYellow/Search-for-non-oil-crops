@@ -1,0 +1,43 @@
+<%@ page pageEncoding="UTF-8" %>
+<section class="unified-search" data-unified-search data-active-mode="${searchMode}" aria-label="植物搜索">
+  <div class="search-mode-bar" role="group" aria-label="选择搜索方式">
+    <button type="button" class="search-mode-button" data-search-mode="smart" aria-pressed="${searchMode ne 'name' and searchMode ne 'appearance'}">描述搜索</button>
+    <button type="button" class="search-mode-button" data-search-mode="name" aria-pressed="${searchMode eq 'name'}">名称搜索</button>
+    <button type="button" class="search-mode-button" data-search-mode="appearance" aria-pressed="${searchMode eq 'appearance'}">外观筛选</button>
+    <a class="search-professional-link" data-professional-link href="${pageContext.request.contextPath}/search/advanced">专业查询 <span aria-hidden="true">↗</span></a>
+  </div>
+  <form class="unified-search-form" action="${pageContext.request.contextPath}/discover" method="get" data-search-mode-form data-search-form data-validate="description" novalidate <c:if test="${searchMode eq 'appearance'}">hidden</c:if>>
+    <input type="hidden" name="mode" value="${searchMode}" data-search-mode-value>
+    <label class="sr-only" for="plant-query">输入植物名称、学名、别名或外观描述</label>
+    <div class="unified-search-input-row">
+      <span class="search-mark" aria-hidden="true">⌕</span>
+      <input id="plant-query" type="search" name="q" maxlength="500" autocomplete="off" value="<c:out value='${query}'/>" data-plant-suggest aria-autocomplete="list" aria-controls="plant-query-suggestions" aria-expanded="false" placeholder="${searchMode eq 'name' ? '输入中文名、别名或拉丁学名……' : '描述你看到的叶片、花朵、颜色或果实……'}">
+      <button type="button" class="search-clear" aria-label="清空搜索内容">清空</button>
+      <button type="submit" class="button primary" data-loading-text="正在搜索…">开始搜索 <span aria-hidden="true">↗</span></button>
+      <ul id="plant-query-suggestions" class="plant-suggestion-list" role="listbox" aria-label="植物名称建议" hidden></ul>
+    </div>
+    <p class="unified-search-hint" data-search-hint aria-live="polite"><span data-mode-hint>
+      <c:choose>
+        <c:when test="${searchMode eq 'name'}">按中文名、别名或拉丁学名查找；建议来自公开植物名录。</c:when>
+        <c:when test="${searchMode eq 'appearance'}">可以描述叶片、花朵、果实或植株类型；下方也可直接选择特征。</c:when>
+        <c:otherwise>描述日常所见即可；也可直接输入中文名或拉丁学名。</c:otherwise>
+      </c:choose></span>
+      <span data-suggestion-status></span>
+    </p>
+    <span class="sr-only" data-loading-status role="status" aria-live="polite"></span>
+    <div class="description-examples" data-description-examples aria-label="描述示例" <c:if test="${searchMode eq 'name'}">hidden</c:if>>
+      <span>试试这样描述：</span>
+      <button type="button" data-search-example="叶子像针，树上长着松塔">“叶子像针，树上长着松塔”</button>
+      <button type="button" data-search-example="叶片像扇子，秋天变黄">“叶片像扇子，秋天变黄”</button>
+    </div>
+    <c:if test="${not empty sessionScope.currentUser}"><label class="history-opt-in"><input type="checkbox" name="saveSearch" value="1" <c:if test="${param.saveSearch eq '1'}">checked</c:if>> 保存此次检索到我的历史</label></c:if>
+  </form>
+  <p class="search-stale-notice" data-stale-results-notice role="status" aria-live="polite" hidden>你已更改搜索方式或筛选条件；重新提交后查看更新结果。</p>
+  <div class="guided-appearance-panel" data-appearance-panel <c:if test="${searchMode ne 'appearance'}">hidden</c:if>>
+    <div class="guided-appearance-intro"><h2>先选你看得清的特征</h2><p>只选确定的项目，其余留空即可。标签旁的数量表示当前公开库中有多少植物具有该项<strong>已核验</strong>记录。</p></div>
+    <%@ include file="visual-trait-choices.jspf" %>
+    <section class="guided-trait-controls" aria-label="外观特征条件">
+      <%@ include file="../plants/trait-selectors.jspf" %>
+    </section>
+  </div>
+</section>

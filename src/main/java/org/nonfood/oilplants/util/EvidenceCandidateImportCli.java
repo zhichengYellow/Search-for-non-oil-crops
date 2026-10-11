@@ -29,6 +29,12 @@ public final class EvidenceCandidateImportCli {
         Path root = Path.of(System.getProperty("user.dir")).toAbsolutePath().normalize();
         JsonNode traitDocument = JSON.readTree(root.resolve("data/pdf_extract/trait_candidates.json").toFile());
         List<Map<String,String>> fattyRows = readCsv(root.resolve("data/fatty_acid_candidates.csv"));
+        List<Map<String,String>> literatureSources = readCsv(root.resolve("data/fatty_acid_literature_sources.csv"));
+        List<Map<String,String>> literatureSamples = readCsv(root.resolve("data/fatty_acid_literature_samples.csv"));
+        List<Map<String,String>> literatureCandidates = readCsv(root.resolve("data/fatty_acid_literature_candidates.csv"));
+        if ((literatureSources.isEmpty() || literatureSamples.isEmpty() || literatureCandidates.isEmpty()) &&
+                !(literatureSources.isEmpty() && literatureSamples.isEmpty() && literatureCandidates.isEmpty()))
+            throw new IllegalArgumentException("Literature source, sample and candidate CSV files must all be present and non-empty.");
         JsonNode traits = traitDocument.isArray() ? traitDocument : traitDocument.path("candidates");
         if (!traits.isArray()) throw new IllegalArgumentException("Trait candidate JSON must be an array.");
         int traitCount = traits.size(), fattyCount = fattyRows.size();
@@ -38,7 +44,9 @@ public final class EvidenceCandidateImportCli {
             try {
                 requireMigration(c);
                 long sourceId = findSource(c, "course-pdf-2026");
-                int traitsFound = 0, fattyFound = 0;
+                int traitsFound = 0, fattyFound = 0, literatureSourcesAdded = 0, literatureSamplesAdded = 0,
+                        literatureCandidatesAdded = 0;
+                Map<String,Long> literatureSourceIds = new LinkedHashMap<>();
                 try (PreparedStatement insertTrait = c.prepareStatement(
                         "INSERT IGNORE INTO plant_trait_values(plant_id,trait_id,option_id,value_text,verification_status,source_id,source_page,source_excerpt,source_key,extraction_method,mapping_confidence,ambiguity_note,evidence_image_reference) " +
                         "SELECT ?,t.id,o.id,?, ?,?,?,?,?,?,?,?,? FROM plant_traits t JOIN trait_options o ON o.trait_id=t.id " +
@@ -46,6 +54,38 @@ public final class EvidenceCandidateImportCli {
                      PreparedStatement insertFatty = c.prepareStatement(
                         "INSERT IGNORE INTO fatty_acid_candidates(candidate_key,sample_id,row_no,component_code,raw_value_text,numeric_value_candidate,unit_candidate,candidate_type,collection_unit_candidate,testing_unit_candidate,sample_part_candidate,origin_candidate,source_id,source_pdf_page,source_printed_page,source_bbox,evidence_image_reference,source_record_reference,qc_flags,verification_status) " +
                         "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'REVIEW_PENDING')")) {
+                    for (Map<String,String> source : literatureSources) {
+                        String key = required(source,"source_key");
+                        if (literatureSourceIds.containsKey(key)) throw new SQLException("Duplicate literature source key: " + key);
+                        if (!"LITERATURE".equals(required(source,"source_type")) ||
+                                !"NEEDS_REVIEW".equals(required(source,"verification_status")))
+                            throw new SQLException("Literature sources must remain NEEDS_REVIEW: " + key);
+                        boolean existed = exists(c,"SELECT COUNT(*) FROM plant_knowledge_sources WHERE source_key=?",key);
+                        long id = upsertLiteratureSource(c,source);
+                        verifyLiteratureSource(c,id,source);
+                        if (!existed) {
+                            addImportEvent(c,"plant_knowledge_source",id,id,"NEEDS_REVIEW");
+                            literatureSourcesAdded++;
+                        }
+                        literatureSourceIds.put(key,id);
+                    }
+                    Map<String,Long> literatureSampleIds = new HashMap<>();
+                    for (Map<String,String> sample : literatureSamples) {
+                        String sampleKey=required(sample,"source_key"), sourceKey=sourceKeyForSample(sampleKey);
+                        Long literatureSourceId=literatureSourceIds.get(sourceKey);
+                        if(literatureSourceId==null)throw new SQLException("Sample references an unknown literature source: "+sampleKey);
+                        if(literatureSampleIds.containsKey(sampleKey))throw new SQLException("Duplicate literature sample key: "+sampleKey);
+                        if(!"NEEDS_REVIEW".equals(required(sample,"verification_status")) ||
+                                !"NEEDS_REVIEW".equals(required(sample,"oil_content_status")))
+                            throw new SQLException("Literature samples must remain NEEDS_REVIEW: "+sampleKey);
+                        long plantId=findPlant(c,required(sample,"plant_source_key"));
+                        boolean existed=exists(c,"SELECT COUNT(*) FROM plant_oil_samples WHERE source_key=?",sampleKey);
+                        insertLiteratureSample(c,sample,plantId);
+                        long sampleId=findSample(c,sampleKey);
+                        verifyLiteratureSample(c,sampleId,sample,plantId);
+                        if(!existed){addImportEvent(c,"plant_oil_sample",sampleId,literatureSourceId,"NEEDS_REVIEW");literatureSamplesAdded++;}
+                        literatureSampleIds.put(sampleKey,sampleId);
+                    }
                     for (JsonNode candidate : traits) {
                         String key = required(candidate, "candidate_key");
                         if (!seenTraitKeys.add(key)) throw new SQLException("Duplicate trait candidate key: " + key);
@@ -97,20 +137,35 @@ public final class EvidenceCandidateImportCli {
                         if (changed > 0) addImportEvent(c,"fatty_acid_candidate",findId(c,"SELECT id FROM fatty_acid_candidates WHERE candidate_key=?",key,"fatty-acid candidate"),sourceId,"REVIEW_PENDING");
                         fattyFound++;
                     }
+                    for (Map<String,String> row : literatureCandidates) {
+                        String key=required(row,"candidate_id");
+                        if(!seenFattyKeys.add(key))throw new SQLException("Duplicate literature fatty-acid candidate key: "+key);
+                        if(!"REVIEW_PENDING".equals(required(row,"verification_status")))
+                            throw new SQLException("Literature fatty-acid candidate is not pending review: "+key);
+                        Long sampleId=literatureSampleIds.get(required(row,"sample_id"));
+                        if(sampleId==null)throw new SQLException("Candidate references an unknown literature sample: "+key);
+                        Long candidateSourceId=literatureSourceIds.get(required(row,"source_key"));
+                        if(candidateSourceId==null)throw new SQLException("Candidate references an unknown literature source: "+key);
+                        bindFattyCandidate(insertFatty,row,sampleId,candidateSourceId);
+                        int changed=insertFatty.executeUpdate();
+                        verifyFattyCandidate(c,key,sampleId,candidateSourceId,row);
+                        if(changed>0){addImportEvent(c,"fatty_acid_candidate",findId(c,"SELECT id FROM fatty_acid_candidates WHERE candidate_key=?",key,"literature fatty-acid candidate"),candidateSourceId,"REVIEW_PENDING");literatureCandidatesAdded++;}
+                    }
                 }
-                if (traitsFound != traitCount || fattyFound != fattyCount)
+                if (traitsFound != traitCount || fattyFound != fattyCount || literatureSampleIdsCount(c,literatureSamples)!=literatureSamples.size())
                     throw new SQLException("Candidate count mismatch; refusing the import.");
                 long traitSourceCount = count(c,"SELECT COUNT(*) FROM plant_trait_values WHERE source_key LIKE 'pdf-trait-v1-%'");
                 long fattySourceCount = count(c,"SELECT COUNT(*) FROM fatty_acid_candidates WHERE source_id=?",sourceId);
+                long literatureCandidateCount=count(c,"SELECT COUNT(*) FROM fatty_acid_candidates c JOIN plant_knowledge_sources s ON s.id=c.source_id WHERE s.source_type='LITERATURE'");
                 if (commit) c.commit(); else c.rollback();
-                System.out.println(JSON.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
-                        "mode",commit?"COMMIT":"DRY_RUN_ROLLED_BACK",
-                        "trait_candidates_validated",traitsFound,
-                        "trait_candidates_for_course_source",traitSourceCount,
-                        "fatty_acid_candidates_validated",fattyFound,
-                        "fatty_acid_candidates_for_course_source",fattySourceCount,
-                        "confirmed_fatty_acid_rows_written",0,
-                        "idempotency", "INSERT IGNORE on deterministic candidate/source keys")));
+                Map<String,Object> report=new LinkedHashMap<>();
+                report.put("mode",commit?"COMMIT":"DRY_RUN_ROLLED_BACK");report.put("trait_candidates_validated",traitsFound);
+                report.put("trait_candidates_for_course_source",traitSourceCount);report.put("fatty_acid_candidates_validated",fattyFound);
+                report.put("fatty_acid_candidates_for_course_source",fattySourceCount);report.put("literature_sources_added",literatureSourcesAdded);
+                report.put("literature_samples_added",literatureSamplesAdded);report.put("literature_candidates_added",literatureCandidatesAdded);
+                report.put("literature_candidates_total",literatureCandidateCount);report.put("confirmed_fatty_acid_rows_written",0);
+                report.put("idempotency","INSERT IGNORE on deterministic candidate/source keys");
+                System.out.println(JSON.writerWithDefaultPrettyPrinter().writeValueAsString(report));
             } catch (Exception e) {
                 c.rollback();
                 throw e;
@@ -135,12 +190,86 @@ public final class EvidenceCandidateImportCli {
         KnowledgeReviewEventDao.append(c,type,id,"IMPORT_CANDIDATE",null,sourceId,
                 "Imported from source-linked candidate artifact",null,after.toString());
     }
+    private static long upsertLiteratureSource(Connection c,Map<String,String> source)throws SQLException{
+        String sql="INSERT INTO plant_knowledge_sources(source_key,source_type,source_name,source_url,citation,license_code,retrieved_at,verification_status,created_by) VALUES(?,?,?,?,?,?,CURRENT_TIMESTAMP,?,NULL) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)";
+        try(PreparedStatement p=c.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
+            p.setString(1,required(source,"source_key"));p.setString(2,required(source,"source_type"));p.setString(3,required(source,"source_name"));
+            p.setString(4,required(source,"source_url"));p.setString(5,required(source,"citation"));p.setString(6,required(source,"license_code"));p.setString(7,required(source,"verification_status"));p.executeUpdate();
+            try(ResultSet r=p.getGeneratedKeys()){if(r.next())return r.getLong(1);}
+        }
+        return findId(c,"SELECT id FROM plant_knowledge_sources WHERE source_key=?",required(source,"source_key"),"literature source");
+    }
+    private static void verifyLiteratureSource(Connection c,long id,Map<String,String> source)throws SQLException{
+        String sql="SELECT source_type,source_name,source_url,citation,license_code,verification_status FROM plant_knowledge_sources WHERE id=?";
+        try(PreparedStatement p=c.prepareStatement(sql)){p.setLong(1,id);try(ResultSet r=p.executeQuery()){
+            if(!r.next())throw new SQLException("Literature source disappeared: "+source.get("source_key"));
+            for(String field:List.of("source_type","source_name","source_url","citation","license_code"))
+                if(!Objects.equals(r.getString(field),required(source,field)))throw new SQLException("Existing literature source differs from artifact at "+source.get("source_key")+" / "+field);
+            if(!Set.of("CONFIRMED","NEEDS_REVIEW","UNKNOWN","DISPUTED").contains(r.getString("verification_status")))
+                throw new SQLException("Unexpected source review state at "+source.get("source_key"));
+        }}
+    }
+    private static void insertLiteratureSample(Connection c,Map<String,String> row,long plantId)throws SQLException{
+        String sql="INSERT IGNORE INTO plant_oil_samples(source_key,record_kind,plant_id,sample_label,oil_content_pct,oil_content_unit,oil_content_source_text,oil_content_status,collection_unit_candidate,testing_unit_candidate,sample_part_candidate,origin_candidate,table_headers,source_snippets,other_measurements,source_pdf_page,source_printed_page,raw_source_text,source_note,source_pages,verification_status) VALUES(?,'MANUAL_SAMPLE',?,?,?,?,?,'NEEDS_REVIEW',?,?,?,?,?,?,?,?,?,?,?,?,'NEEDS_REVIEW')";
+        try(PreparedStatement p=c.prepareStatement(sql)){
+            int i=1;p.setString(i++,required(row,"source_key"));p.setLong(i++,plantId);p.setString(i++,required(row,"sample_label"));
+            p.setBigDecimal(i++,new java.math.BigDecimal(required(row,"oil_content_pct")));p.setString(i++,required(row,"oil_content_unit"));p.setString(i++,required(row,"oil_content_source_text"));
+            nullableParameter(p,i++,row,"collection_unit_candidate");nullableParameter(p,i++,row,"testing_unit_candidate");nullableParameter(p,i++,row,"sample_part_candidate");nullableParameter(p,i++,row,"origin_candidate");
+            jsonParameter(p,i++,row,"table_headers");jsonParameter(p,i++,row,"source_snippets");jsonParameter(p,i++,row,"other_measurements");
+            p.setInt(i++,Integer.parseInt(required(row,"source_pdf_page")));p.setInt(i++,Integer.parseInt(required(row,"source_printed_page")));
+            nullableParameter(p,i++,row,"raw_source_text");nullableParameter(p,i++,row,"source_note");nullableParameter(p,i++,row,"source_pages");p.executeUpdate();
+        }
+    }
+    private static void verifyLiteratureSample(Connection c,long id,Map<String,String> row,long plantId)throws SQLException{
+        String sql="SELECT plant_id,sample_label,oil_content_pct,oil_content_unit,oil_content_source_text,oil_content_status,verification_status,source_pdf_page,source_printed_page,raw_source_text FROM plant_oil_samples WHERE id=?";
+        try(PreparedStatement p=c.prepareStatement(sql)){p.setLong(1,id);try(ResultSet r=p.executeQuery()){
+            if(!r.next()||r.getLong("plant_id")!=plantId||!Objects.equals(r.getString("sample_label"),required(row,"sample_label"))||
+                    r.getBigDecimal("oil_content_pct").compareTo(new java.math.BigDecimal(required(row,"oil_content_pct")))!=0||
+                    !Objects.equals(r.getString("oil_content_unit"),required(row,"oil_content_unit"))||
+                    !Objects.equals(r.getString("oil_content_source_text"),required(row,"oil_content_source_text"))||
+                    r.getInt("source_pdf_page")!=Integer.parseInt(required(row,"source_pdf_page"))||
+                    r.getInt("source_printed_page")!=Integer.parseInt(required(row,"source_printed_page"))||
+                    !Objects.equals(r.getString("raw_source_text"),nullable(row,"raw_source_text")))
+                throw new SQLException("Existing literature sample conflicts with candidate artifact: "+row.get("source_key"));
+        }}
+    }
+    private static void bindFattyCandidate(PreparedStatement p,Map<String,String> row,long sampleId,long sourceId)throws SQLException{
+        p.setString(1,required(row,"candidate_id"));p.setLong(2,sampleId);p.setInt(3,Integer.parseInt(required(row,"row_no")));
+        p.setString(4,required(row,"component_code"));p.setString(5,required(row,"raw_value_text"));
+        String numeric=nullable(row,"candidate_numeric_value");if(numeric==null)p.setNull(6,Types.DECIMAL);else p.setBigDecimal(6,new java.math.BigDecimal(numeric));
+        nullableParameter(p,7,row,"unit_candidate");p.setString(8,required(row,"candidate_type"));
+        nullableParameter(p,9,row,"collection_unit_candidate");nullableParameter(p,10,row,"testing_unit_candidate");nullableParameter(p,11,row,"sample_part_candidate");nullableParameter(p,12,row,"origin_candidate");
+        p.setLong(13,sourceId);p.setInt(14,Integer.parseInt(required(row,"source_pdf_page")));
+        nullableParameter(p,15,row,"source_printed_page");nullableParameter(p,16,row,"evidence_bbox_top_origin_json");nullableParameter(p,17,row,"evidence_image_reference");
+        nullableParameter(p,18,row,"source_record_reference");nullableParameter(p,19,row,"qc_flags");
+    }
+    private static void verifyFattyCandidate(Connection c,String key,long sampleId,long sourceId,Map<String,String> row)throws SQLException{
+        String sql="SELECT sample_id,source_id,component_code,raw_value_text,numeric_value_candidate,unit_candidate,candidate_type,source_pdf_page,source_printed_page,evidence_image_reference,verification_status FROM fatty_acid_candidates WHERE candidate_key=?";
+        try(PreparedStatement p=c.prepareStatement(sql)){p.setString(1,key);try(ResultSet r=p.executeQuery()){
+            if(!r.next()||r.getLong("sample_id")!=sampleId||r.getLong("source_id")!=sourceId||!Objects.equals(r.getString("component_code"),required(row,"component_code"))||
+                    !Objects.equals(r.getString("raw_value_text"),required(row,"raw_value_text"))||!decimalEquals(r.getBigDecimal("numeric_value_candidate"),nullable(row,"candidate_numeric_value"))||
+                    !Objects.equals(r.getString("unit_candidate"),nullable(row,"unit_candidate"))||!Objects.equals(r.getString("candidate_type"),required(row,"candidate_type"))||
+                    r.getInt("source_pdf_page")!=Integer.parseInt(required(row,"source_pdf_page"))||!Objects.equals(r.getString("source_printed_page"),nullable(row,"source_printed_page"))||
+                    !Objects.equals(r.getString("evidence_image_reference"),nullable(row,"evidence_image_reference")))
+                throw new SQLException("Existing fatty-acid candidate conflicts with artifact: "+key);
+            if("CONFIRMED".equals(r.getString("verification_status")))return;
+            if(!"REVIEW_PENDING".equals(r.getString("verification_status"))&& !"REJECTED".equals(r.getString("verification_status"))&& !"EXTRACTED".equals(r.getString("verification_status")))
+                throw new SQLException("Unexpected candidate state for "+key);
+        }}
+    }
+    private static boolean decimalEquals(java.math.BigDecimal value,String raw){return value==null?raw==null:raw!=null&&value.compareTo(new java.math.BigDecimal(raw))==0;}
+    private static String sourceKeyForSample(String key)throws SQLException{int cut=key.lastIndexOf("-sample-");if(cut<1)throw new SQLException("Invalid literature sample key: "+key);return key.substring(0,cut);}
+    private static long literatureSampleIdsCount(Connection c,List<Map<String,String>> rows)throws SQLException{long found=0;for(Map<String,String> row:rows)if(exists(c,"SELECT COUNT(*) FROM plant_oil_samples WHERE source_key=?",required(row,"source_key")))found++;return found;}
     private static String required(JsonNode n,String name)throws SQLException{String value=nullable(n,name);if(value==null)throw new SQLException("Required candidate field missing: "+name);return value;}
     private static String nullable(JsonNode n,String name){JsonNode value=n.get(name);return value==null||value.isNull()||value.asText().isBlank()?null:value.asText();}
     private static String required(Map<String,String> row,String name)throws SQLException{String value=nullable(row,name);if(value==null)throw new SQLException("Required CSV candidate field missing: "+name);return value;}
     private static String nullable(Map<String,String> row,String name){String value=row.get(name);return value==null||value.isBlank()?null:value;}
     private static int integer(JsonNode n,String name)throws SQLException{try{return Integer.parseInt(required(n,name));}catch(NumberFormatException e){throw new SQLException("Invalid candidate page: "+name,e);}}
     private static void nullableParameter(PreparedStatement p,int position,Map<String,String> row,String field)throws SQLException{String value=row.get(field);if(value==null||value.isBlank())p.setNull(position,Types.VARCHAR);else p.setString(position,value);}
+    private static void jsonParameter(PreparedStatement p,int position,Map<String,String> row,String field)throws SQLException{
+        String value=nullable(row,field);if(value==null){p.setNull(position,Types.VARCHAR);return;}
+        try{JSON.readTree(value);}catch(IOException e){throw new SQLException("Invalid JSON in "+field,e);}p.setString(position,value);
+    }
 
     static List<Map<String,String>> readCsv(Path path)throws IOException{
         List<List<String>> records=parseCsv(Files.readString(path,StandardCharsets.UTF_8));

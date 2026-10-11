@@ -3,7 +3,7 @@ import jakarta.servlet.*;import jakarta.servlet.http.*;import org.nonfood.oilpla
 public class AuthFilter implements Filter{
  public void doFilter(ServletRequest req,ServletResponse res,FilterChain chain)throws IOException,ServletException{
   HttpServletRequest r=(HttpServletRequest)req;HttpServletResponse s=(HttpServletResponse)res;User sessionUser=WebSupport.user(r);
-  if(sessionUser==null){s.sendRedirect(r.getContextPath()+"/login?next="+java.net.URLEncoder.encode(r.getRequestURI().substring(r.getContextPath().length()),java.nio.charset.StandardCharsets.UTF_8));return;}
+  if(sessionUser==null){String target=r.getRequestURI().substring(r.getContextPath().length());String query=r.getQueryString();if(query!=null&&!query.isBlank()&&target.length()+query.length()<=4096)target+="?"+query;s.sendRedirect(r.getContextPath()+"/login?next="+java.net.URLEncoder.encode(target,java.nio.charset.StandardCharsets.UTF_8));return;}
   try{User current=new UserDao().findById(sessionUser.getId()).orElse(null);if(current==null||!current.isEnabled()){r.getSession().invalidate();s.sendRedirect(r.getContextPath()+"/login?disabled=1");return;}current.setPasswordHash(null);r.getSession().setAttribute(WebSupport.USER,current);chain.doFilter(req,res);}
   catch(java.sql.SQLException e){throw new ServletException("Unable to verify account status",e);}
  }

@@ -5,13 +5,13 @@
     <p class="eyebrow">WELCOME BACK</p>
     <h1>继续探索<br><em>植物的更多可能。</em></h1>
     <p>登录后使用组合检索、保存收藏并管理个人资料。</p>
-    <div class="aside-line"></div><span>NON-FOOD OIL PLANTS KNOWLEDGE SYSTEM</span>
+    <div class="aside-line"></div><span>PLANTSCOPE · BOTANICAL KNOWLEDGE EXPLORER</span>
   </div>
   <div class="form-panel">
     <p class="eyebrow">ACCOUNT ACCESS</p><h2>登录</h2><p class="muted">欢迎回到植物知识库。</p>
     <form method="post" action="${pageContext.request.contextPath}/login" class="stack-form" data-validate="login" novalidate>
       <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
-      <input type="hidden" name="next" value="<c:out value='${param.next}'/>">
+      <input type="hidden" name="next" value="<c:out value='${next}'/>">
       <label for="login-username">用户名</label>
       <input id="login-username" name="username" autocomplete="username" required maxlength="32" aria-describedby="login-username-error">
       <small class="field-hint" id="login-username-error" data-field-error="username" role="status" aria-live="polite"></small>

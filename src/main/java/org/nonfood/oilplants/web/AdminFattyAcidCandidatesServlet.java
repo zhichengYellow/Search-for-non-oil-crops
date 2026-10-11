@@ -28,13 +28,19 @@ public class AdminFattyAcidCandidatesServlet extends HttpServlet {
             List<FattyAcidCandidate> pending=dao.listPending(300);
             request.setAttribute("candidates",pending);
             request.setAttribute("pendingCount",pending.size());
-            request.setAttribute("reviewSources",new TraitDao().listSources().stream()
-                    .filter(s->"CONFIRMED".equals(s.getVerificationStatus())).toList());
+            List<KnowledgeSource> sources=new TraitDao().listSources();
             String raw=request.getParameter("id");
             if(raw!=null&&!raw.isBlank()) {
                 long id=positiveLong(raw);
-                request.setAttribute("candidate",pending.stream().filter(c->c.getId()==id).findFirst()
-                        .orElseThrow(()->new IllegalArgumentException("候选记录不存在或已完成审核。")));
+                FattyAcidCandidate candidate=pending.stream().filter(c->c.getId()==id).findFirst()
+                        .orElseThrow(()->new IllegalArgumentException("候选记录不存在或已完成审核。"));
+                request.setAttribute("candidate",candidate);
+                boolean canConfirm="CONFIRMED".equals(candidate.getSourceVerificationStatus())&&"%".equals(candidate.getUnitCandidate());
+                request.setAttribute("canConfirmFattyCandidate",canConfirm);
+                request.setAttribute("reviewSources",canConfirm?sources.stream()
+                        .filter(s->s.getId()==candidate.getSourceId()&&"CONFIRMED".equals(s.getVerificationStatus())).toList():List.of());
+            } else {
+                request.setAttribute("reviewSources",List.of());
             }
             WebSupport.view(request,response,"admin/fatty-acids");
         } catch(Exception e){WebSupport.error(request,response,e,"脂肪酸候选资料暂时不可用。");}

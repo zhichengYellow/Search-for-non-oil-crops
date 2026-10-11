@@ -9,6 +9,7 @@ import java.util.*;
 
 public class TraitDao {
     private static final ObjectMapper JSON = new ObjectMapper();
+    private static final String VALUE_SELECT="SELECT v.id,v.plant_id,p.name_zh,t.code trait_code,t.label_zh trait_label,o.code option_code,o.label_zh option_label,v.verification_status,v.source_id,s.source_name,v.source_page,v.source_excerpt,v.evidence_image_reference,v.extraction_method,v.mapping_confidence,v.ambiguity_note FROM plant_trait_values v JOIN plants p ON p.id=v.plant_id JOIN plant_traits t ON t.id=v.trait_id LEFT JOIN trait_options o ON o.id=v.option_id JOIN plant_knowledge_sources s ON s.id=v.source_id";
     private record Resolved(TraitCriterion criterion, long traitId, long optionId, String traitLabel,
                             String optionLabel, BigDecimal weight) { }
     private record SqlExpr(String sql, List<Object> parameters) { }
@@ -16,9 +17,11 @@ public class TraitDao {
 
     public List<TraitDefinition> catalog() throws SQLException {
         Map<String,TraitDefinition> traits = new LinkedHashMap<>();
-        String sql = "SELECT c.code category_code,c.label_zh category_label,t.code trait_code,t.label_zh trait_label,t.search_weight,o.id option_id,o.code option_code,o.label_zh option_label " +
+        String sql = "SELECT c.code category_code,c.label_zh category_label,t.code trait_code,t.label_zh trait_label,t.search_weight,o.id option_id,o.code option_code,o.label_zh option_label,COALESCE(vc.confirmed_plant_count,0) confirmed_plant_count " +
                 "FROM trait_categories c JOIN plant_traits t ON t.category_id=c.id AND t.is_active=1 " +
-                "LEFT JOIN trait_options o ON o.trait_id=t.id AND o.is_active=1 WHERE c.is_active=1 " +
+                "LEFT JOIN trait_options o ON o.trait_id=t.id AND o.is_active=1 " +
+                "LEFT JOIN (SELECT v.option_id,COUNT(DISTINCT v.plant_id) confirmed_plant_count FROM plant_trait_values v JOIN plants p ON p.id=v.plant_id AND p.is_public=1 WHERE v.verification_status='CONFIRMED' GROUP BY v.option_id) vc ON vc.option_id=o.id " +
+                "WHERE c.is_active=1 " +
                 "ORDER BY c.display_order,t.display_order,o.display_order";
         try(Connection c=Database.getConnection(); PreparedStatement ps=c.prepareStatement(sql); ResultSet rs=ps.executeQuery()) {
             while(rs.next()) {
@@ -29,7 +32,7 @@ public class TraitDao {
                     t.setCode(code);t.setLabel(rs.getString("trait_label"));t.setWeight(rs.getBigDecimal("search_weight"));traits.put(code,t);
                 }
                 long optionId=rs.getLong("option_id");
-                if(!rs.wasNull()) { TraitOption o=new TraitOption();o.setId(optionId);o.setCode(rs.getString("option_code"));o.setLabel(rs.getString("option_label"));t.getOptions().add(o); }
+                if(!rs.wasNull()) { TraitOption o=new TraitOption();o.setId(optionId);o.setCode(rs.getString("option_code"));o.setLabel(rs.getString("option_label"));o.setConfirmedPlantCount(rs.getLong("confirmed_plant_count"));t.getOptions().add(o); }
             }
         }
         return new ArrayList<>(traits.values());
@@ -37,8 +40,16 @@ public class TraitDao {
 
     public List<KnowledgeSource> listSources() throws SQLException {
         List<KnowledgeSource> out=new ArrayList<>();
-        try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement("SELECT id,source_type,source_name,source_url,citation,license_code,verification_status FROM plant_knowledge_sources ORDER BY source_type,source_name");ResultSet rs=ps.executeQuery()) {
-            while(rs.next()){KnowledgeSource s=new KnowledgeSource();s.setId(rs.getLong("id"));s.setSourceType(rs.getString("source_type"));s.setSourceName(rs.getString("source_name"));s.setSourceUrl(rs.getString("source_url"));s.setCitation(rs.getString("citation"));s.setLicenseCode(rs.getString("license_code"));s.setVerificationStatus(rs.getString("verification_status"));out.add(s);}
+        String sql="SELECT s.id,s.source_key,s.source_type,s.source_name,s.source_url,s.citation,s.license_code,s.verification_status,"+
+                "COALESCE(DATE_FORMAT(s.retrieved_at,'%Y-%m-%d %H:%i'),DATE_FORMAT(s.created_at,'%Y-%m-%d %H:%i')) source_date,"+
+                "COALESCE(tv.pending_count,0) pending_trait_count,COALESCE(fv.pending_count,0) pending_fatty_count,COALESCE(tx.pending_count,0) pending_taxon_count "+
+                "FROM plant_knowledge_sources s "+
+                "LEFT JOIN (SELECT source_id,COUNT(*) pending_count FROM plant_trait_values WHERE verification_status IN ('EXTRACTED','REVIEW_PENDING','NEEDS_REVIEW') GROUP BY source_id) tv ON tv.source_id=s.id "+
+                "LEFT JOIN (SELECT source_id,COUNT(*) pending_count FROM fatty_acid_candidates WHERE verification_status IN ('EXTRACTED','REVIEW_PENDING') GROUP BY source_id) fv ON fv.source_id=s.id "+
+                "LEFT JOIN (SELECT source_id,COUNT(*) pending_count FROM external_taxon_candidates WHERE verification_status IN ('EXTRACTED','REVIEW_PENDING') GROUP BY source_id) tx ON tx.source_id=s.id "+
+                "ORDER BY s.source_type,s.source_name";
+        try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql);ResultSet rs=ps.executeQuery()) {
+            while(rs.next()){KnowledgeSource s=new KnowledgeSource();s.setId(rs.getLong("id"));s.setSourceKey(rs.getString("source_key"));s.setSourceDate(rs.getString("source_date"));s.setSourceType(rs.getString("source_type"));s.setSourceName(rs.getString("source_name"));s.setSourceUrl(rs.getString("source_url"));s.setCitation(rs.getString("citation"));s.setLicenseCode(rs.getString("license_code"));s.setVerificationStatus(rs.getString("verification_status"));s.setPendingTraitCount(rs.getLong("pending_trait_count"));s.setPendingFattyAcidCount(rs.getLong("pending_fatty_count"));s.setPendingTaxonCount(rs.getLong("pending_taxon_count"));out.add(s);}
         }
         return out;
     }
@@ -98,8 +109,20 @@ public class TraitDao {
         try(PreparedStatement p=c.prepareStatement(sql)){p.setLong(1,id);try(ResultSet r=p.executeQuery()){if(!r.next())return null;Map<String,Object> out=new LinkedHashMap<>();for(String field:List.of("plant_id","trait_id","option_id","verification_status","source_id","source_page","source_excerpt","source_key","extraction_method","mapping_confidence","ambiguity_note","evidence_image_reference"))out.put(field,r.getObject(field));return out;}}
     }
     public Optional<TraitValueRecord> findValue(long id) throws SQLException {
-        String sql="SELECT v.id,v.plant_id,p.name_zh,t.code trait_code,t.label_zh trait_label,o.code option_code,o.label_zh option_label,v.verification_status,v.source_id,s.source_name,v.source_page,v.source_excerpt,v.evidence_image_reference,v.extraction_method,v.mapping_confidence,v.ambiguity_note FROM plant_trait_values v JOIN plants p ON p.id=v.plant_id JOIN plant_traits t ON t.id=v.trait_id LEFT JOIN trait_options o ON o.id=v.option_id JOIN plant_knowledge_sources s ON s.id=v.source_id WHERE v.id=?";
-        try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){ps.setLong(1,id);try(ResultSet rs=ps.executeQuery()){if(!rs.next())return Optional.empty();TraitValueRecord v=new TraitValueRecord();v.setId(rs.getLong("id"));v.setPlantId(rs.getLong("plant_id"));v.setPlantName(rs.getString("name_zh"));v.setTraitCode(rs.getString("trait_code"));v.setTraitLabel(rs.getString("trait_label"));v.setOptionCode(rs.getString("option_code"));v.setOptionLabel(rs.getString("option_label"));v.setStatus(rs.getString("verification_status"));v.setSourceId(rs.getLong("source_id"));v.setSourceName(rs.getString("source_name"));v.setSourcePage(rs.getString("source_page"));v.setExcerpt(rs.getString("source_excerpt"));v.setEvidenceImageReference(rs.getString("evidence_image_reference"));v.setExtractionMethod(rs.getString("extraction_method"));v.setMappingConfidence(rs.getString("mapping_confidence"));v.setAmbiguityNote(rs.getString("ambiguity_note"));return Optional.of(v);}}
+        try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(VALUE_SELECT+" WHERE v.id=?")){ps.setLong(1,id);try(ResultSet rs=ps.executeQuery()){return rs.next()?Optional.of(mapValue(rs)):Optional.empty();}}
+    }
+    public List<TraitValueRecord> confirmedValuesForPlant(long plantId)throws SQLException {
+        List<TraitValueRecord> out=new ArrayList<>();String sql=VALUE_SELECT+" WHERE v.plant_id=? AND v.verification_status='CONFIRMED' ORDER BY t.display_order,t.label_zh,o.display_order,o.label_zh,v.id";
+        try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){ps.setLong(1,plantId);try(ResultSet rs=ps.executeQuery()){while(rs.next())out.add(mapValue(rs));}}
+        return out;
+    }
+    public Map<String,Long> evidenceCountsForPlant(long plantId)throws SQLException {
+        Map<String,Long> counts=new HashMap<>();String sql="SELECT verification_status,COUNT(*) FROM plant_trait_values WHERE plant_id=? GROUP BY verification_status";
+        try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){ps.setLong(1,plantId);try(ResultSet rs=ps.executeQuery()){while(rs.next())counts.put(rs.getString(1),rs.getLong(2));}}
+        return counts;
+    }
+    private static TraitValueRecord mapValue(ResultSet rs)throws SQLException {
+        TraitValueRecord v=new TraitValueRecord();v.setId(rs.getLong("id"));v.setPlantId(rs.getLong("plant_id"));v.setPlantName(rs.getString("name_zh"));v.setTraitCode(rs.getString("trait_code"));v.setTraitLabel(rs.getString("trait_label"));v.setOptionCode(rs.getString("option_code"));v.setOptionLabel(rs.getString("option_label"));v.setStatus(rs.getString("verification_status"));v.setSourceId(rs.getLong("source_id"));v.setSourceName(rs.getString("source_name"));v.setSourcePage(rs.getString("source_page"));v.setExcerpt(rs.getString("source_excerpt"));v.setEvidenceImageReference(rs.getString("evidence_image_reference"));v.setExtractionMethod(rs.getString("extraction_method"));v.setMappingConfidence(rs.getString("mapping_confidence"));v.setAmbiguityNote(rs.getString("ambiguity_note"));return v;
     }
 
     public Page<PlantMatchCandidate> search(List<TraitCriterion> criteria, int page, int pageSize) throws SQLException {

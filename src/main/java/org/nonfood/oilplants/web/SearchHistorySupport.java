@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 final class SearchHistorySupport {
-    private static final Set<String> GENERAL = Set.of("q", "matchMode", "family", "genus", "nameZh", "scientificName",
+    private static final Set<String> GENERAL = Set.of("q", "mode", "matchMode", "family", "genus", "nameZh", "scientificName",
             "uses", "distribution", "oilMin", "oilMax", "component", "componentMin", "componentMax",
             "sort", "direction", "field");
     private static final Set<String> TRAITS = Set.of("plant_form", "plant_height", "leaf_persistence", "leaf_shape",
@@ -65,6 +65,7 @@ final class SearchHistorySupport {
     private static String summarize(String mode, SortedMap<String, List<String>> values) {
         String label = switch (mode) {
             case "BASIC" -> "基础检索";
+            case "NAME" -> "名称检索";
             case "ADVANCED" -> "专业检索";
             case "DESCRIPTION" -> "描述找植物";
             case "TRAITS" -> "外观特征检索";
