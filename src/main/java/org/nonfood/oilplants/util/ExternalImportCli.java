@@ -3,6 +3,7 @@ package org.nonfood.oilplants.util;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.nonfood.oilplants.config.Database;
+import org.nonfood.oilplants.dao.KnowledgeReviewEventDao;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -87,9 +88,8 @@ public final class ExternalImportCli {
                         int i=1;p.setLong(i++,batchId);p.setLong(i++,sourceId);p.setString(i++,x.key);p.setString(i++,x.resolution);p.setString(i++,x.kind);p.setString(i++,x.nameZh);p.setString(i++,x.scientificName);p.setString(i++,x.acceptedName);p.setString(i++,x.authorship);p.setString(i++,x.rank);p.setString(i++,x.family);p.setString(i++,x.genus);p.setString(i++,x.namespace);p.setString(i++,x.externalId);p.setString(i++,x.sourceUrl);p.setString(i++,x.license);p.setString(i++,x.attribution);p.setString(i++,x.evidence);p.setString(i++,JSON.writeValueAsString(x.input));if(x.linkedPlantId==null)p.setNull(i,java.sql.Types.BIGINT);else p.setLong(i,x.linkedPlantId);p.executeUpdate();
                         try(ResultSet r=p.getGeneratedKeys()){if(!r.next())throw new IllegalStateException("Could not obtain candidate ID.");id=r.getLong(1);}
                     }
-                    try(PreparedStatement p=c.prepareStatement("INSERT INTO knowledge_review_events(entity_type,entity_id,action,source_id,reason,after_data) VALUES('external_import_candidate',?,'IMPORT_CANDIDATE',?,'Imported into isolated pending-review queue',?)")){
-                        p.setLong(1,id);p.setLong(2,sourceId);p.setString(3,JSON.writeValueAsString(x.input));p.executeUpdate();
-                    }
+                    KnowledgeReviewEventDao.append(c,"external_import_candidate",id,"IMPORT_CANDIDATE",null,sourceId,
+                            "Imported into isolated pending-review queue",null,JSON.writeValueAsString(x.input));
                     inserted++;
                 }
                 String status="COMPLETED";

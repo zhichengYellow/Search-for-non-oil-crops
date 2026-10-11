@@ -16,3 +16,5 @@ __pycache__/
 data/images/diagnostics/
 data/ocr/*.log
 data/ocr/test.json
+# Local source datasets; retain generated import artifacts and review manifests in Git.
+data/raw/

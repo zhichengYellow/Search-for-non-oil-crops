@@ -91,7 +91,7 @@ mvn package
 ```
 
 将 `target/oil-plants-knowledge.war` 复制到 Tomcat 10.1 `webapps/`，配置上面的环境变量后启动 Tomcat。应用 context path 默认是 `/oil-plants-knowledge`。上传图片写入 `UPLOAD_DIR` 并通过应用的图片 Servlet 输出，不允许按用户路径读取文件。
-默认 `mvn clean test` 运行单元测试；当前 8 项数据库测试按默认设置跳过。配置 `DB_URL`、`DB_USER`、`DB_PASSWORD` 后，可将 `./scripts/integration-test.sh` 指向隔离 MySQL 测试库执行数据库往返测试。`./scripts/business-flow-test.sh` 在嵌入式 Tomcat 上执行真实注册、邮件验证/重置、登录、权限、自愿保存检索/最近浏览/热门汇总、数据库联想、植物对比、检索、收藏、管理 CRUD 和图片生命周期流程，并清理随机临时记录。JSP 编译与基础 HTTP 冒烟分别运行 `./scripts/compile-jsps.sh`、`./scripts/smoke-test.sh`；验收记录见 `docs/TEST_REPORT.md`。
+默认 `mvn clean test` 运行单元测试；依赖数据库的集成测试默认跳过。配置 `DB_URL`、`DB_USER`、`DB_PASSWORD` 后，可将 `./scripts/integration-test.sh` 指向隔离 MySQL 测试库执行数据库往返测试。`./scripts/business-flow-test.sh` 在嵌入式 Tomcat 上执行真实注册、邮件验证/重置、登录、权限、自愿保存检索/最近浏览/热门汇总、数据库联想、植物对比、检索、收藏、管理 CRUD 和图片生命周期流程，并清理随机临时记录。JSP 编译与基础 HTTP 冒烟分别运行 `./scripts/compile-jsps.sh`、`./scripts/smoke-test.sh`；PlantScope 3.3 本轮验收结果见 `docs/TEST_REPORT_3_3.md`。
 
 ## 功能入口
 
@@ -122,7 +122,7 @@ python3 scripts/build_data_quality_report.py
 scripts/import_pdf_data.sh
 ```
 
-管理员也可通过管理页面录入其他经核验的数据，并填写来源页码和核验状态。外观特征须附来源，且只有 `CONFIRMED` 值参与特征匹配；特征提取候选不能自动确认。当前数据库有 94 条 EXTRACTED 特征候选、0 条确认特征，因此外观检索说明证据不足。化学样本及脂肪酸必须归属同一采样记录。
+管理员也可通过管理页面录入其他经核验的数据，并填写来源页码和核验状态。外观特征须附来源，且只有 `CONFIRMED` 值参与特征匹配；特征提取候选不能自动确认。截至 2026-10-11，数据库共有 1,180 条 EXTRACTED 外观特征候选（其中新增 NHM 1,086 条、课程 PDF 94 条），确认特征仍为 0；候选值不会参与正式外观匹配。化学样本及脂肪酸必须归属同一采样记录。实际覆盖见 [知识库报告](docs/KNOWLEDGE_COVERAGE_REPORT.md)。
 
 ### PlantScope 3.0 候选导入与质量核验
 
@@ -165,4 +165,4 @@ python3 scripts/fetch_gbif_taxonomy_candidates.py \
 ./scripts/import_external_candidates.sh data/external/gbif/match_candidates.jsonl --commit
 ```
 
-GBIF 名称匹配、API confidence 和候选许可标记都不等于分类学确认。当前实测知识库仍有 33 株课程植物，3 条 GBIF 分类候选待审核；新发布到 `GENERAL_BOTANY` 的植物为 0，94 个课程外观候选均未确认。没有使用空壳记录凑到 150 株。
+GBIF 名称匹配、API confidence 和候选许可标记都不等于分类学确认。截至 2026-10-11，知识库共有 150 株公开植物：33 株课程资料和 117 株经 WFO 身份核对的新增植物。原有 3 条 GBIF 候选仍待审核；1,086 条 NHM 外观值仍是未确认候选，外观检索没有可用的已确认事实。未使用空壳记录凑数。来源、导入与人工审核材料见 [真实数据导入报告](docs/DATA_IMPORT_EXECUTION_REPORT.md) 和 [知识库覆盖报告](docs/KNOWLEDGE_COVERAGE_REPORT.md)。

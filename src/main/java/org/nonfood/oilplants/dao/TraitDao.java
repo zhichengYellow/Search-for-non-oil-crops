@@ -84,23 +84,19 @@ public class TraitDao {
                     before=Map.of();
                 }
                 Map<String,Object> after=traitSnapshot(c,eventId);
-                insertReviewEvent(c,eventId,id>0?"UPDATE":"CREATE",reviewer,sourceId,before,after);
+                KnowledgeReviewEventDao.append(c,"plant_trait_value",eventId,id>0?"UPDATE":"CREATE",reviewer,sourceId,
+                        null,JSON.writeValueAsString(before),JSON.writeValueAsString(after));
                 c.commit();
             } catch(Exception e) { c.rollback();if(e instanceof SQLException sql)throw sql;throw new SQLException("Unable to save trait evidence.",e); }
         }
     }
 
-    public void deleteValue(long id,Long actor) throws SQLException {try(Connection c=Database.getConnection()){c.setAutoCommit(false);try{Map<String,Object> before=traitSnapshot(c,id);if(before==null){c.rollback();return;}long sourceId=((Number)before.get("source_id")).longValue();try(PreparedStatement ps=c.prepareStatement("DELETE FROM plant_trait_values WHERE id=?")){ps.setLong(1,id);ps.executeUpdate();}insertReviewEvent(c,id,"DELETE",actor,sourceId,before,Map.of());c.commit();}catch(Exception e){c.rollback();if(e instanceof SQLException sql)throw sql;throw new SQLException("Unable to delete trait evidence.",e);}}}
+    public void deleteValue(long id,Long actor) throws SQLException {try(Connection c=Database.getConnection()){c.setAutoCommit(false);try{Map<String,Object> before=traitSnapshot(c,id);if(before==null){c.rollback();return;}long sourceId=((Number)before.get("source_id")).longValue();try(PreparedStatement ps=c.prepareStatement("DELETE FROM plant_trait_values WHERE id=?")){ps.setLong(1,id);ps.executeUpdate();}KnowledgeReviewEventDao.append(c,"plant_trait_value",id,"DELETE",actor,sourceId,null,JSON.writeValueAsString(before),JSON.writeValueAsString(Map.of()));c.commit();}catch(Exception e){c.rollback();if(e instanceof SQLException sql)throw sql;throw new SQLException("Unable to delete trait evidence.",e);}}}
 
     private static Map<String,Object> traitSnapshot(Connection c,long id)throws SQLException{
         String sql="SELECT plant_id,trait_id,option_id,verification_status,source_id,source_page,source_excerpt,source_key,extraction_method,mapping_confidence,ambiguity_note,evidence_image_reference FROM plant_trait_values WHERE id=?";
         try(PreparedStatement p=c.prepareStatement(sql)){p.setLong(1,id);try(ResultSet r=p.executeQuery()){if(!r.next())return null;Map<String,Object> out=new LinkedHashMap<>();for(String field:List.of("plant_id","trait_id","option_id","verification_status","source_id","source_page","source_excerpt","source_key","extraction_method","mapping_confidence","ambiguity_note","evidence_image_reference"))out.put(field,r.getObject(field));return out;}}
     }
-    private static void insertReviewEvent(Connection c,long id,String action,Long reviewer,long sourceId,Map<String,Object> before,Map<String,Object> after)throws Exception{
-        String sql="INSERT INTO knowledge_review_events(entity_type,entity_id,action,actor_user_id,source_id,before_data,after_data) VALUES('plant_trait_value',?,?,?,?,?,?)";
-        try(PreparedStatement p=c.prepareStatement(sql)){p.setLong(1,id);p.setString(2,action);if(reviewer==null)p.setNull(3,Types.BIGINT);else p.setLong(3,reviewer);p.setLong(4,sourceId);p.setString(5,JSON.writeValueAsString(before));p.setString(6,JSON.writeValueAsString(after));p.executeUpdate();}
-    }
-
     public Optional<TraitValueRecord> findValue(long id) throws SQLException {
         String sql="SELECT v.id,v.plant_id,p.name_zh,t.code trait_code,t.label_zh trait_label,o.code option_code,o.label_zh option_label,v.verification_status,v.source_id,s.source_name,v.source_page,v.source_excerpt,v.evidence_image_reference,v.extraction_method,v.mapping_confidence,v.ambiguity_note FROM plant_trait_values v JOIN plants p ON p.id=v.plant_id JOIN plant_traits t ON t.id=v.trait_id LEFT JOIN trait_options o ON o.id=v.option_id JOIN plant_knowledge_sources s ON s.id=v.source_id WHERE v.id=?";
         try(Connection c=Database.getConnection();PreparedStatement ps=c.prepareStatement(sql)){ps.setLong(1,id);try(ResultSet rs=ps.executeQuery()){if(!rs.next())return Optional.empty();TraitValueRecord v=new TraitValueRecord();v.setId(rs.getLong("id"));v.setPlantId(rs.getLong("plant_id"));v.setPlantName(rs.getString("name_zh"));v.setTraitCode(rs.getString("trait_code"));v.setTraitLabel(rs.getString("trait_label"));v.setOptionCode(rs.getString("option_code"));v.setOptionLabel(rs.getString("option_label"));v.setStatus(rs.getString("verification_status"));v.setSourceId(rs.getLong("source_id"));v.setSourceName(rs.getString("source_name"));v.setSourcePage(rs.getString("source_page"));v.setExcerpt(rs.getString("source_excerpt"));v.setEvidenceImageReference(rs.getString("evidence_image_reference"));v.setExtractionMethod(rs.getString("extraction_method"));v.setMappingConfidence(rs.getString("mapping_confidence"));v.setAmbiguityNote(rs.getString("ambiguity_note"));return Optional.of(v);}}

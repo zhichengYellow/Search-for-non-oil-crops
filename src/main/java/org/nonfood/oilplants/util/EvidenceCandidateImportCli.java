@@ -3,6 +3,7 @@ package org.nonfood.oilplants.util;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.nonfood.oilplants.config.Database;
+import org.nonfood.oilplants.dao.KnowledgeReviewEventDao;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -131,9 +132,8 @@ public final class EvidenceCandidateImportCli {
     private static long count(Connection c,String sql,long value)throws SQLException{try(PreparedStatement p=c.prepareStatement(sql)){p.setLong(1,value);try(ResultSet r=p.executeQuery()){r.next();return r.getLong(1);}}}
     private static void addImportEvent(Connection c,String type,long id,long sourceId,String status)throws SQLException{
         var after=JSON.createObjectNode();after.put("verification_status",status);after.put("importer","EvidenceCandidateImportCli");
-        try(PreparedStatement p=c.prepareStatement("INSERT INTO knowledge_review_events(entity_type,entity_id,action,source_id,reason,after_data) VALUES(?,?,'IMPORT_CANDIDATE',?,'Imported from source-linked candidate artifact',?)")){
-            p.setString(1,type);p.setLong(2,id);p.setLong(3,sourceId);p.setString(4,after.toString());p.executeUpdate();
-        }
+        KnowledgeReviewEventDao.append(c,type,id,"IMPORT_CANDIDATE",null,sourceId,
+                "Imported from source-linked candidate artifact",null,after.toString());
     }
     private static String required(JsonNode n,String name)throws SQLException{String value=nullable(n,name);if(value==null)throw new SQLException("Required candidate field missing: "+name);return value;}
     private static String nullable(JsonNode n,String name){JsonNode value=n.get(name);return value==null||value.isNull()||value.asText().isBlank()?null:value.asText();}

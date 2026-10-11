@@ -6,7 +6,8 @@ import java.sql.*;
 import java.util.*;
 
 public class PlantDao {
-    private static final String SELECT = "SELECT p.id,p.genus_id,p.name_zh,p.scientific_name,p.name_en,p.morphology,p.distribution,p.cultivation,p.uses,p.source_pages,p.verification_status,f.family_name_zh,f.family_name_latin,g.genus_name_zh,g.genus_name_latin,im.stored_name,im.alt_text,(SELECT GROUP_CONCAT(CONCAT(COALESCE(s.sample_label,CONCAT('样本#',s.id)),'：',CAST(s.oil_content_pct AS CHAR),'%') ORDER BY s.id SEPARATOR '；') FROM plant_oil_samples s WHERE s.plant_id=p.id AND s.oil_content_status='VERIFIED' AND s.oil_content_pct IS NOT NULL) AS oil_content_summary";
+    static final String PLANT_COLUMNS = "p.id,p.genus_id,p.name_zh,p.scientific_name,p.name_en,p.morphology,p.distribution,p.cultivation,p.uses,p.source_pages,p.verification_status,f.family_name_zh,f.family_name_latin,g.genus_name_zh,g.genus_name_latin,im.stored_name,im.alt_text,(SELECT GROUP_CONCAT(CONCAT(COALESCE(s.sample_label,CONCAT('样本#',s.id)),'：',CAST(s.oil_content_pct AS CHAR),'%') ORDER BY s.id SEPARATOR '；') FROM plant_oil_samples s WHERE s.plant_id=p.id AND s.oil_content_status='VERIFIED' AND s.oil_content_pct IS NOT NULL) AS oil_content_summary";
+    private static final String SELECT = "SELECT " + PLANT_COLUMNS;
     public Page<Plant> search(PlantSearchCriteria criteria, boolean admin) throws SQLException {
         int page=Math.max(1,criteria.getPage()), size=Math.max(1,Math.min(50,criteria.getPageSize()));
         PlantQuery.Built built=PlantQuery.search(criteria,admin,false);
@@ -15,7 +16,7 @@ public class PlantDao {
         try(Connection c=Database.getConnection(); PreparedStatement ps=c.prepareStatement("SELECT COUNT(DISTINCT p.id)"+from)){
             bind(ps,built.parameters()); try(ResultSet rs=ps.executeQuery()){rs.next();total=rs.getLong(1);}
         }
-        String sql=SELECT+from+" ORDER BY "+("oilContent".equals(criteria.getSort())?"(SELECT MIN(sx.oil_content_pct) FROM plant_oil_samples sx WHERE sx.plant_id=p.id)":"p.name_zh")+("desc".equalsIgnoreCase(criteria.getDirection())?" DESC":" ASC")+",p.id ASC LIMIT ? OFFSET ?";
+        String sql=SELECT+from+PlantQuery.orderBy(criteria)+" LIMIT ? OFFSET ?";
         List<Plant> items=new ArrayList<>();
         try(Connection c=Database.getConnection(); PreparedStatement ps=c.prepareStatement(sql)){
             int next=bind(ps,built.parameters()); ps.setInt(next++,size); ps.setInt(next,(page-1)*size);

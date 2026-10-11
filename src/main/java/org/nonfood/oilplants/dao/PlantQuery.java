@@ -34,13 +34,15 @@ public final class PlantQuery {
             }
             sql.append(")");
         }
-        if (includeOrder) {
-            String order = "p.name_zh";
-            if("oilContent".equals(c.getSort())) order = "(SELECT MIN(sx.oil_content_pct) FROM plant_oil_samples sx WHERE sx.plant_id=p.id AND sx.oil_content_status='VERIFIED')";
-            String direction = "desc".equalsIgnoreCase(c.getDirection()) ? "DESC" : "ASC";
-            sql.append(" ORDER BY ").append(order).append(' ').append(direction).append(", p.id ASC");
-        }
+        if (includeOrder) sql.append(orderBy(c));
         return new Built(sql.toString(), List.copyOf(args));
+    }
+    static String orderBy(PlantSearchCriteria c) {
+        String order = "p.name_zh";
+        boolean oilSort = "oilContent".equals(c.getSort());
+        if(oilSort) order = "(SELECT MIN(sx.oil_content_pct) FROM plant_oil_samples sx WHERE sx.plant_id=p.id AND sx.oil_content_status='VERIFIED')";
+        String direction = "desc".equalsIgnoreCase(c.getDirection()) ? "DESC" : "ASC";
+        return " ORDER BY " + (oilSort ? "(" + order + ") IS NULL ASC, " : "") + order + ' ' + direction + ", p.id ASC";
     }
     private static void keyword(StringBuilder sql,List<Object> args,String value,boolean exact){
         if(value==null||value.isBlank())return;

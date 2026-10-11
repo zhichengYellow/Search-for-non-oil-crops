@@ -61,7 +61,8 @@ public final class ExternalImportCandidateDao {
                     try(PreparedStatement p=c.prepareStatement("UPDATE external_import_candidates SET verification_status=? WHERE id=?")){p.setString(1,status);p.setLong(2,id);p.executeUpdate();}
                     var before=JSON.createObjectNode();before.put("verification_status",oldStatus);var after=JSON.createObjectNode();after.put("verification_status",status);after.put("reason",reason);
                     try(PreparedStatement p=c.prepareStatement("INSERT INTO external_import_reviews(candidate_id,actor_user_id,decision,reason,before_data,after_data) VALUES(?,?,?,?,?,?)")){p.setLong(1,id);p.setLong(2,actor);p.setString(3,decision);p.setString(4,reason);p.setString(5,before.toString());p.setString(6,after.toString());p.executeUpdate();}
-                    try(PreparedStatement p=c.prepareStatement("INSERT INTO knowledge_review_events(entity_type,entity_id,action,actor_user_id,source_id,reason,before_data,after_data) VALUES('external_import_candidate',?,?,?,?,?,?,?)")){p.setLong(1,id);p.setString(2,decision);p.setLong(3,actor);p.setLong(4,sourceId);p.setString(5,reason);p.setString(6,oldPayload);p.setString(7,after.toString());p.executeUpdate();}
+                    KnowledgeReviewEventDao.append(c,"external_import_candidate",id,decision,actor,sourceId,
+                            reason,oldPayload,after.toString());
                     changed++;
                 }
                 c.commit();return changed;

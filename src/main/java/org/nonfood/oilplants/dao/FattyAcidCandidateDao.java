@@ -70,7 +70,8 @@ public class FattyAcidCandidateDao {
                         p.setLong(1, reviewer); p.setString(2, reason); p.setLong(3, candidateId); p.executeUpdate();
                     }
                     var after = JSON.createObjectNode(); after.put("verification_status", "REJECTED"); after.put("review_reason", reason);
-                    event(c,"fatty_acid_candidate",candidateId,"REJECT",reviewer,sourceId,reason,before,after);
+                    KnowledgeReviewEventDao.append(c,"fatty_acid_candidate",candidateId,"REJECT",reviewer,sourceId,
+                            reason,before.toString(),after.toString());
                     c.commit(); return;
                 }
                 if (!"confirm".equals(action)) throw new SQLException("审核操作无效。");
@@ -102,7 +103,8 @@ public class FattyAcidCandidateDao {
                 var after = JSON.createObjectNode(); after.put("verification_status", "CONFIRMED"); after.put("reviewed_numeric_value", reviewedValue);
                 after.put("reviewed_unit", unit); after.put("review_source_id", reviewSourceId); after.put("review_source_excerpt", sourceExcerpt);
                 after.put("formal_component_sample_id", sampleId); after.put("formal_component_name", component);
-                event(c,"fatty_acid_candidate",candidateId,"CONFIRM",reviewer,reviewSourceId,reason,before,after);
+                KnowledgeReviewEventDao.append(c,"fatty_acid_candidate",candidateId,"CONFIRM",reviewer,reviewSourceId,
+                        reason,before.toString(),after.toString());
                 c.commit();
             } catch (Exception e) {
                 c.rollback();
@@ -116,11 +118,4 @@ public class FattyAcidCandidateDao {
         try(PreparedStatement p=c.prepareStatement("SELECT source_pdf_page FROM fatty_acid_candidates WHERE id=?")){p.setLong(1,id);try(ResultSet r=p.executeQuery()){if(!r.next())throw new SQLException("候选页码不存在。");return r.getString(1);}}
     }
 
-    private static void event(Connection c,String type,long id,String action,long reviewer,long sourceId,String reason,
-                               com.fasterxml.jackson.databind.JsonNode before,com.fasterxml.jackson.databind.JsonNode after)throws SQLException{
-        try(PreparedStatement p=c.prepareStatement("INSERT INTO knowledge_review_events(entity_type,entity_id,action,actor_user_id,source_id,reason,before_data,after_data) VALUES(?,?,?,?,?,?,?,?)")){
-            p.setString(1,type);p.setLong(2,id);p.setString(3,action);p.setLong(4,reviewer);p.setLong(5,sourceId);p.setString(6,reason);
-            p.setString(7,before.toString());p.setString(8,after.toString());p.executeUpdate();
-        }
-    }
 }

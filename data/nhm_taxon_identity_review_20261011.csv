@@ -1,0 +1,57 @@
+﻿requested_name,state,primary_dataset,source_record_id,nhm_wfo_id,wfo_name,wfo_rank,wfo_family_genus,nhm_family,nhm_genus,issue,secondary_records
+Prunus dulcis,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Elaeis guineensis,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM combined angiosperm traits,pkt016067954,wfo-0000947985,Elaeis guineensis,species,Arecaceae / Elaeis,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,
+Phoenix dactylifera,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b73ae,wfo-0000269752,Phoenix dactylifera,species,Arecaceae / Phoenix,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt01606ce60 [WFO wfo-0000269752; family ; genus ]
+Hordeum vulgare,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b5f53,wfo-0000875054,Hordeum vulgare,species,Poaceae / Hordeum,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt01606985a [WFO wfo-0000875054; family ; genus ]
+Avena sativa,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b4028,wfo-0000852231,Avena sativa,species,Poaceae / Avena,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt0160644d8 [WFO wfo-0000852231; family ; genus ]
+Malus domestica,IDENTITY_HOLD,NHM combined angiosperm traits,pkt01606b189,wfo-0001008355,Malus × domestica,species,Rosaceae / Malus,,,NHM_TAXON_DIFFERS_FROM_WFO_NAME,
+Prunus persica,IDENTITY_HOLD,NHM combined angiosperm traits,pkt01606dacf,wfo-0001005458,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,
+Prunus armeniaca,IDENTITY_HOLD,NHM combined angiosperm traits,pkt01606daa2,wfo-0001006419,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,
+Prunus mume,IDENTITY_HOLD,NHM combined angiosperm traits,pkt01606dac5,wfo-0000987336,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,
+Prunus avium,IDENTITY_HOLD,NHM combined angiosperm traits,pkt01606daa3,wfo-0001005630,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,
+Prunus domestica,IDENTITY_HOLD,NHM Flora of China,iuq0aa7b78e6,wfo-0000996078,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,NHM combined angiosperm traits#pkt01606daac [WFO wfo-0000996298; family ; genus ]
+Citrus reticulata,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Citrus sinensis,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Musa acuminata,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b6c76,wfo-0000473834,Musa acuminata,species,Musaceae / Musa,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt01606ba67 [WFO wfo-0000473834; family ; genus ]
+Diospyros kaki,IDENTITY_HOLD,NHM Flora of China,iuq0aa7b530e,wfo-0000649136,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,NHM combined angiosperm traits#pkt016067465 [WFO wfo-0000649136; family ; genus ]
+Pistacia vera,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM combined angiosperm traits,pkt01606d23a,wfo-0000393766,Pistacia vera,species,Anacardiaceae / Pistacia,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,
+Fragaria vesca,IDENTITY_HOLD,NHM combined angiosperm traits,pkt01606894b,wfo-0001002789,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,
+Fragaria × ananassa,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Solanum tuberosum,IDENTITY_HOLD,NHM Flora of China,iuq0aa7b86c6,wfo-0001031907,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,NHM combined angiosperm traits#pkt01606f90d [WFO wfo-0001031907; family ; genus ]
+Raphanus sativus,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Allium cepa,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b38ae,wfo-0000755919,Allium cepa,species,Amaryllidaceae / Allium,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt016063400 [WFO wfo-0000755919; family ; genus ]
+Phaseolus vulgaris,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b7365,wfo-0000183282,Phaseolus vulgaris,species,Fabaceae / Phaseolus,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt01606cd89 [WFO wfo-0000183282; family ; genus ]
+Vigna unguiculata,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b8fa9,wfo-0000189386,Vigna unguiculata,species,Fabaceae / Vigna,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt0160710e2 [WFO wfo-0000189386; family ; genus ]
+Pisum sativum,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Lens culinaris,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Cajanus cajan,IDENTITY_HOLD,NHM Flora of China,iuq0aa7b441e,wfo-0000179103,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,NHM combined angiosperm traits#pkt016064ed3 [WFO wfo-0000179103; family ; genus ]
+Brassica campestris,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Paeonia suffruticosa,IDENTITY_HOLD,NHM Flora of China,iuq0aa7b702c,,,,,,,NHM_WFO_ID_MISSING_OR_UNPARSEABLE,NHM combined angiosperm traits#pkt01606c4c9 [WFO http://www.worldfloraonline.org/taxon/nan; family ; genus ]
+Lilium brownii,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b6670,wfo-0000685383,Lilium brownii,species,Liliaceae / Lilium,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt01606a91d [WFO wfo-0000685383; family ; genus ]
+Wisteria sinensis,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b90a6,wfo-0000214070,Wisteria sinensis,species,Fabaceae / Wisteria,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt01607134e [WFO wfo-0000214070; family ; genus ]
+Clematis florida,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b4af9,wfo-0000609915,Clematis florida,species,Ranunculaceae / Clematis,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt01606605c [WFO wfo-0000609915; family ; genus ]
+Bougainvillea glabra,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b42d3,wfo-0000569884,Bougainvillea glabra,species,Nyctaginaceae / Bougainvillea,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt016064b53 [WFO wfo-0000569884; family ; genus ]
+Camellia sasanqua,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Magnolia liliflora,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Prunus cerasifera,IDENTITY_HOLD,NHM Flora of China,iuq0aa7b78e5,wfo-0001007409,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,NHM combined angiosperm traits#pkt01606daa6 [WFO wfo-0001007095; family ; genus ]
+Betula platyphylla,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Eucommia ulmoides,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b5792,wfo-0000681176,Eucommia ulmoides,species,Eucommiaceae / Eucommia,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt01606825e [WFO wfo-0000681176; family ; genus ]
+Zelkova serrata,IDENTITY_HOLD,NHM Flora of China,iuq0aa7b9164,wfo-0001251809,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,NHM combined angiosperm traits#pkt016071506 [WFO wfo-0001251809; family ; genus ]
+Ulmus pumila,IDENTITY_HOLD,NHM Flora of China,iuq0aa7b8dfc,wfo-0000416819,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,NHM combined angiosperm traits#pkt016070be6 [WFO wfo-0000416819; family ; genus ]
+Metasequoia glyptostroboides,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Platycladus orientalis,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Juniperus chinensis,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Cunninghamia lanceolata,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Taxus chinensis,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Ginkgo biloba,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Pinus massoniana,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Pinus tabuliformis,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Cedrus deodara,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Cupressus funebris,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Picea asperata,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Populus davidiana,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Salix matsudana,NO_NHM_RECORD,,,,,,,,,Name absent from both local NHM CSV exports; no identity assertion made,
+Robinia pseudoacacia,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b7dea,wfo-0000213931,Robinia pseudoacacia,species,Fabaceae / Robinia,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt01606e59c [WFO wfo-0000213931; family ; genus ]
+Sophora flavescens,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b86f2,wfo-0000185581,Sophora flavescens,species,Fabaceae / Sophora,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt01606f9d2 [WFO wfo-0000185581; family ; genus ]
+Myrtus communis,IDENTITY_HOLD,NHM combined angiosperm traits,pkt01606bbb8,wfo-0000248713,,,,,,WFO_ID_NOT_IN_LOCAL_RELEASE,
+Eucalyptus globulus,STRICT_MATCH_NOT_SELECTED_THIS_BATCH,NHM Flora of China,iuq0aa7b577f,wfo-0000954998,Eucalyptus globulus,species,Myrtaceae / Eucalyptus,,,Identity passes local WFO release cross-check but was outside the selected first-batch subset,NHM combined angiosperm traits#pkt016068216 [WFO wfo-0000954998; family ; genus ]

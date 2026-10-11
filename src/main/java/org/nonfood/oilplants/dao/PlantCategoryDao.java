@@ -19,11 +19,7 @@ public final class PlantCategoryDao {
             +"COUNT(DISTINCT CASE WHEN r.verification_status='CONFIRMED' AND p.is_public=1 THEN p.id END) AS plant_count "
             +"FROM plant_categories c LEFT JOIN plant_category_relations r ON r.category_id=c.id "
             +"LEFT JOIN plants p ON p.id=r.plant_id WHERE c.is_active=1 ";
-    private static final String PLANT_COLUMNS="SELECT DISTINCT p.id,p.genus_id,p.name_zh,p.scientific_name,p.name_en,"
-            +"p.morphology,p.distribution,p.cultivation,p.uses,p.source_pages,p.verification_status,"
-            +"f.family_name_zh,f.family_name_latin,g.genus_name_zh,g.genus_name_latin,im.stored_name,im.alt_text,"
-            +"(SELECT GROUP_CONCAT(CONCAT(COALESCE(s.sample_label,CONCAT('样本#',s.id)),'：',CAST(s.oil_content_pct AS CHAR),'%') ORDER BY s.id SEPARATOR '；') "
-            +"FROM plant_oil_samples s WHERE s.plant_id=p.id AND s.oil_content_status='VERIFIED' AND s.oil_content_pct IS NOT NULL) AS oil_content_summary ";
+    private static final String PLANT_COLUMNS="SELECT DISTINCT "+PlantDao.PLANT_COLUMNS+" ";
 
     public List<PlantCategory> listPublicCategories()throws SQLException{
         List<PlantCategory> out=new ArrayList<>();

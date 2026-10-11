@@ -34,7 +34,7 @@ public class ExternalTaxonCandidateDao {
                 try(PreparedStatement p=c.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
                     p.setString(1,candidateKey);p.setLong(2,plantId);p.setLong(3,sourceId);p.setString(4,queryName);p.setString(5,matched);p.setString(6,accepted);p.setString(7,key);p.setString(8,rank);p.setString(9,confidence);p.setString(10,JSON.writeValueAsString(payload));p.setString(11,"REVIEW_PENDING");
                     int changed=p.executeUpdate();long id;
-                    if(changed>0){try(ResultSet r=p.getGeneratedKeys()){if(!r.next())throw new SQLException("外部分类候选编号未返回。");id=r.getLong(1);}event(c,id,"IMPORT_CANDIDATE",actor,sourceId,null,null,payload);}
+                    if(changed>0){try(ResultSet r=p.getGeneratedKeys()){if(!r.next())throw new SQLException("外部分类候选编号未返回。");id=r.getLong(1);}KnowledgeReviewEventDao.append(c,"external_taxon_candidate",id,"IMPORT_CANDIDATE",actor,sourceId,null,null,payload==null?null:payload.toString());}
                     else id=findCandidate(c,candidateKey);
                     c.commit();return id;
                 }
@@ -60,7 +60,8 @@ public class ExternalTaxonCandidateDao {
                 if(!"EXTRACTED".equals(previous)&&!"REVIEW_PENDING".equals(previous))throw new SQLException("该候选已完成审核。");
                 try(PreparedStatement p=c.prepareStatement("UPDATE external_taxon_candidates SET verification_status=?,reviewed_by=?,reviewed_at=CURRENT_TIMESTAMP,review_reason=? WHERE id=?")){p.setString(1,status);p.setLong(2,actor);p.setString(3,reason);p.setLong(4,id);p.executeUpdate();}
                 var before=JSON.createObjectNode();before.put("verification_status",previous);var after=JSON.createObjectNode();after.put("verification_status",status);after.put("review_reason",reason);
-                event(c,id,"CONFIRMED".equals(status)?"CONFIRM":"REJECT",actor,sourceId,reason,before,after);
+                KnowledgeReviewEventDao.append(c,"external_taxon_candidate",id,"CONFIRMED".equals(status)?"CONFIRM":"REJECT",
+                        actor,sourceId,reason,before==null?null:before.toString(),after==null?null:after.toString());
                 c.commit();
             }catch(Exception e){c.rollback();if(e instanceof SQLException sql)throw sql;throw new SQLException("审核 GBIF 候选失败。",e);}
         }
@@ -72,9 +73,5 @@ public class ExternalTaxonCandidateDao {
         try(PreparedStatement p=c.prepareStatement("SELECT id FROM plant_knowledge_sources WHERE source_key='gbif-species-api-v2'" );ResultSet r=p.executeQuery()){if(!r.next())throw new SQLException("GBIF 来源记录未创建。");return r.getLong(1);}
     }
     private static long findCandidate(Connection c,String key)throws SQLException{try(PreparedStatement p=c.prepareStatement("SELECT id FROM external_taxon_candidates WHERE candidate_key=?")){p.setString(1,key);try(ResultSet r=p.executeQuery()){if(!r.next())throw new SQLException("匹配候选未保存。");return r.getLong(1);}}}
-    private static void event(Connection c,long id,String action,Long actor,long sourceId,String reason,JsonNode before,JsonNode after)throws SQLException{
-        String sql="INSERT INTO knowledge_review_events(entity_type,entity_id,action,actor_user_id,source_id,reason,before_data,after_data) VALUES('external_taxon_candidate',?,?,?,?,?,?,?)";
-        try(PreparedStatement p=c.prepareStatement(sql)){p.setLong(1,id);p.setString(2,action);if(actor==null)p.setNull(3,Types.BIGINT);else p.setLong(3,actor);p.setLong(4,sourceId);p.setString(5,reason);p.setString(6,before==null?null:before.toString());p.setString(7,after==null?null:after.toString());p.executeUpdate();}
-    }
     private static String sha256(String value)throws SQLException{try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8)));}catch(Exception e){throw new SQLException("Unable to hash GBIF candidate identity.",e);}}
 }
