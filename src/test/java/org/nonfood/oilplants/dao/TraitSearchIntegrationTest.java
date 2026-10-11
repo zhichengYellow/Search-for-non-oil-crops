@@ -16,16 +16,16 @@ class TraitSearchIntegrationTest {
         try {
             source=createSource(suffix);
             plants[0]=createPlant("needle",suffix);plants[1]=createPlant("fan",suffix);plants[2]=createPlant("pending",suffix);
-            addValue(plants[0],source,"leaf_shape","needle","CONFIRMED");addValue(plants[0],source,"fruit_shape","cone","CONFIRMED");
+            addValue(plants[0],source,"leaf_shape","needle","CONFIRMED");addValue(plants[0],source,"cone_shape","cone","CONFIRMED");addValue(plants[0],source,"fruit_shape","pod","CONFIRMED");
             addValue(plants[1],source,"leaf_shape","fan_shaped","CONFIRMED");
             addValue(plants[2],source,"leaf_shape","needle","NEEDS_REVIEW");
 
             TraitDao dao=new TraitDao();
-            var positive=dao.search(List.of(new TraitCriterion("leaf_shape","needle",false),new TraitCriterion("fruit_shape","cone",false)),1,12);
+            var positive=dao.search(List.of(new TraitCriterion("leaf_shape","needle",false),new TraitCriterion("cone_shape","cone",false)),1,12);
             assertEquals(1,positive.getTotal());assertEquals(plants[0],positive.getItems().get(0).getPlantId());
             PlantMatchCandidate candidate=positive.getItems().get(0);assertTrue(candidate.getMatches().stream().anyMatch(v->v.contains("针形")));assertTrue(candidate.isEnoughEvidence());assertEquals(100.0,candidate.getDataCoverage());
-            var explainedConflict=dao.search(List.of(new TraitCriterion("leaf_shape","needle",false),new TraitCriterion("fruit_shape","pod",false)),1,12);
-            assertEquals(1,explainedConflict.getTotal());assertTrue(explainedConflict.getItems().get(0).getConflicts().stream().anyMatch(v->v.contains("球果")));
+            var explainedConflict=dao.search(List.of(new TraitCriterion("leaf_shape","needle",false),new TraitCriterion("fruit_shape","berry",false)),1,12);
+            assertTrue(explainedConflict.getItems().stream().anyMatch(v->v.getPlantId()==plants[0]&&v.getConflicts().stream().anyMatch(x->x.contains("荚果状"))));
             var negative=dao.search(List.of(new TraitCriterion("leaf_shape","needle",true)),1,12);
             assertEquals(1,negative.getTotal());assertEquals(plants[1],negative.getItems().get(0).getPlantId());assertTrue(negative.getItems().get(0).getMatches().stream().anyMatch(v->v.contains("扇形")));
             var pending=dao.search(List.of(new TraitCriterion("leaf_shape","needle",false)),1,12);assertEquals(1,pending.getTotal());

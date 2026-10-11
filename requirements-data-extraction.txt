@@ -1,0 +1,3 @@
+# Versions present in the extraction environment used for the checked-in artifacts.
+PyMuPDF==1.22.5
+Pillow==9.5.0

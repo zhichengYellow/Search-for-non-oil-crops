@@ -23,6 +23,7 @@ public class HomeServlet extends HttpServlet {
             request.setAttribute("featured", service.dao().search(criteria, false).getItems());
             request.setAttribute("homeStats", service.dao().publicStats());
             request.setAttribute("families", service.dao().listFamilies());
+            request.setAttribute("plantCategories", new org.nonfood.oilplants.dao.PlantCategoryDao().listPublicCategories());
             request.setAttribute("popularPlants", new org.nonfood.oilplants.dao.UserDiscoveryDao().popularPlants(6));
         } catch (Exception e) {
             LOG.log(Level.WARNING, "Homepage data unavailable", e);

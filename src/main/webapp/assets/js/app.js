@@ -148,6 +148,20 @@
       if (f.sourceUrl.value && !f.sourceUrl.checkValidity()) return fail('来源链接格式无效。');
     }
 
+    if (type === 'fatty-acid-review') {
+      const value = f.reviewedValue.value;
+      if (value === '' || !Number.isFinite(Number(value)) || Number(value) < 0 || Number(value) > 100) return fail('请对照原图手工输入 0–100 范围内的组分数值。');
+      if (f.reviewedUnit.value !== '%') return fail('没有明确来源支持的百分比单位时，不能确认组分。');
+      if (!f.reviewSourceId.value) return fail('请选择已核验的数值/单位证据来源。');
+      if (f.sourceExcerpt.value.trim().length < 8) return fail('请填写具体的来源数据依据。');
+      if (f.reason.value.trim().length < 5) return fail('请说明你如何核对了行、列与小数点。');
+    }
+
+    if (type === 'fatty-acid-reject' && f.reason.value.trim().length < 5) return fail('请说明无法可靠识别的原因。');
+
+    if (type === 'gbif-lookup' && !f.plantId.value) return fail('请选择要查询的植物。');
+    if (type === 'taxon-review' && f.reason.value.trim().length < 8) return fail('请填写至少 8 个字符的分类匹配审核依据。');
+
     if (type === 'password') {
       if (f.oldPassword && !f.oldPassword.value) return fail('请输入当前密码。');
       if (f.password.value.length < 10 || f.password.value.length > 72 || !/[A-Za-z]/.test(f.password.value) || !/[0-9]/.test(f.password.value)) return fail('新密码需为 10–72 位，并同时包含字母和数字。');

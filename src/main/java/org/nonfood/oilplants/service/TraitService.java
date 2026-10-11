@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class TraitService {
-    private static final Set<String> VALUE_STATES=Set.of("CONFIRMED","NEEDS_REVIEW","UNKNOWN","DISPUTED");
+    private static final Set<String> VALUE_STATES=Set.of("EXTRACTED","REVIEW_PENDING","CONFIRMED","NEEDS_REVIEW","UNKNOWN","DISPUTED","REJECTED");
     private final TraitDao dao;
     private final DescriptionParser parser;
     public TraitService(){this(new TraitDao(),new DescriptionParser());}
@@ -36,6 +36,7 @@ public class TraitService {
         if(traitCode==null||!traitCode.matches("[a-z_]{2,64}")||optionCode==null||!optionCode.matches("[a-z0-9_]{2,64}"))throw new IllegalArgumentException("特征或选项无效。");
         if(page!=null&&page.length()>80)throw new IllegalArgumentException("来源页码最多 80 个字符。");
         if(excerpt!=null&&excerpt.length()>4000)throw new IllegalArgumentException("来源片段最多 4000 个字符。");
+        if("CONFIRMED".equals(status)&&(excerpt==null||excerpt.isBlank()))throw new IllegalArgumentException("确认特征必须保存对应的来源证据摘录。");
         dao.saveValue(id,plantId,traitCode,optionCode,status,sourceId,bound(page,80),bound(excerpt,4000),reviewer);return id;
     }
 

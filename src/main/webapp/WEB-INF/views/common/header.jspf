@@ -7,10 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173d32">
   <title><c:out value="${pageTitle}" default="PlantScope · 植知"/> · PlantScope</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/site.css?v=botanical-5">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/site.css?v=botanical-7">
   <script>window.APP_CONTEXT = '<c:out value="${pageContext.request.contextPath}"/>';</script>
   <script src="${pageContext.request.contextPath}/assets/js/jquery-3.7.1.min.js?v=botanical-4" defer></script>
-  <script src="${pageContext.request.contextPath}/assets/js/app.js?v=botanical-4" defer></script>
+  <script src="${pageContext.request.contextPath}/assets/js/app.js?v=botanical-6" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">跳至主要内容</a>
@@ -24,6 +24,7 @@
     <a href="${pageContext.request.contextPath}/discover">描述找植物</a>
     <a href="${pageContext.request.contextPath}/find-by-traits">外观特征</a>
     <a href="${pageContext.request.contextPath}/plants">植物名录</a>
+    <a href="${pageContext.request.contextPath}/categories">按类别</a>
     <a href="${pageContext.request.contextPath}/compare">植物对比</a>
     <a href="${pageContext.request.contextPath}/search/advanced">高级查询<c:if test="${empty sessionScope.currentUser}"><span class="nav-lock">登录后</span></c:if></a>
     <c:choose>

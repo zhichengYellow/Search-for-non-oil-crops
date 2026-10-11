@@ -5,6 +5,9 @@
     <a href="${pageContext.request.contextPath}/admin" class="${adminSection eq 'dashboard' ? 'active' : ''}" <c:if test="${adminSection eq 'dashboard'}">aria-current="page"</c:if>><span aria-hidden="true">◫</span>概览</a>
     <a href="${pageContext.request.contextPath}/admin/plants" class="${adminSection eq 'plants' ? 'active' : ''}" <c:if test="${adminSection eq 'plants'}">aria-current="page"</c:if>><span aria-hidden="true">❧</span>植物资料</a>
     <a href="${pageContext.request.contextPath}/admin/traits" class="${adminSection eq 'traits' ? 'active' : ''}" <c:if test="${adminSection eq 'traits'}">aria-current="page"</c:if>><span aria-hidden="true">◈</span>外观特征与来源</a>
+    <a href="${pageContext.request.contextPath}/admin/fatty-acids" class="${adminSection eq 'fatty-acids' ? 'active' : ''}" <c:if test="${adminSection eq 'fatty-acids'}">aria-current="page"</c:if>><span aria-hidden="true">∿</span>脂肪酸核验</a>
+    <a href="${pageContext.request.contextPath}/admin/taxa" class="${adminSection eq 'taxa' ? 'active' : ''}" <c:if test="${adminSection eq 'taxa'}">aria-current="page"</c:if>><span aria-hidden="true">⌖</span>外部分类候选</a>
+    <a href="${pageContext.request.contextPath}/admin/expansion" class="${adminSection eq 'expansion' ? 'active' : ''}" <c:if test="${adminSection eq 'expansion'}">aria-current="page"</c:if>><span aria-hidden="true">▦</span>扩容批次审核</a>
     <a href="${pageContext.request.contextPath}/admin/categories" class="${adminSection eq 'categories' ? 'active' : ''}" <c:if test="${adminSection eq 'categories'}">aria-current="page"</c:if>><span aria-hidden="true">⌘</span>科属分类</a>
     <a href="${pageContext.request.contextPath}/admin/users" class="${adminSection eq 'users' ? 'active' : ''}" <c:if test="${adminSection eq 'users'}">aria-current="page"</c:if>><span aria-hidden="true">◎</span>用户管理</a>
   </nav>

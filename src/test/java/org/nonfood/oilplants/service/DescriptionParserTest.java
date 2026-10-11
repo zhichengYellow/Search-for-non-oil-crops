@@ -11,7 +11,7 @@ class DescriptionParserTest {
         assertEquals("tree",criterion(result,"plant_form").optionCode());
         assertEquals("needle",criterion(result,"leaf_shape").optionCode());
         assertEquals("brown",criterion(result,"fruit_color").optionCode());
-        assertEquals("cone",criterion(result,"fruit_shape").optionCode());
+        assertEquals("cone",criterion(result,"cone_shape").optionCode());
     }
     @Test void mapsSeasonalLeafColorAndFanShapeSeparately(){
         var result=parser.parse("秋天叶子会变成黄色，叶片像小扇子。");
@@ -22,6 +22,24 @@ class DescriptionParserTest {
     @Test void simpleNegationBecomesNegativeCriterion(){
         TraitCriterion criterion=criterion(parser.parse("这不是针形叶片"),"leaf_shape");
         assertTrue(criterion.negated());assertEquals("needle",criterion.optionCode());
+    }
+    @Test void colorKeywordsNeedPlantPartContext(){
+        var fruit=parser.parse("果实是黄色");
+        assertEquals("yellow",criterion(fruit,"fruit_color").optionCode());
+        assertNull(find(fruit,"leaf_color"));
+        assertFalse(parser.parse("黄色").hasRecognizedCriteria());
+    }
+    @Test void recognizesRoundFruitRoughBarkAndMountainHabitat(){
+        var result=parser.parse("树皮粗糙，生长在山区，果实接近圆形");
+        assertEquals("rough",criterion(result,"bark_texture").optionCode());
+        assertEquals("mountain",criterion(result,"growth_habitat").optionCode());
+        assertEquals("round",criterion(result,"fruit_shape").optionCode());
+    }
+    @Test void pineConeShapeWarningDoesNotClaimSpeciesIdentification(){
+        var result=parser.parse("棕色松塔");
+        assertEquals("cone",criterion(result,"cone_shape").optionCode());
+        assertEquals("brown",criterion(result,"fruit_color").optionCode());
+        assertTrue(result.warnings().stream().anyMatch(w->w.contains("不代表已经确认")));
     }
     @Test void unsupportedTermsDoNotInventCriteriaAndLongInputIsRejected(){
         assertFalse(parser.parse("一种奇特植物").hasRecognizedCriteria());

@@ -1,0 +1,1301 @@
+{
+  "source_pdf": "/Users/binyellow/Study/Search for non-oil crops/docs/课程设计资料.pdf",
+  "source_pdf_sha256": "669e9adbfbdfb855d196e5389b2b8aee763a226fee0ce7f0a7e83bc5bab73685",
+  "source_pdf_bytes": 9298489,
+  "page_count": 19,
+  "page_numbering": "physical page 1..19; printed page number observed as physical page + 10",
+  "text_layer_summary": {
+    "pages_with_text": 0,
+    "pages_without_text": 19
+  },
+  "pages": [
+    {
+      "source_pdf_page": 1,
+      "source_printed_page": 11,
+      "page_width_points": 616.252,
+      "page_height_points": 847.346,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-01.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p001-01",
+          "name_zh": "苏铁",
+          "scientific_name": "Cycas revoluta Thunb.",
+          "entry_ordinal_on_start_page": 1
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 2,
+      "source_printed_page": 12,
+      "page_width_points": 616.252,
+      "page_height_points": 847.107,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-02.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p002-01",
+          "name_zh": "银杏",
+          "scientific_name": "Ginkgo biloba L.",
+          "entry_ordinal_on_start_page": 1
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 3,
+      "source_printed_page": 13,
+      "page_width_points": 616.252,
+      "page_height_points": 847.346,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-03.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p002-01",
+          "name_zh": "银杏",
+          "scientific_name": "Ginkgo biloba L.",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p003-01",
+          "name_zh": "云南黄果冷杉",
+          "scientific_name": "Abies ernestii var. salouenensis (Bordères et Gaussen) W. C. Cheng et L. K. Fu",
+          "entry_ordinal_on_start_page": 1
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 4,
+      "source_printed_page": 14,
+      "page_width_points": 616.252,
+      "page_height_points": 847.107,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-04.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p004-01",
+          "name_zh": "巴山冷杉",
+          "scientific_name": "Abies fargesii Franch.",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p004-02",
+          "name_zh": "杉松",
+          "scientific_name": "Abies holophylla Maxim.",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 5,
+      "source_printed_page": 15,
+      "page_width_points": 616.252,
+      "page_height_points": 847.346,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-05.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p005-01",
+          "name_zh": "怒江冷杉",
+          "scientific_name": "Abies nukiangensis C. Y. Cheng et L. K. Fu",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p005-02",
+          "name_zh": "雪松",
+          "scientific_name": "Cedrus deodara (Roxb.) G. Don",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 6,
+      "source_printed_page": 16,
+      "page_width_points": 616.252,
+      "page_height_points": 847.107,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-06.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p006-01",
+          "name_zh": "铁坚油杉",
+          "scientific_name": "Keteleeria davidiana (Bertr.) Beissn.",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p006-02",
+          "name_zh": "云南油杉",
+          "scientific_name": "Keteleeria evelyniana Mast.",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 7,
+      "source_printed_page": 17,
+      "page_width_points": 616.252,
+      "page_height_points": 847.346,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-07.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p007-01",
+          "name_zh": "油杉",
+          "scientific_name": "Keteleeria fortunei (A. Murray bis) Carrière",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p007-02",
+          "name_zh": "落叶松",
+          "scientific_name": "Larix gmelinii (Rupr.) Kuzen.",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 8,
+      "source_printed_page": 18,
+      "page_width_points": 616.252,
+      "page_height_points": 847.107,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-08.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p008-01",
+          "name_zh": "黄花落叶松",
+          "scientific_name": "Larix olgensis A. Henry",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p008-02",
+          "name_zh": "云杉",
+          "scientific_name": "Picea asperata Mast.",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 9,
+      "source_printed_page": 19,
+      "page_width_points": 616.252,
+      "page_height_points": 847.346,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-09.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p009-01",
+          "name_zh": "鱼鳞云杉",
+          "scientific_name": "Picea jezoensis var. microsperma (Lindl.) W. C. Cheng et L. K. Fu",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p009-02",
+          "name_zh": "红皮云杉",
+          "scientific_name": "Picea koraiensis Nakai",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 10,
+      "source_printed_page": 20,
+      "page_width_points": 616.252,
+      "page_height_points": 847.107,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-10.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p010-01",
+          "name_zh": "西伯利亚云杉",
+          "scientific_name": "Picea obovata Ledeb.",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p010-02",
+          "name_zh": "青杄",
+          "scientific_name": "Picea wilsonii Mast.",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 11,
+      "source_printed_page": 21,
+      "page_width_points": 616.252,
+      "page_height_points": 847.346,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-11.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p011-01",
+          "name_zh": "华山松",
+          "scientific_name": "Pinus armandii Franch.",
+          "entry_ordinal_on_start_page": 1
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 12,
+      "source_printed_page": 22,
+      "page_width_points": 616.252,
+      "page_height_points": 847.107,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-12.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p012-01",
+          "name_zh": "白皮松",
+          "scientific_name": "Pinus bungeana Zucc. ex Endl.",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p012-02",
+          "name_zh": "高山松",
+          "scientific_name": "Pinus densata Mast.",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 13,
+      "source_printed_page": 23,
+      "page_width_points": 616.252,
+      "page_height_points": 847.346,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-13.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p013-01",
+          "name_zh": "赤松",
+          "scientific_name": "Pinus densiflora Sieb.",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p013-02",
+          "name_zh": "湿地松",
+          "scientific_name": "Pinus elliottii Engelm.",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 14,
+      "source_printed_page": 24,
+      "page_width_points": 616.252,
+      "page_height_points": 847.107,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-14.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p014-01",
+          "name_zh": "红松",
+          "scientific_name": "Pinus koraiensis Sieb. et Zucc.",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p014-02",
+          "name_zh": "华南五针松",
+          "scientific_name": "Pinus kwangtungensis Chun et Tsiang",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 15,
+      "source_printed_page": 25,
+      "page_width_points": 616.252,
+      "page_height_points": 847.346,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-15.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p015-01",
+          "name_zh": "马尾松",
+          "scientific_name": "Pinus massoniana D. Don",
+          "entry_ordinal_on_start_page": 1
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 16,
+      "source_printed_page": 26,
+      "page_width_points": 616.252,
+      "page_height_points": 847.107,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-16.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p016-01",
+          "name_zh": "台湾五针松",
+          "scientific_name": "Pinus morrisonicola Hayata",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p016-02",
+          "name_zh": "新疆五针松",
+          "scientific_name": "Pinus sibirica Du Tour",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 17,
+      "source_printed_page": 27,
+      "page_width_points": 616.252,
+      "page_height_points": 847.346,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-17.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p017-01",
+          "name_zh": "樟子松",
+          "scientific_name": "Pinus sylvestris var. mongolica Litv.",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p017-02",
+          "name_zh": "油松",
+          "scientific_name": "Pinus tabuliformis Carr.",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 18,
+      "source_printed_page": 28,
+      "page_width_points": 616.252,
+      "page_height_points": 847.107,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-18.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p018-01",
+          "name_zh": "黑松",
+          "scientific_name": "Pinus thunbergii Parl.",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p018-02",
+          "name_zh": "云南松",
+          "scientific_name": "Pinus yunnanensis Franch.",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    },
+    {
+      "source_pdf_page": 19,
+      "source_printed_page": 29,
+      "page_width_points": 616.252,
+      "page_height_points": 847.346,
+      "text_layer_characters": 0,
+      "embedded_image_count": 1,
+      "scan_page": true,
+      "existing_review_render": "/Users/binyellow/Study/Search for non-oil crops/data/source_pages/page-19.jpg",
+      "existing_render_dimensions_px": [
+        1233,
+        1695
+      ],
+      "visual_layout": "full-page raster with mixed text, photos and chemical tables; manual inspection required",
+      "plant_entries_on_page": [
+        {
+          "plant_id": "pdf19-p019-01",
+          "name_zh": "金钱松",
+          "scientific_name": "Pseudolarix amabilis (J. Nelson) Rehd.",
+          "entry_ordinal_on_start_page": 1
+        },
+        {
+          "plant_id": "pdf19-p019-02",
+          "name_zh": "柳杉",
+          "scientific_name": "Cryptomeria fortune Hooibr. ex Otto et Dietrich",
+          "entry_ordinal_on_start_page": 2
+        }
+      ]
+    }
+  ],
+  "manual_table_transcription": {
+    "source_pdf_page": 11,
+    "source_printed_page": 21,
+    "row_count": 12,
+    "nonempty_fatty_acid_cell_candidates": 97,
+    "confirmed_fatty_acid_values": 0,
+    "unit_printed_for_fatty_acid_columns": false,
+    "candidate_import_policy": "Do not import into the formal fatty_acid_components table until unit and each cell are reviewed."
+  },
+  "table_crop_count": 33,
+  "table_crops": [
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p001-01-pdf-page-01.jpg",
+      "plant_id": "pdf19-p001-01",
+      "plant_name_zh": "苏铁",
+      "plant_scientific_name_as_printed": "Cycas revoluta Thunb.",
+      "source_pdf_page": 1,
+      "source_printed_page": 11,
+      "sample_ids": [
+        "pdf19-p001-01-p001-r01",
+        "pdf19-p001-01-p001-r02",
+        "pdf19-p001-01-p001-r03",
+        "pdf19-p001-01-p001-r04"
+      ],
+      "sample_row_count": 4,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.87449,
+        0.98,
+        0.10672
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p002-01-pdf-page-03.jpg",
+      "plant_id": "pdf19-p002-01",
+      "plant_name_zh": "银杏",
+      "plant_scientific_name_as_printed": "Ginkgo biloba L.",
+      "source_pdf_page": 3,
+      "source_printed_page": 13,
+      "sample_ids": [
+        "pdf19-p002-01-p003-r01",
+        "pdf19-p002-01-p003-r02",
+        "pdf19-p002-01-p003-r03",
+        "pdf19-p002-01-p003-r04",
+        "pdf19-p002-01-p003-r05",
+        "pdf19-p002-01-p003-r06",
+        "pdf19-p002-01-p003-r07",
+        "pdf19-p002-01-p003-r08",
+        "pdf19-p002-01-p003-r09",
+        "pdf19-p002-01-p003-r10",
+        "pdf19-p002-01-p003-r11"
+      ],
+      "sample_row_count": 11,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.26026,
+        0.98,
+        0.21664
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p003-01-pdf-page-03.jpg",
+      "plant_id": "pdf19-p003-01",
+      "plant_name_zh": "云南黄果冷杉",
+      "plant_scientific_name_as_printed": "Abies ernestii var. salouenensis (Bordères et Gaussen) W. C. Cheng et L. K. Fu",
+      "source_pdf_page": 3,
+      "source_printed_page": 13,
+      "sample_ids": [
+        "pdf19-p003-01-p003-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.9175,
+        0.98,
+        0.06586
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p004-01-pdf-page-04.jpg",
+      "plant_id": "pdf19-p004-01",
+      "plant_name_zh": "巴山冷杉",
+      "plant_scientific_name_as_printed": "Abies fargesii Franch.",
+      "source_pdf_page": 4,
+      "source_printed_page": 14,
+      "sample_ids": [
+        "pdf19-p004-01-p004-r01",
+        "pdf19-p004-01-p004-r02",
+        "pdf19-p004-01-p004-r03"
+      ],
+      "sample_row_count": 3,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.40893,
+        0.98,
+        0.09393
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p004-02-pdf-page-04.jpg",
+      "plant_id": "pdf19-p004-02",
+      "plant_name_zh": "杉松",
+      "plant_scientific_name_as_printed": "Abies holophylla Maxim.",
+      "source_pdf_page": 4,
+      "source_printed_page": 14,
+      "sample_ids": [
+        "pdf19-p004-02-p004-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.9175,
+        0.98,
+        0.06371
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p005-01-pdf-page-05.jpg",
+      "plant_id": "pdf19-p005-01",
+      "plant_name_zh": "怒江冷杉",
+      "plant_scientific_name_as_printed": "Abies nukiangensis C. Y. Cheng et L. K. Fu",
+      "source_pdf_page": 5,
+      "source_printed_page": 15,
+      "sample_ids": [
+        "pdf19-p005-01-p005-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.41322,
+        0.98,
+        0.06368
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p005-02-pdf-page-05.jpg",
+      "plant_id": "pdf19-p005-02",
+      "plant_name_zh": "雪松",
+      "plant_scientific_name_as_printed": "Cedrus deodara (Roxb.) G. Don",
+      "source_pdf_page": 5,
+      "source_printed_page": 15,
+      "sample_ids": [
+        "pdf19-p005-02-p005-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.91536,
+        0.98,
+        0.06585
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p006-01-pdf-page-06.jpg",
+      "plant_id": "pdf19-p006-01",
+      "plant_name_zh": "铁坚油杉",
+      "plant_scientific_name_as_printed": "Keteleeria davidiana (Bertr.) Beissn.",
+      "source_pdf_page": 6,
+      "source_printed_page": 16,
+      "sample_ids": [
+        "pdf19-p006-01-p006-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.48,
+        0.98,
+        0.06586
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p006-02-pdf-page-06.jpg",
+      "plant_id": "pdf19-p006-02",
+      "plant_name_zh": "云南油杉",
+      "plant_scientific_name_as_printed": "Keteleeria evelyniana Mast.",
+      "source_pdf_page": 6,
+      "source_printed_page": 16,
+      "sample_ids": [
+        "pdf19-p006-02-p006-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.91107,
+        0.98,
+        0.06798
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p007-01-pdf-page-07.jpg",
+      "plant_id": "pdf19-p007-01",
+      "plant_name_zh": "油杉",
+      "plant_scientific_name_as_printed": "Keteleeria fortunei (A. Murray bis) Carrière",
+      "source_pdf_page": 7,
+      "source_printed_page": 17,
+      "sample_ids": [
+        "pdf19-p007-01-p007-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.48215,
+        0.98,
+        0.06587
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p007-02-pdf-page-07.jpg",
+      "plant_id": "pdf19-p007-02",
+      "plant_name_zh": "落叶松",
+      "plant_scientific_name_as_printed": "Larix gmelinii (Rupr.) Kuzen.",
+      "source_pdf_page": 7,
+      "source_printed_page": 17,
+      "sample_ids": [
+        "pdf19-p007-02-p007-r01",
+        "pdf19-p007-02-p007-r02",
+        "pdf19-p007-02-p007-r03"
+      ],
+      "sample_row_count": 3,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.88526,
+        0.98,
+        0.09595
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p008-01-pdf-page-08.jpg",
+      "plant_id": "pdf19-p008-01",
+      "plant_name_zh": "黄花落叶松",
+      "plant_scientific_name_as_printed": "Larix olgensis A. Henry",
+      "source_pdf_page": 8,
+      "source_printed_page": 18,
+      "sample_ids": [
+        "pdf19-p008-01-p008-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.39172,
+        0.98,
+        0.06578
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p008-02-pdf-page-08.jpg",
+      "plant_id": "pdf19-p008-02",
+      "plant_name_zh": "云杉",
+      "plant_scientific_name_as_printed": "Picea asperata Mast.",
+      "source_pdf_page": 8,
+      "source_printed_page": 18,
+      "sample_ids": [
+        "pdf19-p008-02-p008-r01",
+        "pdf19-p008-02-p008-r02",
+        "pdf19-p008-02-p008-r03",
+        "pdf19-p008-02-p008-r04"
+      ],
+      "sample_row_count": 4,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.87449,
+        0.98,
+        0.10672
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p009-01-pdf-page-09.jpg",
+      "plant_id": "pdf19-p009-01",
+      "plant_name_zh": "鱼鳞云杉",
+      "plant_scientific_name_as_printed": "Picea jezoensis var. microsperma (Lindl.) W. C. Cheng et L. K. Fu",
+      "source_pdf_page": 9,
+      "source_printed_page": 19,
+      "sample_ids": [
+        "pdf19-p009-01-p009-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.39388,
+        0.98,
+        0.06578
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p009-02-pdf-page-09.jpg",
+      "plant_id": "pdf19-p009-02",
+      "plant_name_zh": "红皮云杉",
+      "plant_scientific_name_as_printed": "Picea koraiensis Nakai",
+      "source_pdf_page": 9,
+      "source_printed_page": 19,
+      "sample_ids": [
+        "pdf19-p009-02-p009-r01",
+        "pdf19-p009-02-p009-r02"
+      ],
+      "sample_row_count": 2,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.9025,
+        0.98,
+        0.07871
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p010-01-pdf-page-10.jpg",
+      "plant_id": "pdf19-p010-01",
+      "plant_name_zh": "西伯利亚云杉",
+      "plant_scientific_name_as_printed": "Picea obovata Ledeb.",
+      "source_pdf_page": 10,
+      "source_printed_page": 20,
+      "sample_ids": [
+        "pdf19-p010-01-p010-r01",
+        "pdf19-p010-01-p010-r02"
+      ],
+      "sample_row_count": 2,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.4025,
+        0.98,
+        0.08086
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p010-02-pdf-page-10.jpg",
+      "plant_id": "pdf19-p010-02",
+      "plant_name_zh": "青杄",
+      "plant_scientific_name_as_printed": "Picea wilsonii Mast.",
+      "source_pdf_page": 10,
+      "source_printed_page": 20,
+      "sample_ids": [
+        "pdf19-p010-02-p010-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.91107,
+        0.98,
+        0.06583
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p011-01-pdf-page-11.jpg",
+      "plant_id": "pdf19-p011-01",
+      "plant_name_zh": "华山松",
+      "plant_scientific_name_as_printed": "Pinus armandii Franch.",
+      "source_pdf_page": 11,
+      "source_printed_page": 21,
+      "sample_ids": [
+        "pdf19-p011-01-p011-r01",
+        "pdf19-p011-01-p011-r02",
+        "pdf19-p011-01-p011-r03",
+        "pdf19-p011-01-p011-r04",
+        "pdf19-p011-01-p011-r05",
+        "pdf19-p011-01-p011-r06",
+        "pdf19-p011-01-p011-r07",
+        "pdf19-p011-01-p011-r08",
+        "pdf19-p011-01-p011-r09",
+        "pdf19-p011-01-p011-r10",
+        "pdf19-p011-01-p011-r11",
+        "pdf19-p011-01-p011-r12"
+      ],
+      "sample_row_count": 12,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.7315,
+        0.98,
+        0.2488
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p012-01-pdf-page-12.jpg",
+      "plant_id": "pdf19-p012-01",
+      "plant_name_zh": "白皮松",
+      "plant_scientific_name_as_printed": "Pinus bungeana Zucc. ex Endl.",
+      "source_pdf_page": 12,
+      "source_printed_page": 22,
+      "sample_ids": [
+        "pdf19-p012-01-p012-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.52103,
+        0.98,
+        0.06578
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p012-02-pdf-page-12.jpg",
+      "plant_id": "pdf19-p012-02",
+      "plant_name_zh": "高山松",
+      "plant_scientific_name_as_printed": "Pinus densata Mast.",
+      "source_pdf_page": 12,
+      "source_printed_page": 22,
+      "sample_ids": [
+        "pdf19-p012-02-p012-r01",
+        "pdf19-p012-02-p012-r02"
+      ],
+      "sample_row_count": 2,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.9025,
+        0.98,
+        0.07871
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p013-01-pdf-page-13.jpg",
+      "plant_id": "pdf19-p013-01",
+      "plant_name_zh": "赤松",
+      "plant_scientific_name_as_printed": "Pinus densiflora Sieb.",
+      "source_pdf_page": 13,
+      "source_printed_page": 23,
+      "sample_ids": [
+        "pdf19-p013-01-p013-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.43699,
+        0.98,
+        0.06587
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p013-02-pdf-page-13.jpg",
+      "plant_id": "pdf19-p013-02",
+      "plant_name_zh": "湿地松",
+      "plant_scientific_name_as_printed": "Pinus elliottii Engelm.",
+      "source_pdf_page": 13,
+      "source_printed_page": 23,
+      "sample_ids": [
+        "pdf19-p013-02-p013-r01",
+        "pdf19-p013-02-p013-r02"
+      ],
+      "sample_row_count": 2,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.90464,
+        0.98,
+        0.08088
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p014-01-pdf-page-14.jpg",
+      "plant_id": "pdf19-p014-01",
+      "plant_name_zh": "红松",
+      "plant_scientific_name_as_printed": "Pinus koraiensis Sieb. et Zucc.",
+      "source_pdf_page": 14,
+      "source_printed_page": 24,
+      "sample_ids": [
+        "pdf19-p014-01-p014-r01",
+        "pdf19-p014-01-p014-r02",
+        "pdf19-p014-01-p014-r03"
+      ],
+      "sample_row_count": 3,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.43482,
+        0.98,
+        0.09615
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p014-02-pdf-page-14.jpg",
+      "plant_id": "pdf19-p014-02",
+      "plant_name_zh": "华南五针松",
+      "plant_scientific_name_as_printed": "Pinus kwangtungensis Chun et Tsiang",
+      "source_pdf_page": 14,
+      "source_printed_page": 24,
+      "sample_ids": [
+        "pdf19-p014-02-p014-r01",
+        "pdf19-p014-02-p014-r02"
+      ],
+      "sample_row_count": 2,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.88526,
+        0.98,
+        0.08413
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p015-01-pdf-page-15.jpg",
+      "plant_id": "pdf19-p015-01",
+      "plant_name_zh": "马尾松",
+      "plant_scientific_name_as_printed": "Pinus massoniana D. Don",
+      "source_pdf_page": 15,
+      "source_printed_page": 25,
+      "sample_ids": [
+        "pdf19-p015-01-p015-r01",
+        "pdf19-p015-01-p015-r02",
+        "pdf19-p015-01-p015-r03",
+        "pdf19-p015-01-p015-r04",
+        "pdf19-p015-01-p015-r05"
+      ],
+      "sample_row_count": 5,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.84428,
+        0.98,
+        0.13693
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p016-01-pdf-page-16.jpg",
+      "plant_id": "pdf19-p016-01",
+      "plant_name_zh": "台湾五针松",
+      "plant_scientific_name_as_printed": "Pinus morrisonicola Hayata",
+      "source_pdf_page": 16,
+      "source_printed_page": 26,
+      "sample_ids": [
+        "pdf19-p016-01-p016-r01",
+        "pdf19-p016-01-p016-r02"
+      ],
+      "sample_row_count": 2,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.47571,
+        0.98,
+        0.08108
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p016-02-pdf-page-16.jpg",
+      "plant_id": "pdf19-p016-02",
+      "plant_name_zh": "新疆五针松",
+      "plant_scientific_name_as_printed": "Pinus sibirica Du Tour",
+      "source_pdf_page": 16,
+      "source_printed_page": 26,
+      "sample_ids": [
+        "pdf19-p016-02-p016-r01",
+        "pdf19-p016-02-p016-r02"
+      ],
+      "sample_row_count": 2,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.89819,
+        0.98,
+        0.08086
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p017-01-pdf-page-17.jpg",
+      "plant_id": "pdf19-p017-01",
+      "plant_name_zh": "樟子松",
+      "plant_scientific_name_as_printed": "Pinus sylvestris var. mongolica Litv.",
+      "source_pdf_page": 17,
+      "source_printed_page": 27,
+      "sample_ids": [
+        "pdf19-p017-01-p017-r01",
+        "pdf19-p017-01-p017-r02",
+        "pdf19-p017-01-p017-r03",
+        "pdf19-p017-01-p017-r04"
+      ],
+      "sample_row_count": 4,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.47143,
+        0.98,
+        0.10464
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p017-02-pdf-page-17.jpg",
+      "plant_id": "pdf19-p017-02",
+      "plant_name_zh": "油松",
+      "plant_scientific_name_as_printed": "Pinus tabuliformis Carr.",
+      "source_pdf_page": 17,
+      "source_printed_page": 27,
+      "sample_ids": [
+        "pdf19-p017-02-p017-r01",
+        "pdf19-p017-02-p017-r02"
+      ],
+      "sample_row_count": 2,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.9025,
+        0.98,
+        0.07871
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p018-01-pdf-page-18.jpg",
+      "plant_id": "pdf19-p018-01",
+      "plant_name_zh": "黑松",
+      "plant_scientific_name_as_printed": "Pinus thunbergii Parl.",
+      "source_pdf_page": 18,
+      "source_printed_page": 28,
+      "sample_ids": [
+        "pdf19-p018-01-p018-r01"
+      ],
+      "sample_row_count": 1,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.39819,
+        0.98,
+        0.06362
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p018-02-pdf-page-18.jpg",
+      "plant_id": "pdf19-p018-02",
+      "plant_name_zh": "云南松",
+      "plant_scientific_name_as_printed": "Pinus yunnanensis Franch.",
+      "source_pdf_page": 18,
+      "source_printed_page": 28,
+      "sample_ids": [
+        "pdf19-p018-02-p018-r01",
+        "pdf19-p018-02-p018-r02",
+        "pdf19-p018-02-p018-r03"
+      ],
+      "sample_row_count": 3,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.88741,
+        0.98,
+        0.0938
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p019-01-pdf-page-19.jpg",
+      "plant_id": "pdf19-p019-01",
+      "plant_name_zh": "金钱松",
+      "plant_scientific_name_as_printed": "Pseudolarix amabilis (J. Nelson) Rehd.",
+      "source_pdf_page": 19,
+      "source_printed_page": 29,
+      "sample_ids": [
+        "pdf19-p019-01-p019-r01",
+        "pdf19-p019-01-p019-r02"
+      ],
+      "sample_row_count": 2,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.42822,
+        0.98,
+        0.08107
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    },
+    {
+      "evidence_image_reference": "/Users/binyellow/Study/Search for non-oil crops/data/pdf_extract/table_crops/pdf19-p019-02-pdf-page-19.jpg",
+      "plant_id": "pdf19-p019-02",
+      "plant_name_zh": "柳杉",
+      "plant_scientific_name_as_printed": "Cryptomeria fortune Hooibr. ex Otto et Dietrich",
+      "source_pdf_page": 19,
+      "source_printed_page": 29,
+      "sample_ids": [
+        "pdf19-p019-02-p019-r01",
+        "pdf19-p019-02-p019-r02",
+        "pdf19-p019-02-p019-r03",
+        "pdf19-p019-02-p019-r04",
+        "pdf19-p019-02-p019-r05",
+        "pdf19-p019-02-p019-r06"
+      ],
+      "sample_row_count": 6,
+      "crop_bbox_normalized_top_origin": [
+        0.01,
+        0.83138,
+        0.98,
+        0.14552
+      ],
+      "render_dpi": 300,
+      "purpose": "table evidence crop based on existing row-cell coordinates; crop does not confirm species or numeric values",
+      "review_status": "REVIEW_PENDING"
+    }
+  ]
+}

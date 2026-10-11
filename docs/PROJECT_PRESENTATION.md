@@ -16,7 +16,7 @@ flowchart LR
   S --> D[DAO / JavaBean]
   D --> J[JDBC PreparedStatement]
   J --> M[(MySQL 8)]
-  V --> K[POWO / GBIF 外部检索链接]
+  S --> X[GBIF Species API v2：管理员触发的分类候选]
 ```
 
 项目采用 Java 17、Jakarta Servlet 6、JSP/JSTL、JDBC、MySQL 8，目标运行环境为 Tomcat 10.1。核心业务没有改为 Spring Boot、React 或 Vue。请求由 Servlet 接收，Service 做输入和业务校验，DAO 通过参数化 SQL 查询数据库，JavaBean 在层间传递数据。
@@ -29,10 +29,11 @@ flowchart LR
 | 描述找植物 | 中文口语词典和规则解析；显示并允许修改提取出的特征，不宣称是 AI |
 | 外观特征检索 | 可跳过问题、支持否定条件；解释匹配依据、冲突、未知、分数和数据覆盖度 |
 | 专业检索 | 名称/分类/描述、多条件组合、含油率/组分范围、同采样记录约束、分页和字段选择 |
+| 综合植物类别 | `/categories` 按有来源确认的应用类别浏览；一株植物可以关联多个类别 |
 | 详情与比较 | 植物来源和描述；对比 2–3 种植物，化学测量按样本分组 |
 | 账户 | 图形验证码、邮箱验证/重置、登录失败数据库限流、认证日志、资料、收藏 |
 | 用户历史 | 用户主动勾选保存搜索、本人最近浏览、可清理历史；热门访问按日汇总不记录 IP |
-| 管理后台 | 植物/样本/图片及特征证据维护、来源与核验状态、用户和审计管理 |
+| 管理后台 | 植物/样本/图片与特征维护；脂肪酸、特征和外部分类候选审核；导入批次与扩容质量仪表盘 |
 
 ## 4. 数据库设计
 
@@ -40,10 +41,12 @@ flowchart LR
 - `plant_families`、`plant_genera`、`plants` 表示分类与植物；`plant_aliases`、`plant_images` 管理别名与图片。
 - `plant_oil_samples` 是样本事实边界；`fatty_acid_components.sample_id` 将组分绑定到单一采样记录。缺失的数值使用 `NULL`，油率、组分与样本状态各自记录。
 - `trait_categories`、`plant_traits`、`trait_options` 建立稳定编码的特征词表；`plant_trait_values` 保存植物特征、来源证据、状态与审核信息；`plant_knowledge_sources` 保存来源。
+- `fatty_acid_candidates` 把未确认单元格与具体 `sample_id` 隔离；人工核验后才进入正式 `fatty_acid_components`。`external_taxon_candidates` 保存 GBIF 原始响应，`knowledge_review_events` 追加审核和语义修正事件。
+- 3.2 新增 `plant_categories` / `plant_category_relations`（应用类别多对多）、`plant_datasets` / `plant_dataset_relations`（数据集关系）、分类参考、外部 namespace ID、来源知识条目、图片引用和外部导入批次/候选/审核表。原课程数据关联到 `COURSE_ORIGINAL`，没有复制植物行。
 - `user_search_history` 与 `user_plant_history` 由用户外键隔离；`plant_daily_views` 仅累计每日植物浏览量，不保留访客 IP。
 - 课程 PDF 数据通过稳定来源键导入；所有新增迁移是增量迁移。
 
-**数据现状：**33 株植物、45 张关联图、89 条采样记录、88 条已核验含油率；已核验脂肪酸为 0，已确认外观特征为 0。外观检索功能可运行，但管理员录入并审核来源特征前，不能凭当前课程记录可靠识别植物。
+**数据现状（2026-10-11 实时数据库）：**33 株课程植物、45 张关联图、89 条采样记录、88 条已核验含油率；正式脂肪酸组分 0，另有 97 个待审核单元格；外观候选 94 条、确认 0。新增 GBIF 候选 3 条仍待核验；GENERAL_BOTANY 已发布植物 0。当前不能声称可以可靠识别真实植物，也没有达到建议的约 150 种。
 
 ## 5. 系统权限设计
 
@@ -75,6 +78,7 @@ Service 校验输入后构建 SQL 条件，DAO 使用 `PreparedStatement`。排�
 - 详情展示分类、图片、形态、分布、用途、来源和独立采样数据。
 - 植物对比页支持两到三项；移动端结果表格在容器内横向滚动，不拼接样本。
 - 账户与管理页面共用 PlantScope 视觉变量；管理员可以维护来源和待核验特征。
+- 分类浏览页从数据库读取确认类别关系；扩容工作台显示实时数据统计、外部候选字段、批次、逐条审核决定和受限撤回理由。
 
 ## 8. 项目创新点
 
@@ -86,19 +90,18 @@ Service 校验输入后构建 SQL 条件，DAO 使用 `PreparedStatement`。排�
 
 ## 9. 测试结果
 
-- `mvn clean test`：33 项，25 项通过、8 项 opt-in 数据库测试默认跳过；无失败、无错误。
-- `./scripts/integration-test.sh`：8/8 MySQL 集成测试通过。
-- `./scripts/business-flow-test.sh`：真实 HTTP + MySQL 端到端业务流通过，包括认证、权限、用户历史、搜索、对比和管理。
-- `mvn package`：成功；WAR 为 `target/oil-plants-knowledge.war`。JSP Jasper 编译 0 错误，嵌入式 Tomcat smoke 通过。
-- Chrome 检查首页手机端、描述规则与移动端对比；检索页检查 1440、1024、768、375 像素。768 像素导航换行问题已修复。
-- 未使用真实 SMTP 提供商；未部署独立 Tomcat。没有完成并发/渗透/恢复测试。
+- 3.2 `mvn clean test`：45 项，0 失败，10 个数据库集成测试在默认配置下跳过；`mvn package` 成功生成 `target/oil-plants-knowledge.war`。
+- MySQL 集成测试在恢复出的临时 schema 上 10/10 通过；嵌入式 Tomcat + MySQL HTTP 业务流程通过，包括游客/用户/管理员、类别分页、权限、真实候选队列入口、搜索、管理 CRUD 和退出。
+- `./scripts/compile-jsps.sh`：JSP Jasper 编译 0 错误；Python 数据处理单测 12/12；Node.js 语法检查和 `git diff --check` 通过。
+- 本轮实际从 GBIF strict-name endpoint 获取 3 个候选并导入主库，dry-run 和 commit 成功；候选全部待核验，没有写入正式植物或分类引用。
+- 3.0 期间曾用 Chrome 检查首页与检索页多个视口；本轮没有在真实浏览器重新检查 3.2 类别页/扩容工作台各视口。未使用真实 SMTP、未部署独立 Tomcat，也未完成并发、压力、渗透或生产恢复演练。
 
-完整证据和数据库抽样结果见 [TEST_REPORT.md](TEST_REPORT.md)。
+完整 3.2 证据见 [TEST_REPORT_3_2.md](TEST_REPORT_3_2.md)、[ACCEPTANCE_REPORT_3_2.md](ACCEPTANCE_REPORT_3_2.md) 与 [DATA_QUALITY_REPORT_3_2.md](DATA_QUALITY_REPORT_3_2.md)。3.0 历史验收记录保留在 [TEST_REPORT_3_0.md](TEST_REPORT_3_0.md)。
 
 ## 10. 未来改进方向
 
 - 从可靠来源人工审核并录入外观特征，扩大真实候选覆盖度。
 - 增加带用户授权的植物观察记录与图片上传，位置仅用自愿填写的粗粒度区域。
-- 在官方 API 和许可条件明确后，开发可选外部分类资料适配器；维持来源、许可和人工审核记录。
+- 补充已接受外部学名与历史名称的独立映射/修订记录；只在接口与授权核实后接入 POWO/WFO。
 - 若未来接入大模型或图像识别，应作为可关闭的独立模块，不影响基础规则检索。
 - 进行完整表单/管理页浏览器回归，并测试 SMTP、独立 Tomcat、安全配置、压力和备份恢复。

@@ -2,7 +2,8 @@ package org.nonfood.oilplants.model;
 
 public class TraitValueRecord {
     private long id, plantId, sourceId;
-    private String plantName, traitCode, traitLabel, optionCode, optionLabel, status, sourceName, sourcePage, excerpt;
+    private String plantName, traitCode, traitLabel, optionCode, optionLabel, status, sourceName, sourcePage, excerpt,
+            evidenceImageReference, extractionMethod, mappingConfidence, ambiguityNote;
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
     public long getPlantId() { return plantId; }
@@ -27,4 +28,12 @@ public class TraitValueRecord {
     public void setSourcePage(String sourcePage) { this.sourcePage = sourcePage; }
     public String getExcerpt() { return excerpt; }
     public void setExcerpt(String excerpt) { this.excerpt = excerpt; }
+    public String getEvidenceImageReference() { return evidenceImageReference; }
+    public void setEvidenceImageReference(String evidenceImageReference) { this.evidenceImageReference = evidenceImageReference; }
+    public String getExtractionMethod() { return extractionMethod; }
+    public void setExtractionMethod(String extractionMethod) { this.extractionMethod = extractionMethod; }
+    public String getMappingConfidence() { return mappingConfidence; }
+    public void setMappingConfidence(String mappingConfidence) { this.mappingConfidence = mappingConfidence; }
+    public String getAmbiguityNote() { return ambiguityNote; }
+    public void setAmbiguityNote(String ambiguityNote) { this.ambiguityNote = ambiguityNote; }
 }

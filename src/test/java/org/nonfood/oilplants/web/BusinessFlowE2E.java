@@ -66,6 +66,13 @@ public final class BusinessFlowE2E {
             expect(get(client, port, "/favorites"), 302, "guest favorites redirect");
             expect(get(client, port, "/history"), 302, "guest history redirect");
             expect(get(client,port,"/compare"),200,"public plant comparison picker");
+            HttpResponse<String> categoryList=get(client,port,"/categories");expect(categoryList,200,"public category browse");
+            contains(categoryList.body(),"按类别探索植物","category browse heading");
+            HttpResponse<String> courseCategory=get(client,port,"/categories?key=non_food_oil_crop");expect(courseCategory,200,"course plant category results");
+            contains(courseCategory.body(),"共 33 株","database-backed category count");
+            contains(courseCategory.body(),"苏铁","course category plant result");
+            expect(get(client,port,"/categories?key=not-a-real-category"),404,"unknown category error page");
+            expect(get(client,port,"/admin/expansion"),302,"guest expansion workbench redirect");
 
             HttpResponse<String> registration = get(client, port, "/register");
             expect(registration, 200, "registration form");
@@ -97,11 +104,27 @@ public final class BusinessFlowE2E {
             HttpResponse<String> profile = get(client, port, "/profile");
             expect(profile, 200, "authenticated profile/session");
             expect(get(client, port, "/admin"), 403, "ordinary user admin denial");
+            expect(get(client,port,"/admin/fatty-acids"),403,"ordinary user fatty-acid review denial");
+            expect(get(client,port,"/admin/taxa"),403,"ordinary user external taxonomy review denial");
+            expect(get(client,port,"/admin/expansion"),403,"ordinary user expansion workbench denial");
+            expect(get(client,port,"/admin/evidence?path=data/pdf_extract/table_crops/pdf19-p011-01-pdf-page-11.jpg"),403,"ordinary user source crop denial");
 
             userId = userId(username);
             promoteToAdmin(userId);
             HttpResponse<String> adminHome = get(client, port, "/admin");
             expect(adminHome, 200, "promoted administrator session");
+            contains(adminHome.body(),"DATA QUALITY","live source-backed quality dashboard");
+            HttpResponse<String> expansion=get(client,port,"/admin/expansion");expect(expansion,200,"administrator expansion workbench");
+            contains(expansion.body(),"导入批次","import batch workbench");
+            HttpResponse<String> fattyQueue=get(client,port,"/admin/fatty-acids");expect(fattyQueue,200,"admin fatty-acid candidate queue");
+            contains(fattyQueue.body(),"脂肪酸列没有印出单位","strict fatty-acid unit gate");
+            String candidateId=match(fattyQueue.body(),"/admin/fatty-acids\\?id=([0-9]+)","pending fatty-acid candidate link");
+            HttpResponse<String> fattyReview=get(client,port,"/admin/fatty-acids?id="+candidateId);expect(fattyReview,200,"admin source-backed fatty-acid review page");
+            contains(fattyReview.body(),"手工核验数值","fatty-acid manual review control");
+            HttpResponse<byte[]> evidence=client.send(HttpRequest.newBuilder(uri(port,"/admin/evidence?path=data/pdf_extract/table_crops/pdf19-p011-01-pdf-page-11.jpg")).GET().build(),HttpResponse.BodyHandlers.ofByteArray());
+            expect(evidence,200,"admin-only source crop preview");require(evidence.body().length>5000,"source crop response was empty");
+            HttpResponse<String> taxaReview=get(client,port,"/admin/taxa");expect(taxaReview,200,"GBIF external taxonomy candidate workflow");
+            contains(taxaReview.body(),"不会自动覆盖课程资料","external candidate non-overwrite policy");
             HttpResponse<String> newPlantForm = get(client, port, "/admin/plants/form");
             expect(newPlantForm, 200, "admin create form");
             String adminCsrf = csrf(newPlantForm.body());
@@ -152,7 +175,7 @@ public final class BusinessFlowE2E {
             HttpResponse<String> described=get(client,port,"/discover?q="+enc("叶子像针"));expect(described,200,"database-backed description search");
             contains(described.body(),plantName,"rule-parsed description candidate");
 
-            String traitId=match(get(client,port,"/admin/traits").body(),"name=\"id\" value=\"([0-9]+)\"","trait value id");
+            String traitId=Long.toString(traitValueId(plantId));
             Map<String,String> pendingTrait=fields("csrfToken",csrf(get(client,port,"/admin/traits?edit="+traitId).body()),"action","save","id",traitId,
                     "plantId",Long.toString(plantId),"traitCode","leaf_shape","optionCode","needle","sourceId",courseSourceId,
                     "sourcePage","E2E fixture","sourceExcerpt","Temporary synthetic test fixture only","status","NEEDS_REVIEW");
@@ -209,7 +232,7 @@ public final class BusinessFlowE2E {
             expect(logoutPage, 200, "session before logout");
             expect(post(client, port, "/logout", fields("csrfToken", csrf(logoutPage.body()))), 302, "logout");
             expect(get(client, port, "/favorites"), 302, "session invalidated on logout");
-            System.out.println("Business flow E2E passed: guest routes, CAPTCHA and email-code registration, email verification, password reset, login/session, role authorization, CSRF, opted-in search history, recent views, 30-day popular plants, DB-backed suggestions/comparison/professional/trait/description search, favorites, admin plant/trait CRUD, image lifecycle, details, error page, and logout.");
+            System.out.println("Business flow E2E passed: guest routes, CAPTCHA and email-code registration, email verification, password reset, login/session, role authorization, CSRF, opted-in search history, recent views, 30-day popular plants, DB-backed suggestions/comparison/professional/trait/description search, favorites, admin quality dashboard, fatty-acid/taxon candidate queues and source crop, trait/plant CRUD, image lifecycle, details, error page, and logout.");
         } finally {
             try { tomcat.stop(); } finally { tomcat.destroy(); }
             cleanup(plantId, userId, username, plantName, email);
@@ -302,6 +325,11 @@ public final class BusinessFlowE2E {
             try(ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("Course PDF knowledge source is missing; run the PlantScope trait migration");return Long.toString(r.getLong(1));}
         }
     }
+    private static long traitValueId(long plantId)throws Exception{
+        try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT v.id FROM plant_trait_values v JOIN plant_traits t ON t.id=v.trait_id WHERE v.plant_id=? AND t.code='leaf_shape' AND v.source_page='E2E fixture' ORDER BY v.id DESC LIMIT 1")){
+            p.setLong(1,plantId);try(ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("Temporary test trait evidence missing.");return r.getLong(1);}
+        }
+    }
     private static long otherPublicPlantId(long excluded)throws Exception{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT id FROM plants WHERE is_public=1 AND id<>? ORDER BY id LIMIT 1")){p.setLong(1,excluded);try(ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("Need a second public plant to test comparison.");return r.getLong(1);}}}
     private static String publicPlantName(long id)throws Exception{try(Connection c=Database.getConnection();PreparedStatement p=c.prepareStatement("SELECT name_zh FROM plants WHERE id=? AND is_public=1")){p.setLong(1,id);try(ResultSet r=p.executeQuery()){if(!r.next())throw new IllegalStateException("Comparison plant missing.");return r.getString(1);}}}
     private static void promoteToAdmin(long id) throws Exception {
@@ -348,6 +376,7 @@ public final class BusinessFlowE2E {
                 }
             }
             if (userId > 0) {
+                try (PreparedStatement p = c.prepareStatement("DELETE FROM knowledge_review_events WHERE actor_user_id=? AND entity_type='plant_trait_value'")) { p.setLong(1, userId); p.executeUpdate(); }
                 try (PreparedStatement p = c.prepareStatement("DELETE FROM audit_logs WHERE actor_user_id=?")) { p.setLong(1, userId); p.executeUpdate(); }
                 try (PreparedStatement p = c.prepareStatement("DELETE FROM users WHERE id=?")) { p.setLong(1, userId); p.executeUpdate(); }
             }

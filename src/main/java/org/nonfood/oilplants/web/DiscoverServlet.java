@@ -23,7 +23,7 @@ public class DiscoverServlet extends HttpServlet {
             if(description.length()<=160){var params=new java.util.HashMap<String,String[]>();params.put("q",new String[]{description});var namePage=plantService.dao().search(plantService.criteria(params),false);if(namePage.getTotal()>0){request.setAttribute("mode","names");request.setAttribute("pageData",namePage);request.setAttribute("pageTitle","名称检索结果");request.setAttribute("query",description);WebSupport.view(request,response,"plants/explore");return;}}
             DescriptionParser.ParseResult parsed=new TraitService().parse(description);
             request.setAttribute("pageTitle","植物探索结果");request.setAttribute("parsed",parsed);request.setAttribute("description",description);
-            request.setAttribute("recognizedTerms",parsed.recognizedTerms());request.setAttribute("ignoredTerms",parsed.ignoredTerms());
+            request.setAttribute("recognizedTerms",parsed.recognizedTerms());request.setAttribute("ignoredTerms",parsed.ignoredTerms());request.setAttribute("parseWarnings",parsed.warnings());
             if(parsed.hasRecognizedCriteria()) {
                 request.setAttribute("mode","traits");request.setAttribute("criteria",parsed.criteria());
                 request.setAttribute("selectedOptions",FeatureSearchServlet.selected(parsed.criteria()));request.setAttribute("negativeTraits",FeatureSearchServlet.negatives(parsed.criteria()));

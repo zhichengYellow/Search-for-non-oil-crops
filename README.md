@@ -18,9 +18,11 @@ mysql -u root -p nonfood_oil_plants < database/migrations/20261008_pdf_provenanc
 mysql -u root -p nonfood_oil_plants < database/migrations/20261010_plant_traits.sql
 mysql -u root -p nonfood_oil_plants < database/migrations/20261011_account_security.sql
 mysql -u root -p nonfood_oil_plants < database/migrations/20261012_user_discovery.sql
+mysql -u root -p nonfood_oil_plants < database/migrations/20261013_knowledge_expansion.sql
+mysql -u root -p nonfood_oil_plants < database/migrations/20261014_plant_knowledge_expansion.sql
 ```
 
-上面的迁移分别增加课程 PDF 溯源、可追溯的外观特征/知识来源、账户安全字段，以及用户自选搜索历史、最近浏览与 30 日聚合访问统计。旧数据库只需运行尚未应用的迁移，按时间顺序执行。之后配置 `DB_URL`、`DB_USER`、`DB_PASSWORD`，运行 `scripts/import_pdf_data.sh` 导入来源数据；导入按稳定 source key 幂等，可重复运行。导入抽样核验结果写入 `data/database_import_audit.json`。
+上面的迁移分别增加课程 PDF 溯源、可追溯的外观特征/知识来源、账户安全字段、用户发现统计、审核候选以及 3.2 多对多类别/数据集、外部来源标识、知识来源引用和批次导入模型。旧数据库只需运行尚未应用的迁移，按时间顺序执行。之后配置 `DB_URL`、`DB_USER`、`DB_PASSWORD`，运行 `scripts/import_pdf_data.sh` 导入来源数据；导入按稳定 source key 幂等，可重复运行。导入抽样核验结果写入 `data/database_import_audit.json`。
 
 ### 本地数据库连接
 
@@ -50,6 +52,10 @@ export DB_URL='jdbc:mysql://localhost:3306/nonfood_oil_plants?useUnicode=true&ch
 export DB_USER='nonfood_app'
 export DB_PASSWORD='替换为本地密码'
 export UPLOAD_DIR='/absolute/path/to/oil-plant-uploads'
+# 可选 HikariCP 连接池参数
+export DB_POOL_MAX_SIZE=10
+export DB_POOL_MIN_IDLE=2
+export DB_POOL_CONNECTION_TIMEOUT_MS=30000
 # HTTPS 部署时启用安全 Cookie
 export SESSION_COOKIE_SECURE=true
 # 认证邮件验证码需使用外部随机密钥；生产配置 SMTP 并设置 APP_ENV=production
@@ -96,11 +102,13 @@ mvn package
 - `/compare` 选择并对比 2–3 种植物；化学数据按采样记录分别展示
 - `/history` 登录用户查看自愿保存的检索和本账户最近浏览；列表只读本人记录
 - `/plants` 基础检索；登录后可使用高级条件与字段选择
+- `/categories` 按有来源确认的类别浏览植物
 - `/plant?id=...` 植物详情
 - `/register`、`/login` 用户注册和登录
 - `/forgot-password` 通过已验证邮箱重设密码
 - `/favorites`、`/profile` 个人功能
 - `/admin` 管理控制台与植物、用户管理（仅管理员）
+- `/admin/expansion` 综合知识库候选审核与导入批次管理（仅管理员）
 - `/admin/traits` 知识来源及外观特征值管理（仅管理员，需要先执行新增迁移）
 
 PDF 数据处理可按以下步骤重建；含油率只导入经过页面图像逐格核对的值，脂肪酸数值仍以原始片段保留并待核验，不会猜测或补零。
@@ -114,8 +122,47 @@ python3 scripts/build_data_quality_report.py
 scripts/import_pdf_data.sh
 ```
 
-管理员也可通过管理页面录入其他经核验的数据，并填写来源页码和核验状态。外观特征须附来源，且只有 `CONFIRMED` 值参与特征匹配；迁移只建立受控词表，不会虚构植物特征值。现有数据库的已核验特征数为 0，因此初始外观检索会说明证据不足，需管理员依据可追溯资料审核录入后才能形成可靠候选。化学样本及脂肪酸必须归属同一采样记录。
+管理员也可通过管理页面录入其他经核验的数据，并填写来源页码和核验状态。外观特征须附来源，且只有 `CONFIRMED` 值参与特征匹配；特征提取候选不能自动确认。当前数据库有 94 条 EXTRACTED 特征候选、0 条确认特征，因此外观检索说明证据不足。化学样本及脂肪酸必须归属同一采样记录。
+
+### PlantScope 3.0 候选导入与质量核验
+
+```sh
+# 仅校验文件、来源键、数据库关系和重复项；默认不会提交
+./scripts/import_evidence_candidates.sh --dry-run
+# 仅在完成校验后显式导入 EXTRACTED/REVIEW_PENDING 候选
+./scripts/import_evidence_candidates.sh --commit
+# 从连接中的当前数据库重建机器可读质量报告
+./scripts/export_data_quality_report.sh
+```
+
+该候选导入器不会写入 `fatty_acid_components`。当前 97 条脂肪酸单元格均为 REVIEW_PENDING，因为 PDF 表头没有可靠单位；`data/fatty_acid_verified.csv` 保持空表。管理员审核入口：`/admin/traits`、`/admin/fatty-acids` 和 `/admin/taxa`。GBIF 仅作为可选分类匹配候选，不覆盖课程学名。数据基线、外部源调查、提取和测试结果分别见 `docs/DATA_BASELINE_3_0.md`、`docs/KNOWLEDGE_EXPANSION_REPORT.md`、`docs/PDF_EXTRACTION_REPORT.md`、`docs/FATTY_ACID_VERIFICATION_REPORT.md`、`docs/TRAIT_VERIFICATION_REPORT.md`、`docs/EXTERNAL_SOURCE_REPORT.md`、`docs/DATA_QUALITY_REPORT.md`、`docs/TEST_REPORT_3_0.md` 和 `docs/ACCEPTANCE_REPORT_3_0.md`。
 
 ## 安全实现
 
 密码使用 BCrypt；SQL 使用 PreparedStatement；POST 表单使用 session CSRF token；认证与管理员权限由服务端 Filter 执行；上传文件类型、体积、随机文件名由服务端校验。详细部署和常见问题见 `DEPLOYMENT.md`。
+
+## PlantScope 3.2 知识库扩容
+
+3.2 将应用类别与生物分类分离，以多对多关系管理类别，并通过数据集关系保留 `COURSE_ORIGINAL` 原始课程资料。课程 PDF 植物不会因扩容而复制或覆盖。当前数据库统计、候选审核状态、来源授权和测试结果见：
+
+- [扩容计划](docs/EXPANSION_PLAN_3_2.md)
+- [外部知识来源审计](docs/KNOWLEDGE_SOURCES_3_2.md)
+- [候选导入流程](docs/IMPORT_PIPELINE_3_2.md)
+- [分类核验清单](docs/TAXONOMY_REVIEW_3_2.md)
+- [外观特征覆盖](docs/PLANT_TRAIT_COVERAGE_3_2.md)
+- [图片许可审计](docs/IMAGE_LICENSE_AUDIT_3_2.md)
+- [实时质量报告](docs/DATA_QUALITY_REPORT_3_2.md)
+- [验收报告](docs/ACCEPTANCE_REPORT_3_2.md) 与 [测试报告](docs/TEST_REPORT_3_2.md)
+
+可以使用 GBIF 严格学名匹配生成待审核 JSONL；采集批次支持检查点续传。导入会验证来源、许可状态、namespace 和外部 ID，仅在显式 `--commit` 时进入审核队列：
+
+```sh
+python3 scripts/fetch_gbif_taxonomy_candidates.py \
+  --input data/external/gbif/seed_manifest_20261011.csv \
+  --output data/external/gbif/match_candidates.jsonl \
+  --errors data/external/gbif/fetch_errors.csv
+./scripts/import_external_candidates.sh data/external/gbif/match_candidates.jsonl --dry-run
+./scripts/import_external_candidates.sh data/external/gbif/match_candidates.jsonl --commit
+```
+
+GBIF 名称匹配、API confidence 和候选许可标记都不等于分类学确认。当前实测知识库仍有 33 株课程植物，3 条 GBIF 分类候选待审核；新发布到 `GENERAL_BOTANY` 的植物为 0，94 个课程外观候选均未确认。没有使用空壳记录凑到 150 株。

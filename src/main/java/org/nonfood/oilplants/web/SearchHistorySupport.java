@@ -13,7 +13,7 @@ final class SearchHistorySupport {
             "uses", "distribution", "oilMin", "oilMax", "component", "componentMin", "componentMax",
             "sort", "direction", "field");
     private static final Set<String> TRAITS = Set.of("plant_form", "plant_height", "leaf_persistence", "leaf_shape",
-            "leaf_color", "leaf_margin", "leaf_arrangement", "flower_color", "flower_shape", "fruit_shape",
+            "leaf_color", "leaf_margin", "leaf_arrangement", "flower_color", "flower_shape", "fruit_shape", "cone_shape",
             "fruit_color", "fruit_size", "bark_texture", "growth_habitat", "distribution_region",
             "autumn_leaf_color", "winter_appearance", "flowering_season");
 

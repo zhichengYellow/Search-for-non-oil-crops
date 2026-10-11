@@ -1,495 +1,127 @@
 {
-  "generated_from": [
-    "docs/课程设计资料.pdf",
-    "data/plants.json",
-    "data/oil_samples.json",
-    "data/oil_value_verification.json",
-    "data/manual_table_rows.json",
-    "data/ocr/vision_ocr.json",
-    "data/images/manifest.json"
-  ],
-  "source_pdf": {
-    "path": "docs/课程设计资料.pdf",
-    "sha256": "669e9adbfbdfb855d196e5389b2b8aee763a226fee0ce7f0a7e83bc5bab73685",
-    "page_count": 19,
-    "meaningful_text_layer": false,
-    "pdftotext_nonspace_characters": 0,
-    "embedded_page_images": 19,
-    "embedded_image_properties": [
-      {
-        "pdf_page": 1,
-        "width_px": 2560,
-        "height_px": 3520,
-        "x_ppi": 299,
-        "y_ppi": 299
-      },
-      {
-        "pdf_page": 2,
-        "width_px": 2568,
-        "height_px": 3530,
-        "x_ppi": 300,
-        "y_ppi": 300
-      },
-      {
-        "pdf_page": 3,
-        "width_px": 2560,
-        "height_px": 3520,
-        "x_ppi": 299,
-        "y_ppi": 299
-      },
-      {
-        "pdf_page": 4,
-        "width_px": 2568,
-        "height_px": 3530,
-        "x_ppi": 300,
-        "y_ppi": 300
-      },
-      {
-        "pdf_page": 5,
-        "width_px": 2560,
-        "height_px": 3520,
-        "x_ppi": 299,
-        "y_ppi": 299
-      },
-      {
-        "pdf_page": 6,
-        "width_px": 2568,
-        "height_px": 3530,
-        "x_ppi": 300,
-        "y_ppi": 300
-      },
-      {
-        "pdf_page": 7,
-        "width_px": 2560,
-        "height_px": 3520,
-        "x_ppi": 299,
-        "y_ppi": 299
-      },
-      {
-        "pdf_page": 8,
-        "width_px": 2568,
-        "height_px": 3530,
-        "x_ppi": 300,
-        "y_ppi": 300
-      },
-      {
-        "pdf_page": 9,
-        "width_px": 2560,
-        "height_px": 3520,
-        "x_ppi": 299,
-        "y_ppi": 299
-      },
-      {
-        "pdf_page": 10,
-        "width_px": 2568,
-        "height_px": 3530,
-        "x_ppi": 300,
-        "y_ppi": 300
-      },
-      {
-        "pdf_page": 11,
-        "width_px": 2560,
-        "height_px": 3520,
-        "x_ppi": 299,
-        "y_ppi": 299
-      },
-      {
-        "pdf_page": 12,
-        "width_px": 2568,
-        "height_px": 3530,
-        "x_ppi": 300,
-        "y_ppi": 300
-      },
-      {
-        "pdf_page": 13,
-        "width_px": 2560,
-        "height_px": 3520,
-        "x_ppi": 299,
-        "y_ppi": 299
-      },
-      {
-        "pdf_page": 14,
-        "width_px": 2568,
-        "height_px": 3530,
-        "x_ppi": 300,
-        "y_ppi": 300
-      },
-      {
-        "pdf_page": 15,
-        "width_px": 2560,
-        "height_px": 3520,
-        "x_ppi": 299,
-        "y_ppi": 299
-      },
-      {
-        "pdf_page": 16,
-        "width_px": 2568,
-        "height_px": 3530,
-        "x_ppi": 300,
-        "y_ppi": 300
-      },
-      {
-        "pdf_page": 17,
-        "width_px": 2560,
-        "height_px": 3520,
-        "x_ppi": 299,
-        "y_ppi": 299
-      },
-      {
-        "pdf_page": 18,
-        "width_px": 2568,
-        "height_px": 3530,
-        "x_ppi": 300,
-        "y_ppi": 300
-      },
-      {
-        "pdf_page": 19,
-        "width_px": 2560,
-        "height_px": 3520,
-        "x_ppi": 299,
-        "y_ppi": 299
-      }
-    ],
-    "pages_with_one_full_page_image": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19
-    ],
-    "ocr_pages_processed": 19,
-    "rendered_review_images": 19,
-    "layout_notes": [
-      "每页为一张约 300 DPI 的扁平扫描图，无可用文字层。",
-      "版面混合单栏与双栏；部分页面同页包含两个植物条目。",
-      "银杏条目跨 PDF 第 2–3 页。",
-      "PDF 页码比书内印刷页码少 10。"
-    ]
+  "report_version" : "PlantScope-3.2",
+  "generated_at_utc" : "2026-10-11T01:52:01.483292Z",
+  "source_pdf" : {
+    "path" : "docs/课程设计资料.pdf",
+    "sha256" : "669e9adbfbdfb855d196e5389b2b8aee763a226fee0ce7f0a7e83bc5bab73685",
+    "pages" : 19,
+    "pages_with_text_layer" : 0,
+    "pages_without_text_layer" : 19
   },
-  "extraction": {
-    "plant_entry_count": 33,
-    "plants_with_chinese_name": 33,
-    "plants_with_latin_name": 33,
-    "plants_with_family_zh_and_latin": 33,
-    "plants_with_genus_zh_and_latin": 33,
-    "alias_count": 9,
-    "aliases_needing_review": 9,
-    "entries_with_raw_synonym_notes": 5,
-    "scientific_names_verified_from_heading": 30,
-    "scientific_names_need_review": 3,
-    "table_header_records": 33,
-    "raw_ocr_source_snippets": 840,
-    "plant_fields_needing_review": 125,
-    "plant_fields_missing_or_unreadable": 7,
-    "field_status_counts": {
-      "cultivation:MISSING_OR_UNREADABLE": 2,
-      "cultivation:NEEDS_REVIEW": 31,
-      "distribution:MISSING_OR_UNREADABLE": 2,
-      "distribution:NEEDS_REVIEW": 31,
-      "morphology:MISSING_OR_UNREADABLE": 1,
-      "morphology:NEEDS_REVIEW": 32,
-      "uses:MISSING_OR_UNREADABLE": 2,
-      "uses:NEEDS_REVIEW": 31
-    },
-    "missing_field_counts": {
-      "cultivation": 2,
-      "distribution": 2,
-      "morphology": 1,
-      "uses": 2
-    },
-    "fields_needing_review_counts": {
-      "cultivation": 31,
-      "distribution": 31,
-      "morphology": 32,
-      "uses": 31
-    },
-    "taxonomy_status_counts": {
-      "family_latin:VERIFIED_FROM_PRINTED_HEADING": 33,
-      "family_zh:VERIFIED_FROM_PRINTED_HEADING": 33,
-      "genus_latin:VERIFIED_FROM_PRINTED_HEADING": 33,
-      "genus_zh:VERIFIED_FROM_PRINTED_HEADING": 33,
-      "name_zh:VERIFIED_FROM_PRINTED_HEADING": 33,
-      "scientific_name:NEEDS_REVIEW": 3,
-      "scientific_name:VERIFIED_FROM_PRINTED_HEADING": 30
-    },
-    "plants_with_missing_or_unreadable_fields": [
-      {
-        "plant_id": "pdf19-p003-01",
-        "name_zh": "云南黄果冷杉",
-        "pdf_pages": [
-          3
-        ],
-        "missing_fields": [
-          "distribution"
-        ]
-      },
-      {
-        "plant_id": "pdf19-p007-02",
-        "name_zh": "落叶松",
-        "pdf_pages": [
-          7
-        ],
-        "missing_fields": [
-          "uses"
-        ]
-      },
-      {
-        "plant_id": "pdf19-p011-01",
-        "name_zh": "华山松",
-        "pdf_pages": [
-          11
-        ],
-        "missing_fields": [
-          "morphology",
-          "cultivation",
-          "uses"
-        ]
-      },
-      {
-        "plant_id": "pdf19-p012-01",
-        "name_zh": "白皮松",
-        "pdf_pages": [
-          12
-        ],
-        "missing_fields": [
-          "distribution"
-        ]
-      },
-      {
-        "plant_id": "pdf19-p012-02",
-        "name_zh": "高山松",
-        "pdf_pages": [
-          12
-        ],
-        "missing_fields": [
-          "cultivation"
-        ]
-      }
-    ],
-    "plants_with_taxonomy_review_flags": [
-      {
-        "plant_id": "pdf19-p004-02",
-        "name_zh": "杉松",
-        "pdf_pages": [
-          4
-        ],
-        "scientific_name": "Abies holophylla Maxim.",
-        "review_flags": [
-          "scientific_synonym_or_author_citation_needs_visual_confirmation",
-          "descriptive_fields_are_raw_OCR_excerpts_and_need_human_review"
-        ]
-      },
-      {
-        "plant_id": "pdf19-p005-01",
-        "name_zh": "怒江冷杉",
-        "pdf_pages": [
-          5
-        ],
-        "scientific_name": "Abies nukiangensis C. Y. Cheng et L. K. Fu",
-        "review_flags": [
-          "scientific_synonym_or_author_citation_needs_visual_confirmation",
-          "descriptive_fields_are_raw_OCR_excerpts_and_need_human_review"
-        ]
-      },
-      {
-        "plant_id": "pdf19-p007-02",
-        "name_zh": "落叶松",
-        "pdf_pages": [
-          7
-        ],
-        "scientific_name": "Larix gmelinii (Rupr.) Kuzen.",
-        "review_flags": [
-          "descriptive_fields_are_raw_OCR_excerpts_and_need_human_review"
-        ]
-      },
-      {
-        "plant_id": "pdf19-p016-01",
-        "name_zh": "台湾五针松",
-        "pdf_pages": [
-          16
-        ],
-        "scientific_name": "Pinus morrisonicola Hayata",
-        "review_flags": [
-          "scientific_synonym_or_author_citation_needs_visual_confirmation",
-          "descriptive_fields_are_raw_OCR_excerpts_and_need_human_review"
-        ]
-      },
-      {
-        "plant_id": "pdf19-p017-02",
-        "name_zh": "油松",
-        "pdf_pages": [
-          17
-        ],
-        "scientific_name": "Pinus tabuliformis Carr.",
-        "review_flags": [
-          "scientific_synonym_or_author_citation_needs_visual_confirmation",
-          "descriptive_fields_are_raw_OCR_excerpts_and_need_human_review"
-        ]
-      },
-      {
-        "plant_id": "pdf19-p019-01",
-        "name_zh": "金钱松",
-        "pdf_pages": [
-          19
-        ],
-        "scientific_name": "Pseudolarix amabilis (J. Nelson) Rehd.",
-        "review_flags": [
-          "scientific_synonym_or_author_citation_needs_visual_confirmation",
-          "descriptive_fields_are_raw_OCR_excerpts_and_need_human_review"
-        ]
-      },
-      {
-        "plant_id": "pdf19-p019-02",
-        "name_zh": "柳杉",
-        "pdf_pages": [
-          19
-        ],
-        "scientific_name": "Cryptomeria fortune Hooibr. ex Otto et Dietrich",
-        "review_flags": [
-          "descriptive_fields_are_raw_OCR_excerpts_and_need_human_review"
-        ]
-      }
-    ]
+  "parsed_artifacts" : {
+    "plant_records" : 33,
+    "oil_sample_records" : 89,
+    "manual_fatty_acid_table_rows" : 12,
+    "fatty_acid_candidate_cells" : 97,
+    "trait_candidate_records" : 94,
+    "source_page_crop_count" : 33
   },
-  "images": {
-    "crop_count": 45,
-    "plants_with_associated_crops": 33,
-    "total_plants": 33,
-    "all_crop_associations_verified": true,
-    "source_page_metadata_present": true,
-    "crop_archive": "data/images/crops/",
-    "manifest": "data/images/manifest.json"
-  },
-  "chemistry": {
-    "ocr_row_candidate_count": 89,
-    "row_candidates_linked_to_plant": 89,
-    "row_candidates_with_visually_verified_oil_content": 88,
-    "row_candidates_without_oil_content_candidate": 1,
-    "manual_page_checked_table_rows": 12,
-    "manual_page_checked_rows_by_pdf_page": {
-      "11": 12
-    },
-    "pages_with_oil_cell_candidates": [
-      1,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19
-    ],
-    "pages_with_some_rows_missing_oil_cells": [
-      {
-        "pdf_page": 11,
-        "row_candidates": 12,
-        "rows_without_oil_candidate": 1
-      }
-    ],
-    "verified_fatty_acid_component_record_count": 0,
-    "records_with_aligned_fatty_acid_raw_candidates": 12,
-    "fatty_acid_value_raw_candidates_on_page_checked_rows": 97,
-    "other_measurement_raw_candidates_on_page_checked_rows": 32,
-    "table_numeric_fragments_retained_in_raw_snippets": 748,
-    "sample_rows_fully_verified": 0,
-    "oil_verification_rule": "Only cells visually checked against their exact 300 DPI PDF crop are exposed as oil_content_pct. No OCR number from other columns is treated as an oil value.",
-    "fatty_acid_policy": "No fatty-acid percentages are structured as measured values until each row/column cell is visually verified. Original OCR row fragments, headers and coordinates remain available for review.",
-    "unit_policy": {
-      "含油率（%）": "% as printed",
-      "fatty_acid_columns": "unit is not stated in the printed header; raw readings remain candidates"
-    },
-    "unit_notes": [
-      "采集单位",
-      "测试单位",
-      "测试部位",
-      "产地",
-      "含油率（%）",
-      "碘值",
-      "酸值",
-      "皂化值",
-      "C12:0",
-      "C14:0",
-      "C16:0",
-      "C16:1",
-      "C18:0",
-      "C18:1",
-      "C18:2",
-      "C18:3",
-      "C20:0",
-      "C20:1"
-    ]
-  },
-  "database": {
-    "import_status": "COMPLETED",
-    "source_plants_imported": 33,
-    "ocr_row_candidates_imported": 89,
-    "image_records_imported": 45,
-    "verified_oil_records_in_database": 88,
-    "verified_fatty_acid_records_in_database": 0,
-    "sample_checks": [
-      {
-        "source_key": "pdf19-p001-01",
-        "pdf_page": 1,
-        "name_zh_matches": true,
-        "scientific_name_matches": true,
-        "family_zh_matches": true,
-        "genus_zh_matches": true,
-        "source_pages_matches": true,
-        "database_image_count": 2,
-        "database_verified_oil_count": 4
+  "database" : {
+    "database_name" : "nonfood_oil_plants",
+    "mysql_version" : "8.0.44",
+    "application_tables" : 36,
+    "plants" : 33,
+    "public_plants" : 33,
+    "verified_identity_plants" : 0,
+    "course_pdf_plants" : 33,
+    "course_plants_with_morphology" : 32,
+    "course_plants_with_distribution" : 31,
+    "course_plants_with_cultivation" : 31,
+    "course_plants_with_uses" : 31,
+    "images" : 45,
+    "plants_with_course_pdf_image" : 33,
+    "samples" : 89,
+    "verified_oil_samples" : 88,
+    "plants_with_verified_oil" : 33,
+    "formal_fatty_acid_components" : 0,
+    "course_fatty_acid_candidates" : 97,
+    "course_fatty_acid_candidates_pending" : 97,
+    "course_fatty_acid_candidates_confirmed" : 0,
+    "course_trait_candidates" : 94,
+    "course_trait_candidates_extracted" : 94,
+    "course_confirmed_trait_values" : 0,
+    "plants_with_confirmed_traits" : 0,
+    "confirmed_trait_values_all_sources" : 0,
+    "external_taxon_candidates_pending" : 0,
+    "knowledge_review_events" : 225,
+    "migration_versions_recorded" : 2,
+    "knowledge_expansion_3_2" : {
+      "categories" : 13,
+      "confirmed_category_relations" : 33,
+      "course_plants_with_confirmed_dataset_relation" : 33,
+      "published_general_botany_plants" : 0,
+      "confirmed_plants_by_dataset" : {
+        "COURSE_ORIGINAL" : 33
       },
-      {
-        "source_key": "pdf19-p010-02",
-        "pdf_page": 10,
-        "name_zh_matches": true,
-        "scientific_name_matches": true,
-        "family_zh_matches": true,
-        "genus_zh_matches": true,
-        "source_pages_matches": true,
-        "database_image_count": 1,
-        "database_verified_oil_count": 1
+      "confirmed_public_plants_by_category" : {
+        "non_food_oil_crop" : 33
       },
-      {
-        "source_key": "pdf19-p019-02",
-        "pdf_page": 19,
-        "name_zh_matches": true,
-        "scientific_name_matches": true,
-        "family_zh_matches": true,
-        "genus_zh_matches": true,
-        "source_pages_matches": true,
-        "database_image_count": 1,
-        "database_verified_oil_count": 6
-      }
-    ],
-    "attempt_detail": null,
-    "importer": "scripts/import_pdf_data.sh",
-    "sql_import_script": "database/import_pdf_course_data.sql",
-    "sql_generator": "scripts/build_pdf_import_sql.py",
-    "image_staging_script": "scripts/stage_pdf_crop_images.py",
-    "idempotency_key": "stable source_key values on plants, OCR table-row candidates and image crops"
-  }
+      "knowledge_entries" : 0,
+      "knowledge_entries_by_status" : { },
+      "taxonomy_reference_rows" : 0,
+      "external_identifier_rows" : 0,
+      "external_import_candidate_rows" : 3,
+      "external_import_candidates_by_status" : {
+        "REVIEW_PENDING" : 3
+      },
+      "external_import_candidates_by_resolution" : {
+        "MATCH_REVIEW_REQUIRED" : 3
+      },
+      "external_import_batches_by_status" : {
+        "COMPLETED" : 1
+      },
+      "duplicate_candidate_rows_over_unique_key_count" : 0,
+      "suspected_duplicate_linked_taxon_groups" : 0,
+      "plants_with_extracted_trait_candidates" : 32,
+      "confirmed_trait_value_count" : 0,
+      "trait_candidate_counts_by_code_and_status" : {
+        "bark_texture:EXTRACTED" : 4,
+        "cone_shape:EXTRACTED" : 31,
+        "growth_habitat:EXTRACTED" : 3,
+        "leaf_persistence:EXTRACTED" : 1,
+        "leaf_shape:EXTRACTED" : 25,
+        "plant_form:EXTRACTED" : 30
+      },
+      "plants_with_external_verified_redistributable_image" : 0,
+      "course_pdf_crop_images" : 45
+    }
+  },
+  "coverage_pct" : {
+    "plants_with_verified_oil" : 100.0,
+    "samples_with_verified_oil" : 98.88,
+    "plants_with_pdf_image" : 100.0,
+    "plants_with_confirmed_trait" : 0.0,
+    "plants_with_verified_fatty_acid" : 0.0
+  },
+  "integrity_checks" : {
+    "plant_missing_pdf_source" : 0,
+    "sample_missing_plant" : 0,
+    "sample_missing_source_key_or_page" : 0,
+    "image_missing_plant_or_page_bbox" : 0,
+    "verified_oil_missing_value" : 0,
+    "missing_oil_with_value" : 0,
+    "verified_fatty_acid_missing_percentage" : 0,
+    "confirmed_trait_without_source_excerpt" : 0,
+    "fatty_candidate_orphan_sample_or_source" : 0,
+    "fatty_candidate_confirmed_without_reviewed_unit_or_value" : 0,
+    "trait_candidate_duplicate_source_keys" : 0,
+    "candidate_import_event_orphan_entity" : 0,
+    "course_plant_missing_confirmed_dataset_relation" : 0,
+    "confirmed_category_relation_missing_source_evidence" : 0,
+    "confirmed_knowledge_entry_missing_evidence" : 0,
+    "verified_image_reference_missing_license_or_attribution" : 0,
+    "import_candidate_missing_batch_or_source" : 0,
+    "pending_candidate_in_rolled_back_batch" : 0,
+    "confirmed_external_identifier_missing_namespace_or_source" : 0
+  },
+  "review_states" : {
+    "plant_trait_values" : {
+      "EXTRACTED" : 94
+    },
+    "fatty_acid_candidates" : {
+      "REVIEW_PENDING" : 97
+    },
+    "external_taxon_candidates" : { }
+  },
+  "interpretation" : [ "Candidate records are not confirmed facts and are excluded from public trait/chemical matching.", "The course PDF does not print a unit on its fatty-acid columns; no candidate value is included in the formal fatty_acid_components percentage field.", "No missing biological value was converted to zero." ]
 }
