@@ -21,3 +21,5 @@ data/raw/
 data/backups/
 data/pdf_extract/literature_fatty_acids/
 data/fatty_acid_literature_extraction.json
+data/fatty_acid_literature_candidates.csv
+data/fatty_acid_literature_samples.csv

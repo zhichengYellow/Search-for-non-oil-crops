@@ -56,7 +56,7 @@
 ## 可复核产物与剩余限制
 
 - 完整逐样本转录保留在本机 `data/fatty_acid_literature_extraction.json`，未随公开仓库分发；许可确认后再决定是否共享完整原始转录。
-- 数据库导入清单：[`data/fatty_acid_literature_sources.csv`](../data/fatty_acid_literature_sources.csv)、[`data/fatty_acid_literature_samples.csv`](../data/fatty_acid_literature_samples.csv)、[`data/fatty_acid_literature_candidates.csv`](../data/fatty_acid_literature_candidates.csv)
+- 来源书目元数据清单：[`data/fatty_acid_literature_sources.csv`](../data/fatty_acid_literature_sources.csv)。样本与数值候选 CSV 保留在本机，未纳入公开仓库；论文许可确认后再决定是否共享。
 - 表格图像裁片保留在本机 `data/pdf_extract/literature_fatty_acids/` 供逐格复核；论文再分发许可未确认，因此不纳入公开 Git 仓库。逐项 PDF 页码、印刷页码及表格引用仍保存在 CSV 与本文中。
 - 人工审核口径与建议顺序：[`FATTY_ACID_EVIDENCE_REVIEW.md`](FATTY_ACID_EVIDENCE_REVIEW.md)
 

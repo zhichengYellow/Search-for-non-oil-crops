@@ -22,7 +22,7 @@
 
 本机裁片保存在 `data/pdf_extract/literature_fatty_acids/`，仅供本地审核。论文许可尚未确认，因此没有把页面图像裁片提交到公开 Git 仓库；审核时请通过上文出版方链接查看原始页面。
 
-机器可读逐项工作表：[`data/fatty_acid_literature_candidates.csv`](../data/fatty_acid_literature_candidates.csv)。它保留 `source_key`、`sample_id`、`row_no`、组分、原文值、数字候选值、单位候选、样本来源、页码、原始表格引用、证据图本地路径及 QC 标记。样本级信息在 [`data/fatty_acid_literature_samples.csv`](../data/fatty_acid_literature_samples.csv)；包含未链接样本的完整转录 JSON 留在本机，未随公开仓库分发。
+机器可读逐项工作表 `data/fatty_acid_literature_candidates.csv` 与样本级文件 `data/fatty_acid_literature_samples.csv` 保留在本机，未纳入公开仓库；许可确认后再决定是否共享。候选表保留 `source_key`、`sample_id`、`row_no`、组分、原文值、数字候选值、单位候选、样本来源、页码、原始表格引用、证据图本地路径及 QC 标记。包含未链接样本的完整转录 JSON 同样仅在本机保存。
 
 ## 建议人工审核顺序
 
