@@ -6,11 +6,16 @@
     <h1>技术架构与数据中心</h1>
     <p>Technology &amp; Data Observatory</p>
     <div class="technology-lede">查看 PlantScope 如何使用 Java Web 技术组织植物知识、区分候选与已核验数据，并为课程设计要求提供可检查的实现入口。</div>
+    <a class="technology-repository-link" href="https://github.com/zhichengYellow/Search-for-non-oil-crops" target="_blank" rel="noopener noreferrer" aria-label="在新标签页打开 PlantScope GitHub 项目仓库">
+      <span class="technology-repository-mark" aria-hidden="true">GH</span>
+      <span class="technology-repository-copy"><small>OPEN SOURCE · SOURCE CODE</small><b>GitHub 项目仓库</b><code>github.com/zhichengYellow/Search-for-non-oil-crops</code></span>
+      <span class="technology-repository-arrow" aria-hidden="true">↗</span>
+    </a>
   </header>
 
   <nav class="technology-toc" aria-label="本页目录">
     <a href="#overview">数据概览</a><a href="#architecture">系统架构</a><a href="#stack">技术栈</a>
-    <a href="#sources">数据来源</a><a href="#quality">质量流程</a><a href="#course">课程验收</a><a href="#validation">测试记录</a>
+    <a href="#sources">数据来源</a><a href="#quality">质量流程</a><a href="#course">课程验收</a><a href="#validation">测试记录</a><a href="#support">支持项目</a>
   </nav>
 
   <section id="overview" class="technology-section" aria-labelledby="overview-title">
@@ -99,6 +104,22 @@
       <tr><td>浏览器看板</td><td>1440 / 1024 / 768 / 375 px 无页面级横向溢出</td><td>375 px 目录可横向滚动；移动导航可展开/收起，来源详情可键盘展开。</td></tr>
     </tbody></table></div>
     <p class="technology-footnote">构建机运行时为 JDK 21，Maven 编译目标保持 Java 17。尚未验证生产 SMTP、生产部署、生产负载或多节点运行。</p>
+  </section>
+
+  <section id="support" class="technology-section technology-support" aria-labelledby="support-title">
+    <div class="section-heading"><div><p class="eyebrow">A LITTLE SUPPORT GOES A LONG WAY</p><h2 id="support-title">给项目一点“养分”</h2></div><p>Star、建议、证据核验，都是对植物知识库的有效施肥。</p></div>
+    <div class="technology-support-grid">
+      <article class="technology-support-card">
+        <div class="technology-support-copy"><small>EXCHANGE IDEAS</small><h3>女加微信，男自强 🌿</h3><p>欢迎聊植物、聊课程设计，也欢迎指出哪里还能长得更好。</p></div>
+        <img src="${pageContext.request.contextPath}/assets/images/support/mmqrcode1791878954891.png" alt="微信个人二维码，扫描添加 Zech Huang 为好友" loading="lazy" width="958" height="1415">
+        <span class="technology-support-caption">扫码加微信 · 交流建议和植物知识</span>
+      </article>
+      <article class="technology-support-card">
+        <div class="technology-support-copy"><small>OPTIONAL APPRECIATION</small><h3>乞讨中，若喜欢可打赏 ☕</h3><p>纯属自愿。不给也没关系，点个 Star 或提个 Issue，同样是精神氮肥。</p></div>
+        <img src="${pageContext.request.contextPath}/assets/images/support/mm_facetoface_collect_qrcode_1791016245474.png" alt="微信收款二维码，可自愿打赏支持项目维护" loading="lazy" width="1304" height="1777">
+        <span class="technology-support-caption">感谢支持 · 让项目继续生长</span>
+      </article>
+    </div>
   </section>
 </section>
 <%@ include file="common/footer.jspf" %>
